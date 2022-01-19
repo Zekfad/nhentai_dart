@@ -1,9 +1,11 @@
 import 'dart:io';
-
-import 'package:nhentai/nhentai.dart';
+// Import and shot prefixed typedefs
+import 'package:nhentai/nhentai.dart' show NHentai, NHentaiHosts, NHentaiBook, NHentaiSearch;
+// Import with library prefix
+import 'package:nhentai/nhentai.dart' as nh;
 
 Future<void> main() async {
-  final apiProxy = NHentai(
+  final apiProxy = nh.API(
     client: HttpClient() // Using HTTP proxy
       ..addProxyCredentials('example.com', 1337, 'Basic', HttpClientBasicCredentials('0xdeadbeef', '0x0badf00d'))
       ..findProxy = (uri) => 'PROXY example.com:1337',
@@ -15,7 +17,7 @@ Future<void> main() async {
   // Or just use default settings:
   final api = NHentai();
 
-  final Book? book = await api.getBook(177013);
+  final NHentaiBook? book = await api.getBook(177013);
   if (book == null)
     throw Exception('Something went wrong.');
   
@@ -41,10 +43,10 @@ Future<void> main() async {
   }
 
   // Make single query and print name of first book
-  final Search search1 = await api.search('test').first;
+  final NHentaiSearch search1 = await api.search('test').first;
   print(search1.books.first);
   // or
-  final Search? search2 = await api.doSearch('test');
+  final nh.Search? search2 = await api.doSearch('test');
   print(search2!.books.first);
 
   exit(0);

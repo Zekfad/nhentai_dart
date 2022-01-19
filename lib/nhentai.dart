@@ -1,10 +1,9 @@
 library nhentai;
 
 import 'src/API.dart';
-import 'src/DataModel.dart' show APIException;
-export 'src/DataModel.dart' hide APIException;
+export 'data_model.dart';
+export 'src/API.dart';
 
 typedef NHentai = API;
 typedef NHentaiHosts = Hosts;
 typedef NHentaiHostType = HostType;
-typedef NHentaiException = APIException;
