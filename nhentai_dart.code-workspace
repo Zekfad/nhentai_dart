@@ -1,0 +1,20 @@
+{
+	"extensions": {
+		"recommendations": [
+			"Dart-Code.dart-code"
+		]
+	},
+	"folders": [
+		{
+			"path": ".",
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"NHentai",
+			"scanlator",
+			"unawaited",
+			"pubspec"
+		]
+	}
+}
