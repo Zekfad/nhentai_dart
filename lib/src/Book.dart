@@ -35,7 +35,7 @@ class BookTitle {
   }
 }
 
-/// Book
+/// Book.
 class Book {
   Book({
     required this.title,
@@ -72,6 +72,7 @@ class Book {
   @override
   String toString() => title.toString();
 
+  /// Parse book from API [json] object.
   static Book? parse(dynamic json) {
     if (json == null)
       return null;

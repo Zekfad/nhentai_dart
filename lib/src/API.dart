@@ -151,6 +151,7 @@ class API {
       ),
       query: SearchText(query),
       page : page,
+      sort : sort,
     );
   }
 
@@ -174,6 +175,7 @@ class API {
       ),
       query: SearchTag(tag),
       page : page,
+      sort : sort,
     );
   }
 

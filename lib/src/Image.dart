@@ -4,25 +4,35 @@ import 'Exceptions.dart';
 import 'utils.dart' show parseAsTyped;
 
 
+/// Image type.
+/// Represents type name and extension.
 class ImageType {
+  /// Internal constructor for known image types.
   const ImageType._new(
     this.name,
     this.extension,
   ) : super();
 
+  /// Internal constructor for unknown image types.
   const ImageType._unknown(
     this.extension,
   ) :
     name = 'Unknown',
     super();
 
+  /// Human-readable type name.
   final String name;
+  /// File extension.
   final String extension;
 
+  /// Joint Photographic Experts Group image type.
   static const jpeg = ImageType._new('JPEG', 'jpg');
+  /// Portable Network Graphics image type.
   static const png  = ImageType._new('PNG', 'png');
+  /// Graphics Interchange Format image type.
   static const gif  = ImageType._new('GIF', 'gif');
 
+  /// Types map used for parsing [Image] from API json objects.
   static const Map<String, ImageType> types = {
     'j'   : jpeg,
     'jpg' : jpeg,
@@ -33,8 +43,9 @@ class ImageType {
     'gif' : gif,
   };
 
+  /// Get human-readable type name.
   @override
-  String toString() => extension;
+  String toString() => name;
 }
 
 /// Image.
