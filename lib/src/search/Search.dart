@@ -4,6 +4,7 @@ import 'Query.dart';
 
 /// Search.
 class Search {
+  /// Create search.
   const Search({
     required this.query,
     required this.sort,

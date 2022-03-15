@@ -1,13 +1,19 @@
 import 'DataModel.dart';
 
-T parseAsTyped<T>(dynamic object, { T? Function(dynamic object)? customParser, }) {
+/// Parse object to given type [T] or throw exception if that's not possible.
+T parseAsTyped<T>(dynamic object, {
+  T? Function(dynamic object)? customParser,
+}) {
   final T? value = tryParseAsTyped<T>(object, customParser: customParser);
   if (value == null)
     throw Exception('Parse failed.');
   return value;
 }
 
-T? tryParseAsTyped<T>(dynamic object, { T? Function(dynamic object)? customParser, }) {
+/// Try parse object to given type [T].
+T? tryParseAsTyped<T>(dynamic object, {
+  T? Function(dynamic object)? customParser,
+}) {
   if (object == null)
     return null;
   if (object is T)
@@ -63,14 +69,24 @@ T? tryParseAsTyped<T>(dynamic object, { T? Function(dynamic object)? customParse
   return null;
 }
 
-List<T> parseList<T>(dynamic json, { T? Function(dynamic json)? customItemParser, }) {
-  final List<T>? value = tryParseList<T>(json, customItemParser: customItemParser);
+/// Parse object to list of given type [T] or throw exception if that's not
+/// possible.
+List<T> parseList<T>(dynamic json, {
+  T? Function(dynamic json)? customItemParser,
+}) {
+  final List<T>? value = tryParseList<T>(
+    json,
+    customItemParser: customItemParser,
+  );
   if (value == null)
     throw Exception('Parse failed.');
   return value;
 }
 
-List<T>? tryParseList<T>(dynamic json, { T? Function(dynamic json)? customItemParser, }) {
+/// Try parse object to list of given type [T].
+List<T>? tryParseList<T>(dynamic json, {
+  T? Function(dynamic json)? customItemParser,
+}) {
   if (json == null)
     return null;
   if (json is List<dynamic>) {
@@ -85,8 +101,11 @@ List<T>? tryParseList<T>(dynamic json, { T? Function(dynamic json)? customItemPa
     }
     return arr;
   }
+  return null;
 }
 
+/// Try parse object to map of given key type [K] and value type [V] or throw
+/// exception if that's not possible.
 Map<K, V> parseMap<K, V>(dynamic json, {
   K? Function(dynamic json)? customKeyParser,
   V? Function(dynamic json)? customValueParser,
@@ -101,6 +120,7 @@ Map<K, V> parseMap<K, V>(dynamic json, {
   return value;
 }
 
+/// Try parse object to map of given key type [K] and value type [V].
 Map<K, V>? tryParseMap<K, V>(dynamic json, {
   K? Function(dynamic json)? customKeyParser,
   V? Function(dynamic json)? customValueParser,
@@ -126,4 +146,5 @@ Map<K, V>? tryParseMap<K, V>(dynamic json, {
     });
     return map;
   }
+  return null;
 }

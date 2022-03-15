@@ -1,5 +1,6 @@
 /// Search sorting options.
 class SearchSort {
+  /// Create search sort.
   const SearchSort._(this._value) : super();
 
   /// String value of search parameter.

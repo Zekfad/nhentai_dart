@@ -1,5 +1,6 @@
 /// API exception.
 class APIException implements Exception {
+  /// Create API exception.
   const APIException(this.message) : super();
 
   /// Exception message.
@@ -19,7 +20,7 @@ class APIException implements Exception {
       if (error is String)
         throw APIException(error);
       if (error is bool)
-        throw APIException('Generic exception.');
+        throw const APIException('Generic exception.');
     }
   }
 }

@@ -5,6 +5,7 @@ import 'utils.dart' show tryParseAsTyped, parseAsTyped, parseList, parseMap;
 
 /// Book title.
 class BookTitle {
+  /// Create book tittle.
   const BookTitle({
     required this.english,
     required this.japanese,
@@ -15,7 +16,7 @@ class BookTitle {
   final String? english;
   /// Japanese title.
   final String? japanese;
-  /// Pretty title. Short and without special prefixes/postfixes.
+  /// "Pretty" title. Short and without special prefixes/postfixes.
   final String pretty;
 
   /// Get [pretty] tittle.
@@ -37,6 +38,7 @@ class BookTitle {
 
 /// Book.
 class Book {
+  /// Create book.
   Book({
     required this.title,
     required this.id,
