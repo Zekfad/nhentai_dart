@@ -3,11 +3,12 @@ import 'dart:collection';
 import 'Tag.dart';
 
 
-/// Immutable tags list.
+/// Unmodifiable tags list.
 /// Extends unmodifiable list with helpful methods.
 class TagsList extends ListBase<Tag> {
+  /// Create unmodifiable tag list from iterable with tags.
   TagsList(
-    List<Tag> list,
+    Iterable<Tag> list,
   ) :
     _list = List.unmodifiable(list),
     super();
@@ -18,15 +19,22 @@ class TagsList extends ListBase<Tag> {
   /// Tags count.
   @override
   int get length => _list.length;
+
   /// Always throws, because tags list is unmodifiable.
   @override
-  set length(int newLength) => throw Exception('Tags list is unmodifiable.');
+  set length(int newLength) => throw UnsupportedError(
+    'Cannot change tags list length because it is unmodifiable.',
+  );
+
   /// Get tag by [index].
   @override
   Tag operator [](int index) => _list[index];
+
   /// Always throws, because tags list is unmodifiable.
   @override
-  operator []=(int index, Tag value) => throw Exception('Tags list is unmodifiable.');
+  void operator []=(int index, Tag value) => throw UnsupportedError(
+    'Cannot change tags list values because it is unmodifiable.',
+  );
 
   /// Get unmodifiable subset of tags with requested [types].
   Iterable<Tag> get(List<TagType> types) => List.unmodifiable(
