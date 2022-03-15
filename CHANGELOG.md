@@ -1,3 +1,8 @@
+## 1.0.0-dev.5
+- Update readme to match new API.
+- Update package description.
+- Fix Hosts#getHost preference argument was unused.
+
 ## 1.0.0-dev.4
 
 - BREAKING: rename `doSearch` to `searchSinglePage` and `doSearchTagged` to `searchTaggedSinglePage`
