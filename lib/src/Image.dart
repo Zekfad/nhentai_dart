@@ -49,8 +49,9 @@ class ImageType {
 }
 
 /// Image.
-/// Cover or normal page.
+/// Cover or usual page.
 class Image {
+  /// Create image.
   Image({
     required this.id,
     required this.book,
@@ -62,15 +63,15 @@ class Image {
 
   /// Image ID.
   /// `0` for book cover.
-  /// *Page number* for normal pages.
+  /// *Page number* for usual pages.
   final int id;
   /// Whether image is thumbnail.
   final bool isThumbnail;
   /// Image's related Book.
   final Book book;
-  /// Image type (format and extension).
+  /// Image type (provides format and extension).
   final ImageType type;
-  /// Image width is pixels.
+  /// Image width in pixels.
   final int? width;
   /// Image height in pixels.
   final int? height;
@@ -79,7 +80,10 @@ class Image {
   bool get isCover => id == 0;
 
   /// Image filename.
-  String get filename => '${isCover? (isThumbnail ? 'thumb' : 'cover') : (isThumbnail ? '${id}t' : id)}.${type.extension}';
+  String get filename => '${isCover
+    ? (isThumbnail ? 'thumb' : 'cover')
+    : (isThumbnail ? '${id}t' : '$id')
+  }.${type.extension}';
 
   /// Get image description.
   /// Consists of book title and image [filename].
@@ -87,7 +91,8 @@ class Image {
   String toString() => '[$book/$filename]';
 
   /// Get image thumbnail.
-  /// This method will return itself if it's already a thumbnail or cover.
+  /// This method will return object itself if method was called upon thumbnail
+  /// or cover.
   Image get thumbnail => isThumbnail || isCover
     ? this
     : Image(
@@ -104,7 +109,7 @@ class Image {
   }) {
     final url = (api?.hosts ?? hosts)?.getImageUrl(this);
     if (url == null)
-      throw Exception('Either api or hosts must be provided.');
+      throw ArgumentError('Either api or hosts must be provided.');
     return url;
   }  
 
@@ -126,12 +131,12 @@ class Image {
       'If that\'s not an error open new issue for adding support for "$_type" type.',
     );
     return Image(
-      id       : id,
-      book     : book,
+      id         : id,
+      book       : book,
       isThumbnail: thumbnail,
-      type     : type ?? ImageType._unknown(_type),
-      width    : parseAsTyped(json?['w'])!,
-      height   : parseAsTyped(json?['h'])!,
+      type       : type ?? ImageType._unknown(_type),
+      width      : parseAsTyped(json?['w']),
+      height     : parseAsTyped(json?['h']),
     );
   }
 }
