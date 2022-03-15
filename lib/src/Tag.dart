@@ -37,6 +37,7 @@ TagType _getTagType(String tagType) {
 
 /// Tag.
 class Tag {
+  /// Create tag.
   const Tag({
     required this.id,
     required this.type,
@@ -64,7 +65,7 @@ class Tag {
   /// Tag url.
   final Uri url;
 
-  /// Get tag summary: name and tagged count.
+  /// Get tag summary (name and tagged books count).
   String get summary => '$name ($count)';
 
   /// Get tag type as string.
@@ -77,14 +78,13 @@ class Tag {
   /// Compare tags.
   /// Tags are considered equal when they have the same [id], [type] and [name].
   @override
-  // ignore: hash_and_equals
-  bool operator ==(Object other) {
-    if (other is Tag)
-      return id == other.id
-        && type == other.type
-        && name == other.name;
-    return false;
-  }
+  bool operator ==(Object other) => (other is Tag)
+    && id == other.id
+    && type == other.type
+    && name == other.name;
+
+  @override
+  int get hashCode => Object.hash(id, type, name);
 
   /// Parse tag from API [json] object.
   static Tag? parse(dynamic json) {
