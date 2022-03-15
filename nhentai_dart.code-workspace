@@ -14,7 +14,8 @@
 			"NHentai",
 			"scanlator",
 			"unawaited",
-			"pubspec"
+			"pubspec",
+			"bools",
 		]
 	}
 }
