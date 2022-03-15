@@ -50,14 +50,14 @@ class Hosts {
   /// Get host corresponding to [hostType] with respect to [hostPreference] or
   /// optionally provided [preference].
   String getHost(HostType hostType, [int? preference]) {
-    final _preference = hostPreference[hostType] ?? 0;
+    preference ??= hostPreference[hostType] ?? 0;
     switch (hostType) {
       case HostType.api:
         return api;
       case HostType.images:
-        return images[_preference];
+        return images[preference];
       case HostType.thumbnails:
-        return thumbnails[_preference];
+        return thumbnails[preference];
     }
   }
 
