@@ -3,10 +3,12 @@
 ## Features
 
 * Full model (books, images, tags).
-* Search for text query or tags.
-* Getting random books.
+* Search for text query.
+* Search by tag(s).
+* Get random book.
 * Configurable hosts.
-* Proxy support via custom `HttpClient`.
+* Support custom `HttpClient`.
+* Drop-in HTTP proxy support (configurable by URI).
 
 ## Usage
 
@@ -16,7 +18,7 @@ import 'package:nhentai/nhentai.dart';
 ```
 Create client instance:
 ```dart
-final api = NHentai();
+final api = API();
 ```
 
 Get the data:
@@ -35,6 +37,8 @@ print(
   'First page thumbnail: ${book.pages.first.thumbnail.getUrl(api: api)}\n',
 );
 ```
+
+See more usage at [example](/example/) folder.
 
 ## License
 

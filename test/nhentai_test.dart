@@ -6,7 +6,7 @@ void main() {
   // No tests yet.
 
   // group('Test API client', () {
-  //   final api = NHentai();
+  //   final api = API();
 
   //   test('Test get book', () {
   //     api.getBook(1);
