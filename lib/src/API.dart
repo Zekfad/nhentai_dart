@@ -22,8 +22,12 @@ enum HostType {
 class Hosts {
   const Hosts({
     this.api            = 'nhentai.net',
-    this.images         = const [ 'i.nhentai.net', 'i2.nhentai.net', 'i5.nhentai.net', 'i7.nhentai.net', ],
-    this.thumbnails     = const [ 't.nhentai.net', 't2.nhentai.net', 't5.nhentai.net', 't7.nhentai.net', ],
+    this.images         = const [
+      'i.nhentai.net', 'i2.nhentai.net', 'i5.nhentai.net', 'i7.nhentai.net',
+    ],
+    this.thumbnails     = const [
+      't.nhentai.net', 't2.nhentai.net', 't5.nhentai.net', 't7.nhentai.net',
+    ],
     this.hostPreference = const {
       HostType.images    : 0,
       HostType.thumbnails: 0,
@@ -69,12 +73,38 @@ class Hosts {
 
 /// API client.
 class API {
+  /// Create [API] client with provided HTTP [client] (if any) and [hosts].
   API({
     HttpClient? client,
     this.hosts = const Hosts(),
   }) :
     client = client ?? HttpClient(),
     super();
+
+  /// Create [API] client with provided proxy config and [hosts].
+  /// [proxyUri] must be in format of `http://host:port` or 
+  /// http://username:password@host:port`
+  API.proxy(String proxyUri, { this.hosts = const Hosts(), }) :
+    client = HttpClient(),
+    super() {
+      final _proxyUri = Uri.tryParse(proxyUri);
+      if (_proxyUri == null || _proxyUri.scheme != 'http')
+        throw ArgumentError.value(proxyUri, 'uri', 'Proxy URI must be valid');
+
+      final match = RegExp(r'^(?<username>.+?):(?<password>.+?)$')
+        .firstMatch(_proxyUri.userInfo);
+      final username = match?.namedGroup('username');
+      final password = match?.namedGroup('password');
+
+      if (username != null && password != null)
+        client.addProxyCredentials(
+          _proxyUri.host,
+          _proxyUri.port,
+          'Basic',
+          HttpClientBasicCredentials(username, password),
+        );
+      client.findProxy = (uri) => 'PROXY ${_proxyUri.host}:${_proxyUri.port}';
+  }
 
   /// HttpClient to be used for requests.
   final HttpClient client;
@@ -124,100 +154,105 @@ class API {
   }
 
   /// Get book with given [id].
-  Future<Book?> getBook(int id) async => tryParseAsTyped<Book>(
-    await _getJson(_getPath(HostType.api, '/api/gallery/$id')),
-  );
+  Future<Book?> getBook(int id) async {
+    assert(id > 0, 'Id must be positive integer.');
+    return tryParseAsTyped<Book>(
+      await _getJson(_getPath(HostType.api, '/api/gallery/$id')),
+    );
+  }
 
   /// Get [image] url with respect to this client instance [hosts] settings.
   Uri getImageUrl(Image image) => hosts.getImageUrl(image);
 
-  /// Search for text [query].
-  /// Optionally you can pass [page] witch is 1 by default and must be positive
-  /// and [sort] which is [SearchSort.recent] be default.
-  Future<Search?> doSearch(String query, {
+  /// Get single page of search for text or tag [query].
+  /// Optionally you can provide positive [page] number and [sort].
+  Future<Search?> _searchSinglePage(SearchQuery query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) async {
-    if (page < 0)
-      throw Exception('Page must be positive integer');
+    assert(page > 0, 'Page must be positive integer.');
+    final isTagSearch = query is SearchTag;
     return Search.parse(
       await _getJson(
-        _getPath(HostType.api, '/api/galleries/search', {
-          'query': query,
-          'page' : page.toString(),
-          if (sort != SearchSort.recent)
-            'sort': sort.toString(),
-        }),
+        _getPath(
+          HostType.api,
+          '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
+          {
+            if (isTagSearch)
+              'tag_id': query.tag.id.toString()
+            else
+              'query': query.toString(),
+            'page' : page.toString(),
+            if (sort != SearchSort.recent)
+              'sort': sort.toString(),
+          }
+        ),
       ),
-      query: SearchText(query),
+      query: query,
       page : page,
       sort : sort,
     );
   }
 
-  /// Search for books tagged with [tag].
-  /// Optionally you can pass [page] witch is 1 by default and must be positive
-  /// and [sort] which is [SearchSort.recent] be default.
-  Future<Search?> doSearchTagged(Tag tag, {
+  /// Search for [query].
+  /// Optionally you can provide positive [page] number and [sort].
+  Stream<Search> _search(SearchQuery query, {
     int page = 1,
+    int? count,
     SearchSort sort = SearchSort.recent,
-  }) async {
+  }) async* {
     if (page < 0)
-      throw Exception('Page must be positive integer');
-    return Search.parse(
-      await _getJson(
-        _getPath(HostType.api, '/api/galleries/tagged', {
-          'tag_id': tag.id.toString(),
-          'page'  : page.toString(),
-          if (sort != SearchSort.recent)
-            'sort': sort.toString(),
-        }),
-      ),
-      query: SearchTag(tag),
-      page : page,
-      sort : sort,
-    );
+      throw ArgumentError.value(page, 'page', 'Must be positive integer');
+    late int _pages;
+    if (count != null)
+      _pages = page + count - 1;
+    int _page = page;
+    Search? search;
+    do {
+      search = await _searchSinglePage(query, page: _page++, sort: sort);
+      if (search == null)
+        throw Exception('Cannot parse search result.');
+      if (count == null)
+        _pages = search.pages;
+      yield search;
+    } while (_page <= _pages);
   }
 
+  /// Get single page of search for text [query].
+  /// Optionally you can provide positive [page] number and [sort].
+  Future<Search?> searchSinglePage(String query, {
+    int page = 1,
+    SearchSort sort = SearchSort.recent,
+  }) => _searchSinglePage(SearchText(query), page: page, sort: sort);
+
   /// Search for text [query].
-  /// Optionally you can pass [page] witch is 1 by default and must be positive
-  /// and [sort] which is [SearchSort.recent] be default.
+  /// Optionally you can provide positive [page] number and [sort].
+  /// 
+  /// **Always specify [count] if you only need a certain number of pages**,
+  /// otherwise the stream  will keep making additional requests for more pages
+  /// even if you `break` `await for` loop.
   Stream<Search> search(String query, {
     int page = 1,
+    int? count,
     SearchSort sort = SearchSort.recent,
-  }) async* {
-    if (page < 0)
-      throw Exception('Page must be positive integer');
-    int _pages;
-    int _page = page;
-    Search? search;
-    do {
-      search = await doSearch(query, page: _page++, sort: sort);
-      if (search == null)
-        throw Exception('Cannot parse search result.');
-      _pages = search.pages;
-      yield search;
-    } while (_page <= _pages);
-  }
+  }) => _search(SearchText(query), page: page, count: count, sort: sort);
 
-  /// Search for books tagged with [tag].
-  /// Optionally you can pass [page] witch is 1 by default and must be positive
-  /// and [sort] which is [SearchSort.recent] be default.
-  Stream<Search> searchTagged(Tag tag, {
+  /// Get single page of search for books tagged with [tag].
+  /// Optionally you can provide positive [page] number and [sort].
+  Future<Search?> searchTaggedSinglePage(Tag tag, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
-  }) async* {
-    if (page < 0)
-      throw Exception('Page must be positive integer');
-    int _pages;
-    int _page = page;
-    Search? search;
-    do {
-      search = await doSearchTagged(tag, page: _page++, sort: sort);
-      if (search == null)
-        throw Exception('Cannot parse search result.');
-      _pages = search.pages;
-      yield search;
-    } while (_page <= _pages);
-  }
+  }) => _searchSinglePage(SearchTag(tag), page: page, sort: sort);
+
+  /// Search for books tagged with [tag].
+  /// Optionally you can provide positive [page] number and [sort].
+  /// 
+  /// **Always specify [count] if you only need a certain number of pages**,
+  /// otherwise the stream  will keep making additional requests for more pages
+  /// even if you `break` `await for` loop.
+  Stream<Search> searchTagged(Tag tag, {
+    int page = 1,
+    int? count,
+    SearchSort sort = SearchSort.recent,
+  }) => _search(SearchTag(tag), page: page, count: count, sort: sort);
 }
