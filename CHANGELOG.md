@@ -1,3 +1,10 @@
+## 1.0.0-dev.4
+
+- BREAKING: rename `doSearch` to `searchSinglePage` and `doSearchTagged` to `searchTaggedSinglePage`
+- Update main usage example.
+- Add tags example.
+- Update docs.
+
 ## 1.0.0-dev.3
 
 - Update docs.
