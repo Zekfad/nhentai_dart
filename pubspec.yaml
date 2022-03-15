@@ -1,9 +1,10 @@
 name: nhentai
-version: 1.0.0-dev.4
-description: nhentai.net API client.
+description: Dart client for nhentai.net undocumented APIs.
+version: 1.0.0-dev.5
 homepage: https://github.com/Zekfad/nhentai_dart
-issue_tracker: https://github.com/Zekfad/nhentai_dart/issues
 repository: https://github.com/Zekfad/nhentai_dart
+issue_tracker: https://github.com/Zekfad/nhentai_dart/issues
+documentation: https://pub.dev/documentation/nhentai/latest/
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
