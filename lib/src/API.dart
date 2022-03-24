@@ -1,5 +1,7 @@
 import 'dart:convert';
-import 'package:universal_io/io.dart';
+import 'dart:io'
+  if (dart.library.js) 'package:universal_io/io.dart'
+  if (dart.library.html) 'package:universal_io/io.dart';
 
 import 'DataModel.dart';
 import 'platform.dart' as platform;

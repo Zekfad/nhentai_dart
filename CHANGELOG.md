@@ -1,3 +1,6 @@
+## 1.0.0-dev.7
+- Use `dart:io` on native platforms.
+
 ## 1.0.0-dev.6
 - Experimental web support.
 - Update readme with web usage notes.
