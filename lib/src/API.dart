@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:universal_io/io.dart';
 
 import 'DataModel.dart';
+import 'platform.dart' as platform;
 import 'search/Query.dart';
 import 'utils.dart' show tryParseAsTyped;
 
@@ -84,30 +85,33 @@ class API {
   /// Create [API] client with provided proxy config and [hosts].
   /// [proxyUri] must be in format of `http://host:port` or 
   /// http://username:password@host:port`
-  API.proxy(String proxyUri, { this.hosts = const Hosts(), }) :
-    client = HttpClient(),
-    super() {
-      final _proxyUri = Uri.tryParse(proxyUri);
-      if (_proxyUri == null || _proxyUri.scheme != 'http')
-        throw ArgumentError.value(proxyUri, 'uri', 'Proxy URI must be valid');
+  API.proxy(String proxyUri, { this.hosts = const Hosts(), }) : super() {
+    if (platform.isJS())
+      throw UnsupportedError('Proxy is not supported on web');
 
-      final match = RegExp(r'^(?<username>.+?):(?<password>.+?)$')
-        .firstMatch(_proxyUri.userInfo);
-      final username = match?.namedGroup('username');
-      final password = match?.namedGroup('password');
+    final _proxyUri = Uri.tryParse(proxyUri);
+    if (_proxyUri == null || _proxyUri.scheme != 'http')
+      throw ArgumentError.value(proxyUri, 'uri', 'Proxy URI must be valid');
 
-      if (username != null && password != null)
-        client.addProxyCredentials(
-          _proxyUri.host,
-          _proxyUri.port,
-          'Basic',
-          HttpClientBasicCredentials(username, password),
-        );
-      client.findProxy = (uri) => 'PROXY ${_proxyUri.host}:${_proxyUri.port}';
+    final match = RegExp(r'^(?<username>.+?):(?<password>.+?)$')
+      .firstMatch(_proxyUri.userInfo);
+    final username = match?.namedGroup('username');
+    final password = match?.namedGroup('password');
+
+    client = HttpClient();
+
+    if (username != null && password != null)
+      client.addProxyCredentials(
+        _proxyUri.host,
+        _proxyUri.port,
+        'Basic',
+        HttpClientBasicCredentials(username, password),
+      );
+    client.findProxy = (uri) => 'PROXY ${_proxyUri.host}:${_proxyUri.port}';
   }
 
   /// HttpClient to be used for requests.
-  final HttpClient client;
+  late final HttpClient client;
   /// Hosts settings.
   final Hosts hosts;
 

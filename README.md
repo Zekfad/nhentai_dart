@@ -1,4 +1,4 @@
-# Dart client for nhentai.net undocumented APIs.
+# Client for nhentai.net undocumented APIs
 
 ## Features
 
@@ -9,6 +9,16 @@
 * Configurable hosts.
 * Support custom `HttpClient`.
 * Drop-in HTTP proxy support (configurable by URI).
+
+### Note of web usage
+
+Using this module on web platform is experimental and has some drawbacks:
+
+* You can't access nhentai directly due to CORS.
+  * Workaround: use CORS enabled mirror (for example you can use
+    [dev-mirror](https://github.com/Zekfad/dev-mirror)).
+* `API#getRandomBook` doesn't work due to limitations of `XHR`.
+* Proxy doesn't supported on web.
 
 ## Usage
 
@@ -38,7 +48,7 @@ print(
 );
 ```
 
-See more usage at [example](/example/) folder.
+See more usage at [example](example/) folder.
 
 ## License
 

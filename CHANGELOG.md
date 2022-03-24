@@ -1,3 +1,7 @@
+## 1.0.0-dev.6
+- Experimental web support.
+- Update readme with web usage notes.
+
 ## 1.0.0-dev.5
 - Update readme to match new API.
 - Update package description.
