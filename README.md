@@ -10,7 +10,7 @@
 * Support custom `HttpClient`.
 * Drop-in HTTP proxy support (configurable by URI).
 
-### Note of web usage
+### Notes about web usage
 
 Using this module on web platform is experimental and has some drawbacks:
 
