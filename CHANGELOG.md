@@ -1,3 +1,6 @@
+## 1.0.0-dev.8
+- Add SSL options to Hosts.
+
 ## 1.0.0-dev.7
 - Use `dart:io` on native platforms.
 

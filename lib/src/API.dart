@@ -35,10 +35,18 @@ class Hosts {
       HostType.images    : 0,
       HostType.thumbnails: 0,
     },
+    this.hostSsl        = const {
+      HostType.api       : true,
+      HostType.images    : true,
+      HostType.thumbnails: true,
+    },
   });
 
   /// Default host preference a.k.a. which host to choice from hosts lists.
   final Map<HostType, int> hostPreference;
+
+  /// Hosts SSL settings: whether to use HTTPS or HTTP.
+  final Map<HostType, bool> hostSsl;
 
   /// Main api site.
   final String api;
@@ -119,11 +127,17 @@ class API {
 
   /// Get uri with given [host], [path] and optional [query].
   Uri _getPath(HostType host, String path, [SimpleQuery? query]) =>
-    Uri.https(
-      hosts[host],
-      path,
-      query,
-    );
+    (hosts.hostSsl[host] ?? true)
+      ? Uri.https(
+          hosts[host],
+          path,
+          query,
+        )
+      : Uri.http(
+        hosts[host],
+        path,
+        query,
+      );
 
   /// Make HTTP get request to [url].
   Future<HttpClientResponse> _get(Uri url) async {
