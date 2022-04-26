@@ -1,7 +1,7 @@
 import 'API.dart';
+import 'APIException.dart';
 import 'Book.dart';
-import 'Exceptions.dart';
-import 'utils.dart' show parseAsTyped;
+import 'parseUtils.dart' show parseAsTyped;
 
 
 /// Image type.

@@ -1,5 +1,5 @@
-import 'Exceptions.dart';
-import 'utils.dart' show parseAsTyped;
+import 'APIException.dart';
+import 'parseUtils.dart' show parseAsTyped;
 
 
 /// Tag types.

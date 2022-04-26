@@ -1,6 +1,5 @@
 import 'DataModel.dart';
-import 'TagsList.dart';
-import 'utils.dart' show tryParseAsTyped, parseAsTyped, parseList, parseMap;
+import 'parseUtils.dart' show tryParseAsTyped, parseAsTyped, parseList, parseMap;
 
 
 /// Book title.

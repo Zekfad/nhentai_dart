@@ -4,9 +4,9 @@ import 'dart:io'
   if (dart.library.html) 'package:universal_io/io.dart';
 
 import 'DataModel.dart';
+import 'parseUtils.dart' show tryParseAsTyped;
 import 'platform.dart' as platform;
 import 'search/Query.dart';
-import 'utils.dart' show tryParseAsTyped;
 
 /// Simple one-to-one query parameters map
 typedef SimpleQuery = Map<String, String>;

@@ -1,3 +1,7 @@
+## 1.0.0-dev.9
+- BREAKING: rename `NHentaiException` to `NHentaiAPIException`.
+- Exposed `TagsList` and it's prefixed version `NHentaiTagsList`.
+
 ## 1.0.0-dev.8
 - Add SSL options to Hosts.
 

@@ -1,5 +1,5 @@
 import '../DataModel.dart';
-import '../utils.dart' show parseAsTyped, parseList;
+import '../parseUtils.dart' show parseAsTyped, parseList;
 import 'Query.dart';
 
 /// Search.
