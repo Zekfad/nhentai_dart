@@ -4,7 +4,7 @@ import 'parseUtils.dart' show parseAsTyped;
 /// Comment.
 class Comment {
   /// Create comment.
-  Comment({
+  const Comment({
     required this.id,
     required this.bookId,
     required this.author,

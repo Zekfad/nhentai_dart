@@ -1,3 +1,4 @@
+import 'API.dart';
 import 'parseUtils.dart' show parseAsTyped;
 
 /// User.
@@ -25,6 +26,16 @@ class User {
   /// Is user a stuff.
   final bool staff;
 
+  Uri getAvatarUrl({
+    API? api,
+    Hosts? hosts,
+  }) {
+    final url = (api?.hosts ?? hosts)?.getAvatarUrl(this);
+    if (url == null)
+      throw ArgumentError('Either api or hosts must be provided.');
+    return url;
+  }
+
   /// Get [username].
   @override
   String toString() => username;
@@ -35,11 +46,11 @@ class User {
       return null;
 
     return User(
-      id: parseAsTyped(json?['id']), 
-      username: parseAsTyped(json?['username']), 
-      slug: parseAsTyped(json?['slug']), 
-      avatarFilename: Uri.parse(parseAsTyped(json?['avatar_url'])).pathSegments.last, 
-      superuser: parseAsTyped(json?['is_superuser']), 
+      id: parseAsTyped(json?['id']),
+      username: parseAsTyped(json?['username']),
+      slug: parseAsTyped(json?['slug']),
+      avatarFilename: Uri.parse(parseAsTyped(json?['avatar_url'])).pathSegments.last,
+      superuser: parseAsTyped(json?['is_superuser']),
       staff: parseAsTyped(json?['is_staff']),
     );
   }

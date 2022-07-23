@@ -85,7 +85,7 @@ class Hosts {
   /// Get user avatar url with respect to hosts settings.
   Uri getAvatarUrl(User user) => Uri.https(
     getHost(HostType.images),
-    user.avatarFilename,
+    '/avatars/${user.avatarFilename}',
   );
 }
 
@@ -169,6 +169,12 @@ class API {
     return response.headers[HttpHeaders.locationHeader]!.first;
   }
 
+  /// Get [image] url with respect to this client instance [hosts] settings.
+  Uri getImageUrl(Image image) => hosts.getImageUrl(image);
+
+  /// Get user avatar url with respect to this client instance [hosts] settings.
+  Uri getAvatarUrl(User user) => hosts.getAvatarUrl(user);
+
   /// Get random book.
   Future<Book?> getRandomBook() async {
     final url = await _getRedirectUrl(_getPath(HostType.api, '/random/'));
@@ -187,12 +193,6 @@ class API {
       await _getJson(_getPath(HostType.api, '/api/gallery/$id')),
     );
   }
-
-  /// Get [image] url with respect to this client instance [hosts] settings.
-  Uri getImageUrl(Image image) => hosts.getImageUrl(image);
-
-  /// Get user avatar url with respect to this client instance [hosts] settings.
-  Uri getAvatarUrl(User user) => hosts.getAvatarUrl(user);
 
   /// Get comments associated with given book ID.
   Future<List<Comment>?> getComments(int bookId) async {
