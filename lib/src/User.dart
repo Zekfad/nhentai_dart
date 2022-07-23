@@ -3,13 +3,13 @@ import 'parseUtils.dart' show parseAsTyped;
 /// User.
 class User {
   /// Create user.
-  User({
+  const User({
     required this.id,
     required this.username,
     required this.slug,
-    required this.avatarUrl,
-    required this.isSuperuser,
-    required this.isStaff,
+    required this.avatarFilename,
+    required this.superuser,
+    required this.staff,
   }) : super();
 
   /// User ID.
@@ -19,11 +19,11 @@ class User {
   /// User slug.
   final String slug;
   /// User relevant avatar path.
-  final String avatarUrl;
+  final String avatarFilename;
   /// Is user a superuser.
-  final bool isSuperuser;
+  final bool superuser;
   /// Is user a stuff.
-  final bool isStaff;
+  final bool staff;
 
   /// Get [username].
   @override
@@ -33,13 +33,14 @@ class User {
   static User? parse(dynamic json) {
     if(json == null)
       return null;
+
     return User(
       id: parseAsTyped(json?['id']), 
       username: parseAsTyped(json?['username']), 
       slug: parseAsTyped(json?['slug']), 
-      avatarUrl: parseAsTyped(json?['avatar_url']), 
-      isSuperuser: parseAsTyped(json?['is_superuser']), 
-      isStaff: parseAsTyped(json?['is_staff']),
+      avatarFilename: Uri.parse(parseAsTyped(json?['avatar_url'])).pathSegments.last, 
+      superuser: parseAsTyped(json?['is_superuser']), 
+      staff: parseAsTyped(json?['is_staff']),
     );
   }
 }

@@ -83,9 +83,9 @@ class Hosts {
 
 
   /// Get user avatar url with respect to hosts settings.
-  Uri getAvatarUrl(String avatarUrl) => Uri.https(
+  Uri getAvatarUrl(User user) => Uri.https(
     getHost(HostType.images),
-    avatarUrl,
+    user.avatarFilename,
   );
 }
 
@@ -191,16 +191,18 @@ class API {
   /// Get [image] url with respect to this client instance [hosts] settings.
   Uri getImageUrl(Image image) => hosts.getImageUrl(image);
 
+  /// Get user avatar url with respect to this client instance [hosts] settings.
+  Uri getAvatarUrl(User user) => hosts.getAvatarUrl(user);
+
   /// Get comments associated with given book ID.
   Future<List<Comment>?> getComments(int bookId) async {
     assert(bookId > 0, 'Id must be positive integer.');
     return tryParseList<Comment>(
-      _getJson(_getPath(HostType.api, '/api/gallery/$bookId/comments')),
+      _getJson(
+        _getPath(HostType.api, '/api/gallery/$bookId/comments'),
+      ),
     );
   }
-
-  /// Get user avatar url with respect to this client instance [hosts] settings.
-  Uri getAvatarUrl(String avatarUrl) => hosts.getAvatarUrl(avatarUrl);
 
   /// Get single page of search for text or tag [query].
   /// Optionally you can provide positive [page] number and [sort].

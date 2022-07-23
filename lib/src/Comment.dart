@@ -1,25 +1,25 @@
 import 'DataModel.dart';
-import 'parseUtils.dart' show tryParseAsTyped, parseAsTyped, parseList, parseMap;
+import 'parseUtils.dart' show parseAsTyped;
 
 /// Comment.
 class Comment {
   /// Create comment.
   Comment({
     required this.id,
-    required this.galleryId,
-    required this.poster,
-    required this.postDate,
+    required this.bookId,
+    required this.author,
+    required this.date,
     required this.body,
   }) : super();
 
   /// Comment ID.
   final int id;
   /// Gallery ID associated with comment.
-  final int galleryId;
+  final int bookId;
   /// Comment author.
-  final User poster;
+  final User author;
   /// Comment post date.
-  final DateTime postDate;
+  final DateTime date;
   /// Comment content.
   final String body;
 
@@ -34,9 +34,9 @@ class Comment {
 
     return Comment(
       id: parseAsTyped(json?['id']), 
-      galleryId: parseAsTyped(json['gallery_id']), 
-      poster: parseAsTyped(json['poster']), 
-      postDate: DateTime.fromMillisecondsSinceEpoch(parseAsTyped<int>(json?['post_date']) * 1000), 
+      bookId: parseAsTyped(json['gallery_id']), 
+      author: parseAsTyped(json['poster']), 
+      date: DateTime.fromMillisecondsSinceEpoch(parseAsTyped<int>(json?['post_date']) * 1000), 
       body: parseAsTyped(json?['body']),
       );
   }
