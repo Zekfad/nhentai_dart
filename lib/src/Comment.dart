@@ -1,4 +1,5 @@
 import 'DataModel.dart';
+import 'parseUtils.dart' show tryParseAsTyped, parseAsTyped, parseList, parseMap;
 
 /// Comment.
 class Comment {
@@ -21,4 +22,22 @@ class Comment {
   final DateTime postDate;
   /// Comment content.
   final String body;
+
+  /// Get [body].
+  @override
+  String toString() => body;
+
+  /// Parse comment from API [json] object.
+  static Comment? parse(dynamic json) {
+    if(json == null)
+      return null;
+
+    return Comment(
+      id: parseAsTyped(json?['id']), 
+      galleryId: parseAsTyped(json['gallery_id']), 
+      poster: parseAsTyped(json['poster']), 
+      postDate: DateTime.fromMillisecondsSinceEpoch(parseAsTyped<int>(json?['post_date']) * 1000), 
+      body: parseAsTyped(json?['body']),
+      );
+  }
 }

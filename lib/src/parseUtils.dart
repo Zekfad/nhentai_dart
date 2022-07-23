@@ -59,6 +59,10 @@ T? tryParseAsTyped<T>(dynamic object, {
     return BookTitle.parse(object) as T?;
   if (T == Tag)
     return Tag.parse(object) as T?;
+  if (T == Comment)
+    return Comment.parse(object) as T?;
+  if (T == User)
+    return User.parse(object) as T?;
 
   // Enums
   if (T == TagType)

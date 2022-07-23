@@ -1,3 +1,5 @@
+import 'parseUtils.dart' show parseAsTyped;
+
 /// User.
 class User {
   /// Create user.
@@ -22,4 +24,22 @@ class User {
   final bool isSuperuser;
   /// Is user a stuff.
   final bool isStaff;
+
+  /// Get [username].
+  @override
+  String toString() => username;
+
+  /// Parse user from API [json] object.
+  static User? parse(dynamic json) {
+    if(json == null)
+      return null;
+    return User(
+      id: parseAsTyped(json?['id']), 
+      username: parseAsTyped(json?['username']), 
+      slug: parseAsTyped(json?['slug']), 
+      avatarUrl: parseAsTyped(json?['avatar_url']), 
+      isSuperuser: parseAsTyped(json?['is_superuser']), 
+      isStaff: parseAsTyped(json?['is_staff']),
+    );
+  }
 }
