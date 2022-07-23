@@ -23,3 +23,7 @@ typedef NHentaiTag = Tag;
 typedef NHentaiTagType = TagType;
 /// [TagsList] alias
 typedef NHentaiTagsList = TagsList;
+/// [User] alias
+typedef NHentaiUser = User;
+/// [Comment] alias
+typedef NhentaiComment = Comment;
