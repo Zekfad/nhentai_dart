@@ -17,15 +17,16 @@ class User {
   final int id;
   /// User name.
   final String username;
-  /// User slug.
+  /// Human-readable unique user identifier. 
   final String slug;
-  /// User relevant avatar path.
+  /// User's avatar file name.
   final String avatarFilename;
-  /// Is user a superuser.
+  /// Whether user is superuser.
   final bool superuser;
-  /// Is user a stuff.
+  /// Whether user is staff member.
   final bool staff;
 
+  /// Get avatar url using hosts settings from [api] client or [hosts] config.
   Uri getAvatarUrl({
     API? api,
     Hosts? hosts,
@@ -44,7 +45,6 @@ class User {
   static User? parse(dynamic json) {
     if(json == null)
       return null;
-
     return User(
       id: parseAsTyped(json?['id']),
       username: parseAsTyped(json?['username']),

@@ -81,7 +81,6 @@ class Hosts {
     '/galleries/${image.book.media}/${image.filename}',
   );
 
-
   /// Get user avatar url with respect to hosts settings.
   Uri getAvatarUrl(User user) => Uri.https(
     getHost(HostType.images),
@@ -169,10 +168,10 @@ class API {
     return response.headers[HttpHeaders.locationHeader]!.first;
   }
 
-  /// Get [image] url with respect to this client instance [hosts] settings.
+  /// Get [image] url with respect to [hosts] settings.
   Uri getImageUrl(Image image) => hosts.getImageUrl(image);
 
-  /// Get user avatar url with respect to this client instance [hosts] settings.
+  /// Get [user] avatar url with respect to [hosts] settings.
   Uri getAvatarUrl(User user) => hosts.getAvatarUrl(user);
 
   /// Get random book.
@@ -194,7 +193,7 @@ class API {
     );
   }
 
-  /// Get comments associated with given book ID.
+  /// Get book comments.
   Future<List<Comment>?> getComments(int bookId) async {
     assert(bookId > 0, 'Id must be positive integer.');
     return tryParseList<Comment>(

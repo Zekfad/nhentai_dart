@@ -14,7 +14,7 @@ class Comment {
 
   /// Comment ID.
   final int id;
-  /// Gallery ID associated with comment.
+  /// Book ID associated with comment.
   final int bookId;
   /// Comment author.
   final User author;
@@ -23,7 +23,7 @@ class Comment {
   /// Comment content.
   final String body;
 
-  /// Get [body].
+  /// Get comment [body].
   @override
   String toString() => body;
 
@@ -31,7 +31,6 @@ class Comment {
   static Comment? parse(dynamic json) {
     if(json == null)
       return null;
-
     return Comment(
       id: parseAsTyped(json?['id']), 
       bookId: parseAsTyped(json['gallery_id']), 
