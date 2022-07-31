@@ -43,7 +43,7 @@ class User {
 
   /// Parse user from API [json] object.
   static User? parse(dynamic json) {
-    if(json == null)
+    if (json == null)
       return null;
     return User(
       id: parseAsTyped(json?['id']),
