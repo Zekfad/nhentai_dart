@@ -4,7 +4,7 @@ import 'dart:io'
   if (dart.library.html) 'package:universal_io/io.dart';
 
 import 'DataModel.dart';
-import 'parseUtils.dart' show tryParseAsTyped;
+import 'parseUtils.dart' show tryParseAsTyped, tryParseList;
 import 'platform.dart' as platform;
 import 'search/Query.dart';
 
@@ -79,6 +79,12 @@ class Hosts {
       : HostType.images,
     ),
     '/galleries/${image.book.media}/${image.filename}',
+  );
+
+  /// Get user avatar url with respect to hosts settings.
+  Uri getAvatarUrl(User user) => Uri.https(
+    getHost(HostType.images),
+    '/avatars/${user.avatarFilename}',
   );
 }
 
@@ -162,6 +168,12 @@ class API {
     return response.headers[HttpHeaders.locationHeader]!.first;
   }
 
+  /// Get [image] url with respect to [hosts] settings.
+  Uri getImageUrl(Image image) => hosts.getImageUrl(image);
+
+  /// Get [user] avatar url with respect to [hosts] settings.
+  Uri getAvatarUrl(User user) => hosts.getAvatarUrl(user);
+
   /// Get random book.
   Future<Book?> getRandomBook() async {
     final url = await _getRedirectUrl(_getPath(HostType.api, '/random/'));
@@ -181,8 +193,15 @@ class API {
     );
   }
 
-  /// Get [image] url with respect to this client instance [hosts] settings.
-  Uri getImageUrl(Image image) => hosts.getImageUrl(image);
+  /// Get book comments.
+  Future<List<Comment>?> getComments(int bookId) async {
+    assert(bookId > 0, 'Id must be positive integer.');
+    return tryParseList<Comment>(
+      _getJson(
+        _getPath(HostType.api, '/api/gallery/$bookId/comments'),
+      ),
+    );
+  }
 
   /// Get single page of search for text or tag [query].
   /// Optionally you can provide positive [page] number and [sort].
