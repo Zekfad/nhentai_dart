@@ -29,7 +29,7 @@ class Comment {
 
   /// Parse comment from API [json] object.
   static Comment? parse(dynamic json) {
-    if(json == null)
+    if (json == null)
       return null;
     return Comment(
       id: parseAsTyped(json?['id']), 
