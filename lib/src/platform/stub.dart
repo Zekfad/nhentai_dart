@@ -1,9 +1,9 @@
-/// Whether we're running on web platform.
+/// Returns whether current platform is web.
 bool isJS() {
   throw UnsupportedError('Stub code is called');
 }
 
-/// Whether we're running on desktop/mobile platform.
+/// Returns whether current platform is desktop/mobile.
 bool isIO() {
   throw UnsupportedError('Stub code is called');
 }
