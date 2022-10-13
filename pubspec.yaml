@@ -7,10 +7,11 @@ issue_tracker: https://github.com/Zekfad/nhentai_dart/issues
 # documentation: https://pub.dev/documentation/nhentai/latest/
 
 environment:
-  sdk: '>=2.16.0 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 dev_dependencies:
-  lints: ^1.0.0
+  zekfad_lints: ^1.1.0
   test: ^1.16.0
 dependencies: 
+  meta: ^1.8.0
   universal_io: ^2.0.0
