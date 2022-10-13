@@ -3,5 +3,5 @@
 /// [Search] response bodies and so on.
 library nhentai_data_model;
 
-import 'src/DataModel.dart';
-export 'src/DataModel.dart';
+import 'src/models.dart';
+export 'src/models.dart';

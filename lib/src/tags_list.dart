@@ -1,17 +1,19 @@
 import 'dart:collection';
+import 'package:meta/meta.dart';
 
-import 'Tag.dart';
+import 'tag.dart';
+import 'tag_type.dart';
 
 
 /// Unmodifiable tags list.
-/// Extends unmodifiable list with helpful methods.
+/// Extends unmodifiable list and adds helpful methods.
+@immutable
 class TagsList extends ListBase<Tag> {
-  /// Create unmodifiable tag list from iterable with tags.
+  /// Creates an unmodifiable tag list from iterable with tags.
   TagsList(
     Iterable<Tag> list,
   ) :
-    _list = List.unmodifiable(list),
-    super();
+    _list = List.unmodifiable(list);
 
   /// Underlying unmodifiable list.
   final List<Tag> _list;
@@ -20,7 +22,7 @@ class TagsList extends ListBase<Tag> {
   @override
   int get length => _list.length;
 
-  /// Always throws, because tags list is unmodifiable.
+  /// Always throws [UnsupportedError], because tags list is unmodifiable.
   @override
   set length(int newLength) => throw UnsupportedError(
     'Cannot change tags list length because it is unmodifiable.',
@@ -30,7 +32,7 @@ class TagsList extends ListBase<Tag> {
   @override
   Tag operator [](int index) => _list[index];
 
-  /// Always throws, because tags list is unmodifiable.
+  /// Always throws [UnsupportedError], because tags list is unmodifiable.
   @override
   void operator []=(int index, Tag value) => throw UnsupportedError(
     'Cannot change tags list values because it is unmodifiable.',
