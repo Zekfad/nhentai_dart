@@ -102,8 +102,11 @@ class API {
     final response = await _get(url);
     final data = await utf8.decodeStream(response);
     final json = jsonDecode(data);
-    
-    final jsonError = json?['error'];
+
+    final jsonError = json is Map<String, dynamic>
+      ? json['error']
+      : null;
+
     if (jsonError != null) {
       if (jsonError is String)
         throw APIException(jsonError);
@@ -170,7 +173,7 @@ class API {
   Future<List<Comment>?> getComments(int bookId) async {
     assert(bookId > 0, 'Book ID must be positive integer.');
     return tryParseList(
-      _getJson(
+      await _getJson(
         hosts.api.getUri('/api/gallery/$bookId/comments'),
       ),
     );
