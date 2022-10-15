@@ -5,9 +5,11 @@ import 'dart:io'
 
 import 'package:meta/meta.dart';
 
+import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'models.dart';
+import 'parsers/parse_list.dart';
 import 'platform.dart' as platform;
 import 'search.dart';
 
@@ -77,13 +79,6 @@ class API {
   /// Maximum number of retries for failed HTTP requests.
   final int maxRetries;
 
-  /// Returns [Uri] with given [host], [path] and optional [query].
-  Uri _getPath(HostType host, String path, [SimpleQuery? query]) =>
-    hosts[host].getUri(
-      path,
-      query,
-    );
-
   /// Makes HTTP GET request to [url] and returns closed [HttpClientResponse].
   Future<HttpClientResponse> _get(Uri url) async {
     var retries = 0;
@@ -135,13 +130,20 @@ class API {
   }
 
   /// Returns [Uri] for [image] via [hosts] config.
-  Uri getImageUrl(Image image) => get_image_url.getImageUrl(image, api: this);
+  Uri getImageUrl(Image image) =>
+    get_image_url.getImageUrl(image, api: this);
+
+  /// Returns [Uri] for [user]'avatar via [hosts] config.
+  Uri getAvatarUrl(User user) =>
+    get_avatar_url.getAvatarUrl(user, api: this);
 
   /// Returns random book.
   /// 
   /// Note: doesn't work on web.
   Future<Book?> getRandomBook() async {
-    final url = await _getRedirectUrl(_getPath(HostType.api, '/random/'));
+    final url = await _getRedirectUrl(
+      hosts.api.getUri('/random/'),
+    );
     if (url == null)
       return null;
     final id = RegExp(r'\d+').firstMatch(url)?.group(0);
@@ -154,9 +156,23 @@ class API {
   /// 
   /// Returns `null` if book with such [id] doesn't exist.
   Future<Book?> getBook(int id) async {
-    assert(id > 0, 'Id must be positive integer.');
+    assert(id > 0, 'ID must be positive integer.');
     return Book.tryParse(
-      await _getJson(_getPath(HostType.api, '/api/gallery/$id')),
+      await _getJson(
+        hosts.api.getUri('/api/gallery/$id'),
+      ),
+    );
+  }
+
+  /// Returns book's comments.
+  /// 
+  /// Returns `null` if result can't be parsed to [Search].
+  Future<List<Comment>?> getComments(int bookId) async {
+    assert(bookId > 0, 'Book ID must be positive integer.');
+    return tryParseList(
+      _getJson(
+        hosts.api.getUri('/api/gallery/$bookId/comments'),
+      ),
     );
   }
 
@@ -177,8 +193,7 @@ class API {
     final isTagSearch = query is SearchQueryTag;
     return Search.tryParse(
       await _getJson(
-        _getPath(
-          HostType.api,
+        hosts.api.getUri(
           '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
           {
             if (isTagSearch)

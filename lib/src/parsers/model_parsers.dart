@@ -11,4 +11,6 @@ const modelParsers = <Type, TryParseFunction<dynamic>>{
   Book: Book.tryParse,
   BookTitle: BookTitle.tryParse,
   Tag: Tag.tryParse,
+  Comment: Comment.tryParse,
+  User: User.tryParse,
 };
