@@ -2,12 +2,12 @@
 
 ## Features
 
-* Full model (books, images, tags).
+* Full model (books, images, tags, comments, users).
 * Search for text query.
 * Search by tag(s).
 * Get random book.
 * Configurable hosts.
-* Support custom `HttpClient`.
+* Support for custom `HttpClient`.
 * Drop-in HTTP proxy support (configurable by URI).
 
 ### Notes about web usage
