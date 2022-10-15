@@ -5,83 +5,14 @@ import 'dart:io'
 
 import 'package:meta/meta.dart';
 
+import 'get_image_url.dart' as get_image_url;
+import 'hosts.dart';
 import 'models.dart';
 import 'platform.dart' as platform;
 import 'search.dart';
 
-/// Simple one-to-one query parameters map
+/// Simple one-to-one query parameters map.
 typedef SimpleQuery = Map<String, String>;
-
-/// Host type
-enum HostType {
-  /// API host for getting data objects.
-  api,
-  /// Images host for getting full size pages.
-  images,
-  /// Thumbnails host for getting pages thumbnails and covers.
-  thumbnails,
-}
-
-/// Hosts settings.
-class Hosts {
-  const Hosts({
-    this.api            = 'nhentai.net',
-    this.images         = const [
-      'i.nhentai.net', 'i2.nhentai.net', 'i5.nhentai.net', 'i7.nhentai.net',
-    ],
-    this.thumbnails     = const [
-      't.nhentai.net', 't2.nhentai.net', 't5.nhentai.net', 't7.nhentai.net',
-    ],
-    this.hostPreference = const {
-      HostType.images    : 0,
-      HostType.thumbnails: 0,
-    },
-    this.hostSsl        = const {
-      HostType.api       : true,
-      HostType.images    : true,
-      HostType.thumbnails: true,
-    },
-  });
-
-  /// Default host preference a.k.a. which host to choice from hosts lists.
-  final Map<HostType, int> hostPreference;
-
-  /// Hosts SSL settings: whether to use HTTPS or HTTP.
-  final Map<HostType, bool> hostSsl;
-
-  /// Main api site.
-  final String api;
-  /// Images hosts.
-  final List<String> images;
-  /// Thumbnails hosts.
-  final List<String> thumbnails;
-
-  /// Get host corresponding to [hostType] with respect to [hostPreference].
-  String operator[](HostType hostType) => getHost(hostType);
-
-  /// Get host corresponding to [hostType] with respect to [hostPreference] or
-  /// optionally provided [preference].
-  String getHost(HostType hostType, [int? preference]) {
-    preference ??= hostPreference[hostType] ?? 0;
-    switch (hostType) {
-      case HostType.api:
-        return api;
-      case HostType.images:
-        return images[preference];
-      case HostType.thumbnails:
-        return thumbnails[preference];
-    }
-  }
-
-  /// Get [image] url with respect to hosts settings.
-  Uri getImageUrl(Image image) => Uri.https(
-    getHost((image.isThumbnail || image.isCover)
-      ? HostType.thumbnails
-      : HostType.images,
-    ),
-    '/galleries/${image.book.media}/${image.filename}',
-  );
-}
 
 /// API client.
 @immutable
@@ -90,6 +21,7 @@ class API {
   API({
     HttpClient? client,
     this.hosts = const Hosts(),
+    this.maxRetries = 5,
   }) :
     client = client ?? HttpClient();
 
@@ -103,6 +35,7 @@ class API {
   /// Throws [ArgumentError] on malformed [proxyUri] or it is not HTTP proxy. 
   factory API.proxy(String proxyUri, {
     Hosts hosts = const Hosts(),
+    int maxRetries = 5,
   }) {
     if (platform.isJS())
       throw UnsupportedError('Proxy is not supported on web');
@@ -133,6 +66,7 @@ class API {
     return API(
       client: proxyClient,
       hosts: hosts,
+      maxRetries: maxRetries,
     );
   }
 
@@ -140,26 +74,30 @@ class API {
   final HttpClient client;
   /// Hosts settings.
   final Hosts hosts;
+  /// Maximum number of retries for failed HTTP requests.
+  final int maxRetries;
 
   /// Returns [Uri] with given [host], [path] and optional [query].
   Uri _getPath(HostType host, String path, [SimpleQuery? query]) =>
-    (hosts.hostSsl[host] ?? true)
-      ? Uri.https(
-          hosts[host],
-          path,
-          query,
-        )
-      : Uri.http(
-        hosts[host],
-        path,
-        query,
-      );
+    hosts[host].getUri(
+      path,
+      query,
+    );
 
   /// Makes HTTP GET request to [url] and returns closed [HttpClientResponse].
   Future<HttpClientResponse> _get(Uri url) async {
-    final request = await client.getUrl(url)
-      ..followRedirects = false;
-    return request.close();
+    var retries = 0;
+    while (true) {
+      try {
+        final request = await client.getUrl(url)
+          ..followRedirects = false;
+        final response = await request.close();
+        return response;
+      } on HttpException {
+        if (++retries > maxRetries)
+          rethrow;
+      }
+    }
   }
 
   /// Makes HTTP GET request to [url] and parses response to JSON.
@@ -196,6 +134,9 @@ class API {
     return response.headers[HttpHeaders.locationHeader]!.first;
   }
 
+  /// Returns [Uri] for [image] via [hosts] config.
+  Uri getImageUrl(Image image) => get_image_url.getImageUrl(image, api: this);
+
   /// Returns random book.
   /// 
   /// Note: doesn't work on web.
@@ -218,9 +159,6 @@ class API {
       await _getJson(_getPath(HostType.api, '/api/gallery/$id')),
     );
   }
-
-  /// Returns [Uri] for [image] via [hosts] config.
-  Uri getImageUrl(Image image) => hosts.getImageUrl(image);
 
   /// Returns single [Search] page for [query].
   /// 
@@ -260,6 +198,8 @@ class API {
   }
 
   /// Returns [Stream] of [Search] pages for [query].
+  /// 
+  /// [count] parameter defines a maximum amount of pages to request.
   /// 
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
@@ -307,6 +247,8 @@ class API {
 
   /// Returns [Stream] of [Search] pages for text [query].
   /// 
+  /// [count] parameter defines a maximum amount of pages to request.
+  /// 
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Note: __Always specify [count] if you need only
@@ -335,6 +277,8 @@ class API {
   }) => _searchSinglePage(SearchQueryTag(tag), page: page, sort: sort);
 
   /// Returns [Stream] of pages of [Search] for books tagged with [tag].
+  /// 
+  /// [count] parameter defines a maximum amount of pages to request.
   /// 
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 

@@ -2,6 +2,8 @@ import 'package:meta/meta.dart';
 
 import 'api.dart';
 import 'book.dart';
+import 'get_image_url.dart' as get_image_url;
+import 'hosts.dart';
 import 'image_type.dart';
 import 'parsers.dart' as parsers;
 
@@ -66,16 +68,7 @@ class Image {
   Uri getUrl({
     API? api,
     Hosts? hosts,
-  }) {
-    assert(
-      api != null || hosts != null,
-      '[Image#getUrl] api or hosts must be provided',
-    );
-    final url = (api?.hosts ?? hosts)?.getImageUrl(this);
-    if (url == null)
-      throw ArgumentError('Either api or hosts must be provided.');
-    return url;
-  }  
+  }) => get_image_url.getImageUrl(this, api: api, hosts: hosts);
 
   /// Parses image from API [json] object.
   /// 
