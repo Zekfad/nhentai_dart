@@ -5,6 +5,7 @@ library nhentai_data_model_prefixed;
 
 import 'data_model.dart';
 
+
 /// [APIException] alias.
 typedef NHentaiAPIException = APIException;
 /// [Book] alias.

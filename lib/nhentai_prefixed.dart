@@ -3,7 +3,9 @@
 library nhentai_prefixed;
 
 import 'nhentai.dart';
+
 export 'data_model_prefixed.dart';
+
 
 /// [API] alias.
 typedef NHentai = API;

@@ -3,5 +3,7 @@
 /// [Search] response bodies and so on.
 library nhentai_data_model;
 
+
 import 'src/models.dart';
+
 export 'src/models.dart';
