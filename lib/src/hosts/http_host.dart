@@ -1,3 +1,4 @@
+/// HTTP host mixin.
 mixin HttpHost {
   /// Host authority.
   /// 
