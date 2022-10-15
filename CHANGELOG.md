@@ -1,3 +1,23 @@
+## 1.0.0-dev.10
+- BREAKING: completely new hosts system
+  - `Hosts` class.
+  - `Host` class.
+  - `ApiHost` class.
+  - `ImageHost` class.
+  - `ThumbnailHost` class.
+- BREAKING: static method `APIException.throwIfError` removed.
+- Add `meta` dependency:
+  - Most of classes marked as `@immutable`.
+- New library `nhentai_functions`:
+  - Exported `getImageUrl` and `getAvatarUrl` functions.
+- Added comments support:
+  - `Comment` class.
+  - `User` class.
+  - `API#getComments` method.
+- Internal project restructure.
+- Migrate to `zekfad_lints`.
+- Fix `JSON` error handler.
+
 ## 1.0.0-dev.9
 - BREAKING: rename `NHentaiException` to `NHentaiAPIException`.
 - Exposed `TagsList` and it's prefixed version `NHentaiTagsList`.
