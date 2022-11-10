@@ -21,6 +21,6 @@ Uri getImageUrl(Image image, {
     : HostType.image;
 
   return hosts[hostType].getUri(
-    '/galleries/${image.book.media}/${image.filename}',
+    '/galleries/${image.media}/${image.filename}',
   );
 }
