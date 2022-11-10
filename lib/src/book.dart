@@ -11,7 +11,7 @@ import 'tags_list.dart';
 class Book {
   /// Creates a book.
   // ignore: prefer_const_constructors_in_immutables
-  Book._internal({
+  Book({
     required this.title,
     required this.id,
     required this.media,
@@ -69,7 +69,7 @@ class Book {
     final scanlator = parsers.parse<String>(json?['scanlator']);
     final pagesCount = parsers.parse<int>(json?['num_pages']);
 
-    final book = Book._internal(
+    final book = Book(
       title    : BookTitle.parse(json?['title']),
       id       : parsers.parse(json?['id']),
       media    : parsers.parse(json?['media_id']),
