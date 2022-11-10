@@ -88,8 +88,7 @@ class Image {
         json,
         media: media,
         id: id,
-        thumbnail:
-        thumbnail,
+        thumbnail: thumbnail,
       );
     } on FormatException { // Ignore bad JSON.
       return null;

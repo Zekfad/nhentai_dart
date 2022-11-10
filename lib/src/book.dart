@@ -71,8 +71,23 @@ class Book {
     final pagesCount = parsers.parse<int>(json?['num_pages']);
     final media = parsers.parse<int>(json?['media_id']); 
     
-    // Count id in pages.
+    final _pages = images['pages'];
+    if (_pages is! List<dynamic> || _pages.length != pagesCount)
+      throw const FormatException('Bad JSON: pages malformed.');
+
+    // Starting from 1 because 0 index is cover.
     var i = 1;
+    final pages = List<Image>.unmodifiable(
+      parsers.parseList<Image>(
+        _pages,
+        customItemParser: (dynamic json) => Image.parse(
+          json,
+          id: i++,
+          media: media,
+        ),
+      ),
+    );
+
     final book = Book(
       title    : BookTitle.parse(json?['title']),
       id       : parsers.parse(json?['id']),
@@ -86,20 +101,8 @@ class Book {
       tags     : TagsList(parsers.parseList(json?['tags'])),
       cover    : Image.parse(images['cover'], media: media),
       thumbnail: Image.parse(images['thumbnail'], media: media),
-      pages    : List<Image>.unmodifiable(
-        parsers.parseList<Image>(
-          images['pages'],
-          customItemParser: (dynamic json) => Image.parse(
-            json,
-            id: i++,
-            media: media,
-          ),
-        ),
-      ),
+      pages    : pages,
     );
-
-    if (book.pages.length != pagesCount)
-      throw const FormatException('Bad JSON: pages count mismatch.');
 
     return book;
   }
