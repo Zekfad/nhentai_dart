@@ -10,8 +10,7 @@ import 'tags_list.dart';
 @immutable
 class Book {
   /// Creates a book.
-  // ignore: prefer_const_constructors_in_immutables
-  Book({
+  const Book({
     required this.title,
     required this.id,
     required this.media,
@@ -19,6 +18,9 @@ class Book {
     required this.scanlator,
     required this.uploaded,
     required this.tags,
+    required this.cover,
+    required this.thumbnail,
+    required this.pages,
   });
 
   /// Book title.
@@ -34,18 +36,17 @@ class Book {
   /// Book upload date.
   final DateTime uploaded;
   /// Book cover.
-  late final Image cover;
+  final Image cover;
   /// Book thumbnail.
-  late final Image thumbnail;
+  final Image thumbnail;
   /// Book pages.
-  late final Iterable<Image> pages;
+  final Iterable<Image> pages;
   /// Book tags list.
   final TagsList tags;
 
   /// Get book pretty title.
   @override
   String toString() => title.toString();
-
 
   /// Parses book from API [json] object.
   ///
@@ -68,11 +69,14 @@ class Book {
     final images = parsers.parseMap<String, dynamic>(json?['images']);
     final scanlator = parsers.parse<String>(json?['scanlator']);
     final pagesCount = parsers.parse<int>(json?['num_pages']);
-
+    final media = parsers.parse<int>(json?['media_id']); 
+    
+    // Count id in pages.
+    var i = 1;
     final book = Book(
       title    : BookTitle.parse(json?['title']),
       id       : parsers.parse(json?['id']),
-      media    : parsers.parse(json?['media_id']),
+      media    : media,
       favorites: parsers.parse(json?['num_favorites']),
       // pages    : parsers.parse(json?['num_pages']),
       scanlator: scanlator.isEmpty == true
@@ -80,40 +84,23 @@ class Book {
         : scanlator,
       uploaded : parsers.parse(json?['upload_date']),
       tags     : TagsList(parsers.parseList(json?['tags'])),
-    );
-
-    final cover = Image.parse(
-      images['cover'],
-      id: 0,
-      book: book,
-      thumbnail: false,
-    );
-
-    final thumbnail = Image.parse(
-      images['thumbnail'],
-      id: 0,
-      book: book,
-      thumbnail: true,
-    );
-
-    var i = 1;
-    final pages = List<Image>.unmodifiable(
-      parsers.parseList<Image>(
-        images['pages'],
-        customItemParser: (dynamic json) => Image.parse(
-          json,
-          id: i++,
-          book: book,
+      cover    : Image.parse(images['cover'], media: media),
+      thumbnail: Image.parse(images['thumbnail'], media: media),
+      pages    : List<Image>.unmodifiable(
+        parsers.parseList<Image>(
+          images['pages'],
+          customItemParser: (dynamic json) => Image.parse(
+            json,
+            id: i++,
+            media: media,
+          ),
         ),
       ),
     );
 
-    if (pages.length != pagesCount)
+    if (book.pages.length != pagesCount)
       throw const FormatException('Bad JSON: pages count mismatch.');
 
-    return book
-      ..cover = cover
-      ..thumbnail = thumbnail
-      ..pages = pages;
+    return book;
   }
 }

@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 
 import 'api.dart';
-import 'book.dart';
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'image_type.dart';
@@ -12,10 +11,10 @@ import 'parsers.dart' as parsers;
 /// Cover or usual page.
 @immutable
 class Image {
-  /// Creates an image for a given [book].
+  /// Creates an image for a given [media].
   const Image({
     required this.id,
-    required this.book,
+    required this.media,
     required this.isThumbnail,
     required this.type,
     this.width,
@@ -28,8 +27,8 @@ class Image {
   final int id;
   /// Whether image is thumbnail.
   final bool isThumbnail;
-  /// Book associated with this image.
-  final Book book;
+  /// Associated book media gallery ID.
+  final int media;
   /// Image type (provides format and extension).
   final ImageType type;
   /// Image width in pixels.
@@ -46,9 +45,9 @@ class Image {
     : (isThumbnail ? '${id}t' : '$id')
   }.${type.extension}';
 
-  /// Returns image description that is [book] title and image [filename].
+  /// Returns image description that is associated book [media] and image [filename].
   @override
-  String toString() => '[$book/$filename]';
+  String toString() => '[$media/$filename]';
 
   /// Image thumbnail.
   /// If called upon thumbnail or cover returns this object.
@@ -56,7 +55,7 @@ class Image {
     ? this
     : Image(
       id: id,
-      book: book,
+      media: media,
       isThumbnail: true,
       type: type,
     );
@@ -72,13 +71,13 @@ class Image {
 
   /// Parses image from API [json] object.
   /// 
-  /// Requires [book] which this image belongs to.
+  /// Requires [media] which this image associated book belongs to.
   /// 
   /// By default [id] is `0` which means image will be parsed as cover.
   /// 
   /// Returns `null` if [json] can't be parsed to [Image].
   static Image? tryParse(dynamic json, {
-    required Book book,
+    required int media,
     int id = 0,
     bool thumbnail = false,
   }) {
@@ -87,7 +86,7 @@ class Image {
     try {
       return Image.parse(
         json,
-        book: book,
+        media: media,
         id: id,
         thumbnail:
         thumbnail,
@@ -99,14 +98,14 @@ class Image {
 
   /// Parses image from API [json] object.
   /// 
-  /// Requires [book] which this image belongs to.
+  /// Requires [media] which this image associated book belongs to.
   /// 
   /// By default [id] is `0` which means image will be parsed as cover.
   /// 
   /// Throws a [FormatException] if [json] can't be parsed to [Image].
   // ignore: sort_constructors_first
   factory Image.parse(dynamic json, {
-    required Book book,
+    required int media,
     int id = 0,
     bool thumbnail = false,
   }) {
@@ -118,7 +117,7 @@ class Image {
     );
     return Image(
       id         : id,
-      book       : book,
+      media     : media,
       isThumbnail: thumbnail,
       type       : type,
       width      : parsers.parse(json?['w']),
