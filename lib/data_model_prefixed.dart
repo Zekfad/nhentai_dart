@@ -14,6 +14,8 @@ typedef NHentaiBook = Book;
 typedef NHentaiBookTitle = BookTitle;
 /// [Image] alias.
 typedef NHentaiImage = Image;
+/// [ImageType] alias.
+typedef NHentaiImageType = ImageType;
 /// [Search] alias.
 typedef NHentaiSearch = Search;
 /// [SearchSort] alias.

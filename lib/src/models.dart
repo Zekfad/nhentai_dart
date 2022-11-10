@@ -3,6 +3,7 @@ export 'book.dart' show Book;
 export 'book_title.dart' show BookTitle;
 export 'comment.dart' show Comment;
 export 'image.dart' show Image;
+export 'image_type.dart' show ImageType;
 export 'search.dart' show Search, SearchSort;
 export 'tag.dart' show Tag;
 export 'tag_type.dart' show TagType;

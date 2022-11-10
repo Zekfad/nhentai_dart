@@ -116,7 +116,7 @@ class Image {
     );
     return Image(
       id         : id,
-      media     : media,
+      media      : media,
       isThumbnail: thumbnail,
       type       : type,
       width      : parsers.parse(json?['w']),

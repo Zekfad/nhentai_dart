@@ -18,17 +18,17 @@ class ImageType {
   /// Internal constructor.
   /// 
   /// Creates unknown image type.
-  @internal
-  const ImageType.unknown(
+  const ImageType._unknown(
     this.extension,
   ) :
     name = 'Unknown',
     isUnknown = true;
 
   /// Returns [ImageType] by corresponding [type] string.
-  @internal
+  /// 
+  /// If no such type is known, new "unknown" image type instance returned.
   factory ImageType.getByType(String type) =>
-    _typesMap[type.toLowerCase()] ?? ImageType.unknown(type);
+    _typesMap[type.toLowerCase()] ?? ImageType._unknown(type);
 
   /// Human-readable type name.
   final String name;
