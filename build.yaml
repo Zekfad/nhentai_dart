@@ -1,0 +1,15 @@
+targets:
+  $default:
+    builders:
+      dart_mappable_builder:
+        options:
+          ignore_for_file:
+            - strict_raw_type
+            - inference_failure_on_untyped_parameter
+            - unnecessary_lambdas
+            - avoid_types_on_closure_parameters
+            - use_super_parameters
+            - prefer_expression_function_bodies
+          generateMethods: [decode, encode]
+        generate_for:
+          - lib/data_model.dart

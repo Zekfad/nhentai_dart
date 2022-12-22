@@ -6,4 +6,5 @@ library nhentai_data_model;
 
 import 'src/models.dart';
 
+export 'data_model.mapper.g.dart';
 export 'src/models.dart';

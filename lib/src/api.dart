@@ -5,13 +5,13 @@ import 'dart:io'
 
 import 'package:meta/meta.dart';
 
+import '../data_model.mapper.g.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'models.dart';
-import 'parsers/parse_list.dart';
+import 'models/search.dart';
 import 'platform.dart' as platform;
-import 'search.dart';
 
 /// Simple one-to-one query parameters map.
 typedef SimpleQuery = Map<String, String>;
@@ -160,23 +160,37 @@ class API {
   /// Returns `null` if book with such [id] doesn't exist.
   Future<Book?> getBook(int id) async {
     assert(id > 0, 'ID must be positive integer.');
-    return Book.tryParse(
-      await _getJson(
-        hosts.api.getUri('/api/gallery/$id'),
-      ),
-    );
+    
+    try {
+      return Mapper.fromValue<Book>(
+        await _getJson(
+          hosts.api.getUri('/api/gallery/$id'),
+        ),
+      );
+    } on APIException catch (e) {
+      if(e.message == 'does not exist')
+        return null;
+      rethrow;
+    }
   }
 
   /// Returns book's comments.
   /// 
-  /// Returns `null` if result can't be parsed to [Search].
+  /// Returns `null` if book with such [bookId] doesn't exist.
   Future<List<Comment>?> getComments(int bookId) async {
     assert(bookId > 0, 'Book ID must be positive integer.');
-    return tryParseList(
-      await _getJson(
-        hosts.api.getUri('/api/gallery/$bookId/comments'),
-      ),
-    );
+    
+    try {
+      return Mapper.fromValue<List<Comment>>(
+        await _getJson(
+          hosts.api.getUri('/api/gallery/$bookId/comments'),
+        ),
+      );
+    } on APIException catch (e) {
+      if(e.message == 'Gallery does not exist')
+        return null;
+      rethrow;
+    }
   }
 
   /// Returns single [Search] page for [query].
@@ -185,7 +199,7 @@ class API {
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 
-  /// Returns `null` if result can't be parsed to [Search].
+  /// Returns `null` if [page] does not exist.
   Future<Search?> _searchSinglePage(SearchQuery query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
@@ -194,25 +208,34 @@ class API {
       throw ArgumentError.value(page, 'page', 'Must be grater than 0');
 
     final isTagSearch = query is SearchQueryTag;
-    return Search.tryParse(
-      await _getJson(
-        hosts.api.getUri(
-          '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
-          {
-            if (isTagSearch)
-              'tag_id': query.tag.id.toString()
-            else
-              'query': query.toString(),
-            'page' : page.toString(),
-            if (sort != SearchSort.recent)
-              'sort': sort.toString(),
-          }
+    
+    try {
+      return Search(
+        Mapper.fromValue<SearchResult>(
+          await _getJson(
+            hosts.api.getUri(
+              '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
+              {
+                if (isTagSearch)
+                  'tag_id': query.tag.id.toString()
+                else
+                  'query': query.toString(),
+                'page' : page.toString(),
+                if (sort != SearchSort.recent)
+                  'sort': sort.toString(),
+              }
+            ),
+          ),
         ),
-      ),
-      query: query,
-      page : page,
-      sort : sort,
-    );
+        query: query,
+        page : page,
+        sort : sort,
+      );
+    } on APIException catch (e) {
+      if(e.message == 'does not exist')
+        return null;
+      rethrow;
+    }
   }
 
   /// Returns [Stream] of [Search] pages for [query].
@@ -256,7 +279,7 @@ class API {
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 
-  /// Returns `null` if result can't be parsed to [Search].
+  /// Returns `null` if [page] does not exist.
   Future<Search?> searchSinglePage(String query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
@@ -288,7 +311,7 @@ class API {
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 
-  /// Returns `null` if result can't be parsed to [Search].
+  /// Returns `null` if [page] does not exist.
   Future<Search?> searchTaggedSinglePage(Tag tag, {
     int page = 1,
     SearchSort sort = SearchSort.recent,

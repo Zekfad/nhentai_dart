@@ -4,22 +4,42 @@
 library nhentai_data_model_prefixed;
 
 import 'data_model.dart';
+export 'data_model.dart' show
+  BookMapperExtension,
+  BookTitleMapperExtension,
+  CommentMapperExtension,
+  CoverMapperExtension,
+  ImageMapperExtension,
+  CoverThumbnailMapperExtension,
+  TagMapperExtension,
+  UserMapperExtension,
+  SearchResultMapperExtension,
+  TagTypeMapperExtension;
 
-
+/// [Mapper] alias.
+typedef NHentaiMapper = Mapper;
 /// [APIException] alias.
 typedef NHentaiAPIException = APIException;
 /// [Book] alias.
 typedef NHentaiBook = Book;
 /// [BookTitle] alias.
 typedef NHentaiBookTitle = BookTitle;
+/// [Cover] alias.
+typedef NHentaiCover = Cover;
+/// [CoverThumbnail] alias.
+typedef NHentaiCoverThumbnail = CoverThumbnail;
 /// [Image] alias.
 typedef NHentaiImage = Image;
+/// [ImageThumbnail] alias.
+typedef NHentaiImageThumbnail = ImageThumbnail;
 /// [ImageType] alias.
 typedef NHentaiImageType = ImageType;
 /// [Search] alias.
 typedef NHentaiSearch = Search;
 /// [SearchSort] alias.
 typedef NHentaiSearchSort = SearchSort;
+/// [SearchResult] alias.
+typedef NHentaiSearchResult = SearchResult;
 /// [Tag] alias.
 typedef NHentaiTag = Tag;
 /// [TagType] alias.
