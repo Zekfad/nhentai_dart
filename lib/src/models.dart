@@ -1,5 +1,6 @@
 export 'api_exception.dart' show APIException;
 export 'models/book.dart' show Book;
+export 'models/book_images.dart' show BookImages;
 export 'models/book_title.dart' show BookTitle;
 export 'models/comment.dart' show Comment;
 export 'models/image/cover.dart' show Cover;
