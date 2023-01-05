@@ -25,6 +25,8 @@ class ImageHooks extends MappingHooks {
   }
 }
 
+/// Image.
+@immutable
 @MappableClass(
   hooks: ImageHooks(),
 )

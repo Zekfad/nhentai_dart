@@ -12,12 +12,12 @@ enum SearchSort {
   popularToday('poplar-today');
 
   /// Creates a search sort.
-  const SearchSort([ this.value, ]);
+  const SearchSort([ this.value = '', ]);
 
   /// String value of search parameter.
-  final String? value;
+  final String value;
 
   /// Returns string value of search parameter.
   @override
-  String toString() => value ?? '';
+  String toString() => value;
 }

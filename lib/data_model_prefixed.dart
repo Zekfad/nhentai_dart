@@ -22,6 +22,8 @@ typedef NHentaiMapper = Mapper;
 typedef NHentaiAPIException = APIException;
 /// [Book] alias.
 typedef NHentaiBook = Book;
+/// [BookImages] alias.
+typedef NHentaiBookImages = BookImages;
 /// [BookTitle] alias.
 typedef NHentaiBookTitle = BookTitle;
 /// [Cover] alias.

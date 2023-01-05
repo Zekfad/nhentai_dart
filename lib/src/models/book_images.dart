@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:meta/meta.dart';
 
 import '../../../data_model.dart';
 
@@ -65,6 +66,8 @@ class BookImagesMapper extends SimpleMapper<BookImages> {
 
 }
 
+/// Book's images.
+@immutable
 class BookImages {
   const BookImages({
     required this.media,
