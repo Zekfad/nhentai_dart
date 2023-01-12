@@ -5,8 +5,10 @@ import '../api.dart';
 import '../get_avatar_url.dart' as get_avatar_url;
 import '../hosts.dart';
 
-class AvatarFilenameHooks extends MappingHooks {
-  const AvatarFilenameHooks();
+part 'user.mapper.dart';
+
+class AvatarFilenameHook extends MappingHook {
+  const AvatarFilenameHook();
 
   @override
   dynamic beforeDecode(dynamic value) {
@@ -28,7 +30,7 @@ class AvatarFilenameHooks extends MappingHooks {
 /// User.
 @immutable
 @MappableClass()
-class User {
+class User with UserMappable {
   /// Creates user.
   const User({
     required this.id,
@@ -38,6 +40,9 @@ class User {
     required this.superuser,
     required this.staff,
   });
+
+  static final fromMap = UserMapper.fromMap;
+  static final fromJson = UserMapper.fromJson;
 
   /// User ID.
   @MappableField(key: 'id')
@@ -52,7 +57,7 @@ class User {
   final String slug;
   
   /// User's avatar file name.
-  @MappableField(key: 'avatar_url', hooks: AvatarFilenameHooks())
+  @MappableField(key: 'avatar_url', hook: AvatarFilenameHook())
   final String avatarFilename;
   
   /// Whether user is superuser.

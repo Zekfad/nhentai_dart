@@ -3,10 +3,13 @@ import 'package:meta/meta.dart';
 
 import 'tag_type.dart';
 
+part 'tag.mapper.dart';
+
+
 /// Tag.
 @immutable
 @MappableClass()
-class Tag {
+class Tag with TagMappable {
   /// Creates a tag.
   const Tag({
     required this.id,
@@ -15,6 +18,9 @@ class Tag {
     required this.count,
     required this.url,
   });
+
+  static final fromMap = TagMapper.fromMap;
+  static final fromJson = TagMapper.fromJson;
 
   /// Creates a "dummy" tag.
   /// 

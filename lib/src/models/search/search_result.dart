@@ -3,11 +3,12 @@ import 'package:meta/meta.dart';
 
 import '../book.dart';
 
+part 'search_result.mapper.dart';
 
 /// Search result.
 @immutable
 @MappableClass()
-class SearchResult {
+class SearchResult with SearchResultMappable {
   /// Creates a search result.
   const SearchResult({
     required this.pages,
@@ -15,6 +16,9 @@ class SearchResult {
     required this.books,
   });
   
+  static final fromMap = SearchResultMapper.fromMap;
+  static final fromJson = SearchResultMapper.fromJson;
+
   /// Total pages available.
   @MappableField(key: 'num_pages')
   final int pages;

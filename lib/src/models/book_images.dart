@@ -2,8 +2,8 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
 import '../../../data_model.dart';
+import 'image/image_model.dart';
 
-@CustomMapper()
 class BookImagesMapper extends SimpleMapper<BookImages> {
   const BookImagesMapper();
 
@@ -24,30 +24,41 @@ class BookImagesMapper extends SimpleMapper<BookImages> {
     if (_pages is! Iterable<dynamic>)
       throw MapperException.unexpectedType(_pages.runtimeType, List<Image>, 'Iterable<dynamic>');
     
-    final media = Mapper.fromValue<int>(value['media_id']);
-    final cover = Mapper.fromValue<Cover>({
-      ..._cover,
-      'media_id': media,
-    });
+    final _media = value['media_id'];
+    if(_media is! String)
+      throw MapperException.unexpectedType(_media.runtimeType, int, 'String');
 
-    final thumbnail = Mapper.fromValue<CoverThumbnail>({
-      ..._thumbnail,
-      'parent': cover,
-    });
+    final media = int.parse(_media);
+    final cover = Cover(
+      ImageModelMapper.fromMap({
+        ..._cover,
+        'media_id': media,
+        'id': 0,
+      }),
+    );
+
+    final thumbnail = CoverThumbnail(
+      parent: cover,
+      ImageModelMapper.fromMap({
+        ..._cover,
+        'media_id': media,
+        'id': 0,
+      }), 
+    );
 
     var pageNo = 1;
-    final pages = Mapper.fromIterable<List<Image>>(
-      _pages.map((page) {
-        if (page is! Map<String, dynamic>)
-          throw MapperException.unexpectedType(page.runtimeType, Image, 'Map<String, dynamic>');
-      
-        return {
+    final pages = _pages.map((page) {
+      if (page is! Map<String, dynamic>)
+        throw MapperException.unexpectedType(page.runtimeType, Image, 'Map<String, dynamic>');
+    
+      return Image(
+        ImageModel.fromMap({
           ...page,
           'media_id': media,
           'id': pageNo++,
-        };
-      }),
-    );
+        }),
+      );
+    }).toList();
 
     return BookImages(
       media: media,
@@ -59,11 +70,10 @@ class BookImagesMapper extends SimpleMapper<BookImages> {
 
   @override
   dynamic encode(BookImages self) => {
-    'cover': Mapper.toMap(self.cover),
-    'thumbnail': Mapper.toMap(self.thumbnail),
-    'pages': Mapper.toIterable(self.pages),
+    'cover': self.cover.toMap(),
+    'thumbnail': self.cover.toMap(),
+    'pages': self.pages.map((page) => page.toMap()).toList(),
   };
-
 }
 
 /// Book's images.

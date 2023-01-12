@@ -1,7 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-class DateHooks extends MappingHooks {
-  const DateHooks();
+class DateHook extends MappingHook {
+  const DateHook();
 
   @override
   dynamic beforeDecode(dynamic value) {

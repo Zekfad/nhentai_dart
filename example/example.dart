@@ -48,7 +48,7 @@ Future<void> main() async {
 
   final NHentaiBook? book = await api.getBook(177013);
   if (book == null)
-    throw Exception('Something went wrong.');
+    throw Exception('No book with given id exists.');
   
   // Print short book summary.
   print(

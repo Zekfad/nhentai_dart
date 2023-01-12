@@ -4,11 +4,13 @@ import 'package:meta/meta.dart';
 import '../date_hook.dart';
 import 'user.dart';
 
+part 'comment.mapper.dart';
+
 
 /// Comment.
 @immutable
 @MappableClass()
-class Comment {
+class Comment with CommentMappable {
   /// Creates comment.
   const Comment({
     required this.id,
@@ -17,6 +19,9 @@ class Comment {
     required this.date,
     required this.body,
   });
+
+  static final fromMap = CommentMapper.fromMap;
+  static final fromJson = CommentMapper.fromJson;
 
   /// Comment ID.
   @MappableField(key: 'id')
@@ -31,7 +36,7 @@ class Comment {
   final User author;
   
   /// Comment post date.
-  @MappableField(key: 'post_date', hooks: DateHooks())
+  @MappableField(key: 'post_date', hook: DateHook())
   final DateTime date;
   
   /// Comment content.

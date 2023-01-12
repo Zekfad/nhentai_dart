@@ -2,19 +2,29 @@ import 'dart:collection';
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
-import '../../data_model.mapper.g.dart';
 import 'tag.dart';
 import 'tag_type.dart';
 
-@CustomMapper()
 class TagsListMapper extends SimpleMapper<TagsList> {
   const TagsListMapper();
 
   @override
-  TagsList decode(dynamic value) => TagsList(Mapper.fromValue<List<Tag>>(value));
+  TagsList decode(dynamic value) {
+    if(value is! Iterable<dynamic>)
+      throw MapperException.unexpectedType(value.runtimeType, TagsList, 'Iterable<dynamic>');
+    
+    return TagsList(
+      value.map((tag) {
+        if(tag is! Map<String, dynamic>)
+          throw MapperException.unexpectedType(tag.runtimeType, Tag, 'Map<String, dynamic>');
+        
+        return Tag.fromMap(tag);
+      }),
+    );
+  }
 
   @override
-  dynamic encode(TagsList self) => Mapper.toValue(self.toList());
+  dynamic encode(TagsList self) => self._list.map((e) => e.toMap()).toList();
 
 }
 

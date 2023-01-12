@@ -1,66 +1,26 @@
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
 import '../../api.dart';
 import '../../get_image_url.dart' as get_image_url;
 import '../../hosts.dart';
-import 'image_type.dart';
 import 'cover.dart';
+import 'image_model.dart';
 import 'image_thumbnail.dart';
+import 'image_type.dart';
 
 
-class ImageHooks extends MappingHooks {
-  const ImageHooks();
+class Image implements ImageModel {
+  // Work around ImageModelMappable overriding ==.
+  Image(ImageModel image) : _image = image;
 
-  @override
-  dynamic beforeEncode(dynamic value) {
-    if(value is! Image)
-      throw MapperException.unexpectedType(value.runtimeType, Map<String, dynamic>, 'Image');
+  final ImageModel _image;
 
-    return {
-      't': value.type.extension,
-      'w': value.width,
-      'h': value.height,
-    };
-  }
-}
-
-/// Image.
-@immutable
-@MappableClass(
-  hooks: ImageHooks(),
-)
-class Image {
-  const Image({
-    required this.id,
-    required this.media,
-    required this.type,
-    this.width,
-    this.height,
-  });
-
-  /// Associated book media gallery ID.
-  @MappableField(key: 'media_id')
-  final int media;
-
-  /// Image ID.
-  /// * `0` for book cover.
-  /// * _Page number_ for usual pages.
-  @MappableField(key: 'id')
-  final int id;
-
-  /// Image type (provides format and extension).
-  @MappableField(key: 't')
-  final ImageType type;
-
-  /// Image width in pixels.
-  @MappableField(key: 'w')
-  final int? width;
-
-  /// Image height in pixels.
-  @MappableField(key: 'h')
-  final int? height;
-
+  @override int get media => _image.media;
+  @override int get id => _image.id;
+  @override ImageType get type => _image.type;
+  @override int? get width => _image.width;
+  @override int? get height => _image.height;
+  
   /// Whether image is thumbnail.
   bool get isThumbnail => this is ImageThumbnail;
 
@@ -75,7 +35,7 @@ class Image {
   /// If called upon thumbnail or cover returns this object.
   ImageThumbnail get thumbnail => this is ImageThumbnail
     ? this as ImageThumbnail
-    : ImageThumbnail(
+    : ImageThumbnail(_image,
       parent: this,
     );
 
@@ -93,4 +53,10 @@ class Image {
   @mustCallSuper
   @visibleForOverriding
   String getFullFilename(String filename) => '$filename.${type.extension}';
+
+  @override
+  String toJson() => _image.toJson();
+
+  @override
+  Map<String, dynamic> toMap() => _image.toMap();
 }

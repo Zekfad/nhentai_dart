@@ -9,7 +9,7 @@ final api = nh.API();
 Future<void> main() async {
   final List<nh.Comment>? comments = await api.getComments(177013);
   if (comments == null)
-    throw Exception('Something went wrong.');
+    throw Exception('No book with given id exists.');
 
   final nh.Comment comment = comments.first;
   // Print first comment summary

@@ -5,13 +5,13 @@ import 'dart:io'
 
 import 'package:meta/meta.dart';
 
-import '../data_model.mapper.g.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'models.dart';
 import 'models/search.dart';
 import 'platform.dart' as platform;
+
 
 /// Simple one-to-one query parameters map.
 typedef SimpleQuery = Map<String, String>;
@@ -80,7 +80,8 @@ class API {
   final int maxRetries;
 
   /// Makes HTTP GET request to [url] and returns closed [HttpClientResponse].
-  Future<HttpClientResponse> _get(Uri url) async {
+  @protected
+  Future<HttpClientResponse> get(Uri url) async {
     var retries = 0;
     while (true) {
       try {
@@ -95,35 +96,56 @@ class API {
     }
   }
 
+  Map<String, dynamic> _isMap(dynamic value) {
+    if(value is! Map<String, dynamic>)
+      throw APIException('Unexpected type "${value.runtimeType}". '
+        'Expected: "Map<String, dynamic>".');
+    return value;
+  }
+
+  Iterable<dynamic> _isIterable(dynamic value) {
+    if(value is! Iterable<dynamic>)
+      throw APIException('Unexpected type "${value.runtimeType}". '
+        'Expected: "Iterable<dynamic>".');
+    return value;
+  }
+
   /// Makes HTTP GET request to [url] and parses response to JSON.
   /// 
+  /// [ignoreErrors] accepts list of error messages on which method returns null. 
+  /// 
   /// Throws [APIException] if parsed json is an API error.
-  Future<dynamic> _getJson(Uri url) async {
-    final response = await _get(url);
+  Future<dynamic> _getJson(Uri url, {
+    List<String> ignoreErrors = const [],
+  }) async {
+    final response = await get(url);
     final data = await utf8.decodeStream(response);
     final json = jsonDecode(data);
 
-    final jsonError = json is Map<String, dynamic>
-      ? json['error']
+    final jsonError = json is Map<String, dynamic> 
+      ? json['error'] 
       : null;
 
     if (jsonError != null) {
       if (jsonError is String)
-        throw APIException(jsonError);
+        if(ignoreErrors.contains(jsonError))
+          return null;
+        else   
+          throw APIException(jsonError);
       if (jsonError is bool)
         throw const APIException('Generic exception.');
     }
 
     return json;
   }
-
+  
   /// Makes HTTP GET request to [url] and returns redirect location.
   /// 
   /// Returns `null` if there was no redirect.
   /// 
   /// Note: doesn't work on web.
   Future<String?> _getRedirectUrl(Uri url) async {
-    final response = await _get(url);
+    final response = await get(url);
     final location = response.headers[HttpHeaders.locationHeader];
 
     // location == null || location.isEmpty
@@ -161,17 +183,14 @@ class API {
   Future<Book?> getBook(int id) async {
     assert(id > 0, 'ID must be positive integer.');
     
-    try {
-      return Mapper.fromValue<Book>(
-        await _getJson(
-          hosts.api.getUri('/api/gallery/$id'),
-        ),
-      );
-    } on APIException catch (e) {
-      if(e.message == 'does not exist')
-        return null;
-      rethrow;
-    }
+    final json = await _getJson(
+      ignoreErrors: ['does not exist'],
+      hosts.api.getUri('/api/gallery/$id'),
+    );
+
+    return json != null 
+      ? Book.fromMap(_isMap(json))
+      : null;
   }
 
   /// Returns book's comments.
@@ -180,17 +199,15 @@ class API {
   Future<List<Comment>?> getComments(int bookId) async {
     assert(bookId > 0, 'Book ID must be positive integer.');
     
-    try {
-      return Mapper.fromValue<List<Comment>>(
-        await _getJson(
-          hosts.api.getUri('/api/gallery/$bookId/comments'),
-        ),
-      );
-    } on APIException catch (e) {
-      if(e.message == 'Gallery does not exist')
-        return null;
-      rethrow;
-    }
+    final json = await _getJson(
+      ignoreErrors: ['Gallery does not exist'],
+      hosts.api.getUri('/api/gallery/$bookId/comments'),
+    );
+
+    return _isIterable(json)
+      .whereType<Map<String, dynamic>>()
+      .map(Comment.fromMap)
+      .toList();
   }
 
   /// Returns single [Search] page for [query].
@@ -209,33 +226,28 @@ class API {
 
     final isTagSearch = query is SearchQueryTag;
     
-    try {
-      return Search(
-        Mapper.fromValue<SearchResult>(
-          await _getJson(
-            hosts.api.getUri(
-              '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
-              {
-                if (isTagSearch)
-                  'tag_id': query.tag.id.toString()
-                else
-                  'query': query.toString(),
-                'page' : page.toString(),
-                if (sort != SearchSort.recent)
-                  'sort': sort.toString(),
-              }
-            ),
-          ),
-        ),
-        query: query,
-        page : page,
-        sort : sort,
-      );
-    } on APIException catch (e) {
-      if(e.message == 'does not exist')
-        return null;
-      rethrow;
-    }
+    final json = await _getJson(
+      ignoreErrors: ['does not exist'],
+      hosts.api.getUri(
+        '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
+        {
+          if (isTagSearch)
+            'tag_id': query.tag.id.toString()
+          else
+            'query': query.toString(),
+          'page' : page.toString(),
+          if (sort != SearchSort.recent)
+            'sort': sort.toString(),
+        }
+      ),
+    );
+
+    return Search(
+      SearchResult.fromMap(_isMap(json)),
+      query: query,
+      page: page,
+      sort: sort,
+    );
   }
 
   /// Returns [Stream] of [Search] pages for [query].

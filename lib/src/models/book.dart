@@ -7,9 +7,10 @@ import 'book_title.dart';
 import 'image.dart';
 import 'tags_list.dart';
 
+part 'book.mapper.dart';
 
-class BookHooks extends MappingHooks {
-  const BookHooks();
+class BookHook extends MappingHook {
+  const BookHook();
 
   @override
   dynamic beforeDecode(dynamic value) {
@@ -33,9 +34,13 @@ class BookHooks extends MappingHooks {
 /// Book.
 @immutable
 @MappableClass(
-  hooks: BookHooks(),
+  hook: BookHook(),
+  includeCustomMappers: [
+    TagsListMapper,
+    BookImagesMapper,
+  ],
 )
-class Book {
+class Book with BookMappable {
   /// Creates a book.
   const Book({
     required this.title,
@@ -47,6 +52,10 @@ class Book {
     required this.tags,
     required this.images,
   });
+
+  static final fromMap = BookMapper.fromMap;
+  static final fromJson = BookMapper.fromJson;
+
   /// Book title.
   @MappableField(key: 'title')
   final BookTitle title;
@@ -68,7 +77,7 @@ class Book {
   final String? scanlator;
   
   /// Book upload date.
-  @MappableField(key: 'upload_date', hooks: DateHooks())
+  @MappableField(key: 'upload_date', hook: DateHook())
   final DateTime uploaded;
 
   /// Book tags list.

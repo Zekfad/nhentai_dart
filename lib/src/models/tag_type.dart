@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
+part 'tag_type.mapper.dart';
 
 /// Tag type.
 @MappableEnum(

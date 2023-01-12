@@ -9,7 +9,7 @@ final api = nh.API();
 Future<void> main() async {
   final nh.Book? book = await api.getBook(177013);
   if (book == null)
-    throw Exception('Something went wrong.');
+    throw Exception('No book with given id exists.');
   final tags = book.tags;
 
   // Use predefined filters

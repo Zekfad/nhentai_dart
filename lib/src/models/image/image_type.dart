@@ -2,7 +2,6 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
 
-@CustomMapper()
 class ImageTypeMapper extends SimpleMapper<ImageType> {
   const ImageTypeMapper();
 
