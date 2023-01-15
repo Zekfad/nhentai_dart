@@ -164,7 +164,7 @@ class API {
       hosts.api.getUri('/api/gallery/$id'),
     );
 
-    return nhentaiModelsContainer.fromValue(json);
+    return nhentaiModelsContainer.fromValue<Book>(json);
   }
 
   /// Returns comments for book with given [bookId].
@@ -175,7 +175,7 @@ class API {
       hosts.api.getUri('/api/gallery/$bookId/comments'),
     );
 
-    return nhentaiModelsContainer.fromValue(json);
+    return nhentaiModelsContainer.fromValue<List<Comment>>(json);
   }
 
   /// Returns single [Search] page for [query].
