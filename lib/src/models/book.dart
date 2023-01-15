@@ -37,7 +37,6 @@ class BookHook extends MappingHook {
   hook: BookHook(),
   includeCustomMappers: [
     TagsListMapper,
-    BookImagesMapper,
   ],
 )
 class Book with BookMappable {

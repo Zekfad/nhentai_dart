@@ -1,4 +1,4 @@
-/// Prefixed main library exposing [NHentai] client and corresponding settings:
+/// Prefixed main library exposing [NHentaiAPI] client and corresponding settings:
 /// [NHentaiHosts], [NHentaiHost] and [NHentaiHostType] classes.
 library nhentai_prefixed;
 
@@ -8,7 +8,7 @@ export 'data_model_prefixed.dart';
 
 
 /// [API] alias.
-typedef NHentai = API;
+typedef NHentaiAPI = API;
 /// [Hosts] alias.
 typedef NHentaiHosts = Hosts;
 /// [HostType] alias.

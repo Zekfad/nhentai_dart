@@ -64,6 +64,8 @@ class ImageType {
   static const png  = ImageType._('PNG', 'png');
   /// Graphics Interchange Format image type.
   static const gif  = ImageType._('GIF', 'gif');
+  /// Unknown image type.
+  static const unknown = ImageType._unknown('');
 
   /// Types map used in [ImageType.getByType].
   static const Map<String, ImageType> _typesMap = {

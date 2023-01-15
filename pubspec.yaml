@@ -11,10 +11,10 @@ environment:
 
 dev_dependencies:
   build_runner: ^2.3.2
-  dart_mappable_builder: ^2.0.0-dev.13
+  dart_mappable_builder: ^2.0.0
   test: ^1.16.0
   zekfad_lints: ^1.1.0
 dependencies: 
-  dart_mappable: ^2.0.0-dev.13
+  dart_mappable: ^2.0.1
   meta: ^1.8.0
   universal_io: ^2.0.4

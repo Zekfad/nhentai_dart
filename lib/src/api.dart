@@ -5,11 +5,11 @@ import 'dart:io'
 
 import 'package:meta/meta.dart';
 
+import '../data_model.container.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'models.dart';
-import 'models/search.dart';
 import 'platform.dart' as platform;
 
 
@@ -96,28 +96,10 @@ class API {
     }
   }
 
-  Map<String, dynamic> _isMap(dynamic value) {
-    if(value is! Map<String, dynamic>)
-      throw APIException('Unexpected type "${value.runtimeType}". '
-        'Expected: "Map<String, dynamic>".');
-    return value;
-  }
-
-  Iterable<dynamic> _isIterable(dynamic value) {
-    if(value is! Iterable<dynamic>)
-      throw APIException('Unexpected type "${value.runtimeType}". '
-        'Expected: "Iterable<dynamic>".');
-    return value;
-  }
-
   /// Makes HTTP GET request to [url] and parses response to JSON.
   /// 
-  /// [ignoreErrors] accepts list of error messages on which method returns null. 
-  /// 
   /// Throws [APIException] if parsed json is an API error.
-  Future<dynamic> _getJson(Uri url, {
-    List<String> ignoreErrors = const [],
-  }) async {
+  Future<dynamic> _getJson(Uri url) async {
     final response = await get(url);
     final data = await utf8.decodeStream(response);
     final json = jsonDecode(data);
@@ -128,10 +110,7 @@ class API {
 
     if (jsonError != null) {
       if (jsonError is String)
-        if(ignoreErrors.contains(jsonError))
-          return null;
-        else   
-          throw APIException(jsonError);
+        throw APIException(jsonError);
       if (jsonError is bool)
         throw const APIException('Generic exception.');
     }
@@ -178,36 +157,25 @@ class API {
   }
 
   /// Returns book with given [id].
-  /// 
-  /// Returns `null` if book with such [id] doesn't exist.
-  Future<Book?> getBook(int id) async {
+  Future<Book> getBook(int id) async {
     assert(id > 0, 'ID must be positive integer.');
-    
+        
     final json = await _getJson(
-      ignoreErrors: ['does not exist'],
       hosts.api.getUri('/api/gallery/$id'),
     );
 
-    return json != null 
-      ? Book.fromMap(_isMap(json))
-      : null;
+    return nhentaiModelsContainer.fromValue(json);
   }
 
-  /// Returns book's comments.
-  /// 
-  /// Returns `null` if book with such [bookId] doesn't exist.
-  Future<List<Comment>?> getComments(int bookId) async {
+  /// Returns comments for book with given [bookId].
+  Future<List<Comment>> getComments(int bookId) async {
     assert(bookId > 0, 'Book ID must be positive integer.');
     
     final json = await _getJson(
-      ignoreErrors: ['Gallery does not exist'],
       hosts.api.getUri('/api/gallery/$bookId/comments'),
     );
 
-    return _isIterable(json)
-      .whereType<Map<String, dynamic>>()
-      .map(Comment.fromMap)
-      .toList();
+    return nhentaiModelsContainer.fromValue(json);
   }
 
   /// Returns single [Search] page for [query].
@@ -215,9 +183,7 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Returns `null` if [page] does not exist.
-  Future<Search?> _searchSinglePage(SearchQuery query, {
+  Future<Search> _searchSinglePage(SearchQuery query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) async {
@@ -227,7 +193,6 @@ class API {
     final isTagSearch = query is SearchQueryTag;
     
     final json = await _getJson(
-      ignoreErrors: ['does not exist'],
       hosts.api.getUri(
         '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
         {
@@ -243,7 +208,7 @@ class API {
     );
 
     return Search(
-      SearchResult.fromMap(_isMap(json)),
+      nhentaiModelsContainer.fromValue(json),
       query: query,
       page: page,
       sort: sort,
@@ -257,8 +222,6 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Throws [FormatException] if result can't be parsed to [Search].
   Stream<Search> _search(SearchQuery query, {
     int page = 1,
     int? count,
@@ -277,8 +240,8 @@ class API {
     Search? search;
     do {
       search = await _searchSinglePage(query, page: _page++, sort: sort);
-      if (search == null)
-        throw const FormatException('Cannot parse search result.');
+      // if (search == null)
+      //   throw const FormatException('Cannot parse search result.');
       if (count == null)
         _pages = search.pages;
       yield search;
@@ -290,9 +253,7 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Returns `null` if [page] does not exist.
-  Future<Search?> searchSinglePage(String query, {
+  Future<Search> searchSinglePage(String query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) => _searchSinglePage(SearchQueryText(query), page: page, sort: sort);
@@ -322,9 +283,7 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Returns `null` if [page] does not exist.
-  Future<Search?> searchTaggedSinglePage(Tag tag, {
+  Future<Search> searchTaggedSinglePage(Tag tag, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) => _searchSinglePage(SearchQueryTag(tag), page: page, sort: sort);

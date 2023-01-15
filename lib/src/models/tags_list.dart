@@ -25,7 +25,6 @@ class TagsListMapper extends SimpleMapper<TagsList> {
 
   @override
   dynamic encode(TagsList self) => self._list.map((e) => e.toMap()).toList();
-
 }
 
 /// Unmodifiable tags list.

@@ -2,14 +2,19 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
 import '../../../data_model.dart';
-import 'image/image_model.dart';
+import 'image/cover.dart';
+import 'image/cover_thumbnail.dart';
+import 'image/image.dart';
 
-class BookImagesMapper extends SimpleMapper<BookImages> {
-  const BookImagesMapper();
+part 'book_images.mapper.dart';
+
+
+class BookImagesHook extends MappingHook {
+  const BookImagesHook();
 
   @override
-  BookImages decode(dynamic value) {
-    if (value is! Map<String, dynamic>)
+  dynamic beforeDecode(dynamic value) {
+        if (value is! Map<String, dynamic>)
       throw MapperException.unexpectedType(value.runtimeType, BookImages, 'Map<String, dynamic>');
     
     final _cover = value['cover'];
@@ -27,58 +32,38 @@ class BookImagesMapper extends SimpleMapper<BookImages> {
     final _media = value['media_id'];
     if(_media is! String)
       throw MapperException.unexpectedType(_media.runtimeType, int, 'String');
-
-    final media = int.parse(_media);
-    final cover = Cover(
-      ImageModelMapper.fromMap({
-        ..._cover,
-        'media_id': media,
-        'id': 0,
-      }),
-    );
-
-    final thumbnail = CoverThumbnail(
-      parent: cover,
-      ImageModelMapper.fromMap({
-        ..._cover,
-        'media_id': media,
-        'id': 0,
-      }), 
-    );
-
-    var pageNo = 1;
-    final pages = _pages.map((page) {
-      if (page is! Map<String, dynamic>)
-        throw MapperException.unexpectedType(page.runtimeType, Image, 'Map<String, dynamic>');
     
-      return Image(
-        ImageModel.fromMap({
-          ...page,
-          'media_id': media,
-          'id': pageNo++,
-        }),
-      );
-    }).toList();
+    final cover = Cover.fromMap({
+      ..._cover,
+      'media_id': _media,
+    });
 
-    return BookImages(
-      media: media,
-      cover: cover,
-      thumbnail: thumbnail,
-      pages: pages,
-    );
+    var i = 1;
+    return {
+      ...value,
+      'cover': cover,
+      'thumbnail': {
+        ..._thumbnail,
+        'parent': cover,
+      },
+      'pages': [
+        for(final Map<String, dynamic> page in _pages.cast())
+          {
+            ...page,
+            'media_id': _media,
+            'id': i++, 
+          }
+      ]
+    };
   }
-
-  @override
-  dynamic encode(BookImages self) => {
-    'cover': self.cover.toMap(),
-    'thumbnail': self.cover.toMap(),
-    'pages': self.pages.map((page) => page.toMap()).toList(),
-  };
 }
 
 /// Book's images.
 @immutable
-class BookImages {
+@MappableClass(
+  hook: BookImagesHook(),
+)
+class BookImages with BookImagesMappable {
   const BookImages({
     required this.media,
     required this.cover,
@@ -87,14 +72,18 @@ class BookImages {
   });
 
   /// Image associated media id.
+  @MappableField(key: 'media_id')
   final int media;
 
   /// Book cover.
+  @MappableField(key: 'cover')
   final Cover cover;
 
   /// Book thumbnail.
+  @MappableField(key: 'thumbnail')
   final CoverThumbnail thumbnail;
 
   /// Book pages.
+  @MappableField(key: 'pages')
   final List<Image> pages;
 }

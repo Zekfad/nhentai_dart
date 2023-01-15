@@ -19,9 +19,6 @@ class Tag with TagMappable {
     required this.url,
   });
 
-  static final fromMap = TagMapper.fromMap;
-  static final fromJson = TagMapper.fromJson;
-
   /// Creates a "dummy" tag.
   /// 
   /// Such tag can be used with search, for example if you know
@@ -30,6 +27,9 @@ class Tag with TagMappable {
     type = TagType.unknown,
     count = 0,
     url = '';
+
+  static final fromMap = TagMapper.fromMap;
+  static final fromJson = TagMapper.fromJson;
 
   /// Tag ID.
   @MappableField(key: 'id')

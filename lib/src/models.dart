@@ -8,7 +8,8 @@ export 'models/image/cover_thumbnail.dart' show CoverThumbnail;
 export 'models/image/image.dart' show Image;
 export 'models/image/image_thumbnail.dart' show ImageThumbnail;
 export 'models/image/image_type.dart' show ImageType;
-export 'models/search.dart' show Search, SearchSort, SearchResult;
+export 'models/search.dart' show Search, SearchSort, SearchResult, SearchQuery, 
+  SearchQueryTag, SearchQueryText;
 export 'models/tag.dart' show Tag;
 export 'models/tag_type.dart' show TagType;
 export 'models/tags_list.dart' show TagsList;

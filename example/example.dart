@@ -12,7 +12,7 @@ Future<void> main() async {
   final pureApi = nh.API();
 
   // API client with HTTP proxy.
-  final proxyApi = NHentai.proxy(
+  final proxyApi = NHentaiAPI.proxy(
     // Proxy URI.
     'http://0xdeadbeef:0x0badf00d@example.com:1337/',
     // Custom hosts config with changed image and thumbnail hosts.
@@ -46,9 +46,8 @@ Future<void> main() async {
 
   final api = pureApi;
 
-  final NHentaiBook? book = await api.getBook(177013);
-  if (book == null)
-    throw Exception('No book with given id exists.');
+  // This will throw APIException if book was not found.
+  final NHentaiBook book = await api.getBook(177013);
   
   // Print short book summary.
   print(
@@ -83,8 +82,8 @@ Future<void> main() async {
   print(search1.books.first);
 
   // Pure single search request.
-  final NHentaiSearch? search2 = await api.searchSinglePage('test');
-  print(search2!.books.first);
+  final NHentaiSearch search2 = await api.searchSinglePage('test');
+  print(search2.books.first);
 
   return;
 }
