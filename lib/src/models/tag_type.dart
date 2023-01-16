@@ -24,6 +24,14 @@ enum TagType {
   /// Language tag.
   language;
 
+  /// Parses [TagType] instance from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [String] - then object will be parsed into [TagType] object.
+  /// * [TagType] - then value will be returned as-is.
+  static TagType Function(dynamic value) get parse =>
+    TagTypeMapper.container.fromValue<TagType>;
+
   /// Returns [TagType] by given [tagType] name.
   static TagType getByName(String tagType) =>
     TagType.values.firstWhere(

@@ -20,9 +20,31 @@ class Comment with CommentMappable {
     required this.body,
   });
 
-  static final fromMap = CommentMapper.fromMap;
-  static final fromJson = CommentMapper.fromJson;
+  /// Parses [Comment] instance from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Map] - then object will be parsed into [Comment] object.
+  /// * [Comment] - then value will be returned as-is.
+  static Comment Function(dynamic value) get parse =>
+    CommentMapper.container.fromValue<Comment>;
 
+  /// Parses [List] of [Comment] instances from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Iterable] of [dynamic] - then each object will be decoded same way as
+  ///   [parse] and resulting [Iterable] will be returned.
+  /// * [Iterable] of [Comment] - then value will be returned as-is.
+  static List<Comment> Function(dynamic value) get parseList =>
+    CommentMapper.container.fromValue<List<Comment>>;
+
+  /// Parses JSON string into [Comment] similarly to [parse]. 
+  static Comment Function(String json) get parseJson =>
+    CommentMapper.container.fromJson<Comment>;
+
+  /// Parses JSON string into [List] of [Comment] instances similarly to 
+  /// [parseList].
+  static List<Comment> Function(String json) get parseJsonList =>
+    CommentMapper.container.fromJson<List<Comment>>;
   /// Comment ID.
   @MappableField(key: 'id')
   final int id;

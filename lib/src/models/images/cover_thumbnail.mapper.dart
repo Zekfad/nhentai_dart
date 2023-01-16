@@ -30,10 +30,8 @@ class CoverThumbnailMapperElement extends MapperElementBase<CoverThumbnail> {
 
   @override
   Function get decoder => decode;
-  CoverThumbnail decode(dynamic v) => const CoverThumbnailHook().decode(
-      v,
-      (v) => checkedType(v, (Map<String, dynamic> map) => fromMap(map)),
-      container);
+  CoverThumbnail decode(dynamic v) =>
+      checkedType(v, (Map<String, dynamic> map) => fromMap(map));
   CoverThumbnail fromMap(Map<String, dynamic> map) => CoverThumbnail(
       parent: container.$get(map, 'parent'),
       width: container.$get(map, 'w'),
@@ -41,8 +39,7 @@ class CoverThumbnailMapperElement extends MapperElementBase<CoverThumbnail> {
 
   @override
   Function get encoder => encode;
-  dynamic encode(CoverThumbnail v) => const CoverThumbnailHook()
-      .encode<CoverThumbnail>(v, (v) => toMap(v), container);
+  dynamic encode(CoverThumbnail v) => toMap(v);
   Map<String, dynamic> toMap(CoverThumbnail c) => {
         'parent': container.$enc(c.parent, 'parent'),
         'w': container.$enc(c.width, 'width'),

@@ -12,7 +12,7 @@ Future<void> main() async {
   final pureApi = nh.API();
 
   // API client with HTTP proxy.
-  final proxyApi = NHentaiAPI.proxy(
+  final proxyApi = NHentai.proxy(
     // Proxy URI.
     'http://0xdeadbeef:0x0badf00d@example.com:1337/',
     // Custom hosts config with changed image and thumbnail hosts.

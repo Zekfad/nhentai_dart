@@ -28,8 +28,31 @@ class Tag with TagMappable {
     count = 0,
     url = '';
 
-  static final fromMap = TagMapper.fromMap;
-  static final fromJson = TagMapper.fromJson;
+  /// Parses [Tag] instance from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Map] - then object will be parsed into [Tag] object.
+  /// * [Tag] - then value will be returned as-is.
+  static Tag Function(dynamic value) get parse =>
+    TagMapper.container.fromValue<Tag>;
+
+  /// Parses [List] of [Tag] instances from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Iterable] of [dynamic] - then each object will be decoded same way as
+  ///   [parse] and resulting [Iterable] will be returned.
+  /// * [Iterable] of [Tag] - then value will be returned as-is.
+  static List<Tag> Function(dynamic value) get parseList =>
+    TagMapper.container.fromValue<List<Tag>>;
+
+  /// Parses JSON string into [Tag] similarly to [parse]. 
+  static Tag Function(String json) get parseJson =>
+    TagMapper.container.fromJson<Tag>;
+
+  /// Parses JSON string into [List] of [Tag] instances similarly to 
+  /// [parseList].
+  static List<Tag> Function(String json) get parseJsonList =>
+    TagMapper.container.fromJson<List<Tag>>;
 
   /// Tag ID.
   @MappableField(key: 'id')
@@ -72,5 +95,4 @@ class Tag with TagMappable {
 
   @override
   int get hashCode => Object.hash(id, type, name);
-  
 }

@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-/// Decodes time in seconds to milliseconds and encodes vice versa.
+/// Decodes and encodes [DateTime] as [int] with Unix timestamp in seconds.
 class DateHook extends MappingHook {
   const DateHook();
 

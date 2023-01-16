@@ -27,9 +27,31 @@ class Image with ImageMappable {
     this.height,
   });
 
-  static final fromMap = ImageMapper.fromMap;
-  static final fromJson = ImageMapper.fromJson;
-  static final fromValue = ImageMapper.container.fromValue<Image>;
+  /// Parses [Image] instance from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Map] - then object will be parsed into [Image] object.
+  /// * [Image] - then value will be returned as-is.
+  static Image Function(dynamic value) get parse =>
+    ImageMapper.container.fromValue<Image>;
+
+  /// Parses [List] of [Image] instances from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Iterable] of [dynamic] - then each object will be decoded same way as
+  ///   [parse] and resulting [Iterable] will be returned.
+  /// * [Iterable] of [Image] - then value will be returned as-is.
+  static List<Image> Function(dynamic value) get parseList =>
+    ImageMapper.container.fromValue<List<Image>>;
+
+  /// Parses JSON string into [Image] similarly to [parse]. 
+  static Image Function(String json) get parseJson =>
+    ImageMapper.container.fromJson<Image>;
+
+  /// Parses JSON string into [List] of [Image] instances similarly to 
+  /// [parseList].
+  static List<Image> Function(String json) get parseJsonList =>
+    ImageMapper.container.fromJson<List<Image>>;
 
   /// Associated book media gallery ID.
   @MappableField(key: 'media_id')

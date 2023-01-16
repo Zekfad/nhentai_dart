@@ -7,7 +7,13 @@ class ImageTypeMapper extends SimpleMapper<ImageType> {
 
   @override
   ImageType decode(dynamic value) {
-    final type = ImageType.getByType(value as String);
+    if(value is ImageType)
+      return value;
+
+    if(value is! String)
+      throw MapperException.unexpectedType(value.runtimeType, ImageType, 'String');
+
+    final type = ImageType.getByType(value);
     assert(
       !type.isUnknown,
       'Unknown image type found while parsing JSON. '

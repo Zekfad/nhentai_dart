@@ -5,26 +5,15 @@ import 'package:meta/meta.dart';
 import 'tag.dart';
 import 'tag_type.dart';
 
+
 class TagsListMapper extends SimpleMapper<TagsList> {
   const TagsListMapper();
 
   @override
-  TagsList decode(dynamic value) {
-    if(value is! Iterable<dynamic>)
-      throw MapperException.unexpectedType(value.runtimeType, TagsList, 'Iterable<dynamic>');
-    
-    return TagsList(
-      value.map((tag) {
-        if(tag is! Map<String, dynamic>)
-          throw MapperException.unexpectedType(tag.runtimeType, Tag, 'Map<String, dynamic>');
-        
-        return Tag.fromMap(tag);
-      }),
-    );
-  }
+  TagsList decode(dynamic value) => TagsList(Tag.parseList(value));
 
   @override
-  dynamic encode(TagsList self) => self._list.map((e) => e.toMap()).toList();
+  dynamic encode(TagsList self) => self.map((e) => e.toMap()).toList();
 }
 
 /// Unmodifiable tags list.

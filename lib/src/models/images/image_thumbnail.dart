@@ -1,7 +1,10 @@
+import 'package:meta/meta.dart';
+
 import 'image.dart';
 
 
 /// Thumbnail.
+@immutable
 class ImageThumbnail extends Image {
   ImageThumbnail({
     required this.parent,

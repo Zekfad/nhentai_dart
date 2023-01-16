@@ -40,9 +40,32 @@ class User with UserMappable {
     required this.superuser,
     required this.staff,
   });
+  
+  /// Parses [User] instance from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Map] - then object will be parsed into [User] object.
+  /// * [User] - then value will be returned as-is.
+  static User Function(dynamic value) get parse =>
+    UserMapper.container.fromValue<User>;
 
-  static final fromMap = UserMapper.fromMap;
-  static final fromJson = UserMapper.fromJson;
+  /// Parses [List] of [User] instances from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Iterable] of [dynamic] - then each object will be decoded same way as
+  ///   [parse] and resulting [Iterable] will be returned.
+  /// * [Iterable] of [User] - then value will be returned as-is.
+  static List<User> Function(dynamic value) get parseList =>
+    UserMapper.container.fromValue<List<User>>;
+
+  /// Parses JSON string into [User] similarly to [parse]. 
+  static User Function(String json) get parseJson =>
+    UserMapper.container.fromJson<User>;
+
+  /// Parses JSON string into [List] of [User] instances similarly to 
+  /// [parseList].
+  static List<User> Function(String json) get parseJsonList =>
+    UserMapper.container.fromJson<List<User>>;
 
   /// User ID.
   @MappableField(key: 'id')
