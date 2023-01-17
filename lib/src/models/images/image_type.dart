@@ -7,10 +7,10 @@ class ImageTypeMapper extends SimpleMapper<ImageType> {
 
   @override
   ImageType decode(dynamic value) {
-    if(value is ImageType)
+    if (value is ImageType)
       return value;
 
-    if(value is! String)
+    if (value is! String)
       throw MapperException.unexpectedType(value.runtimeType, ImageType, 'String');
 
     final type = ImageType.getByType(value);

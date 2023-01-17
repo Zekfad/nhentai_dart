@@ -1,4 +1,3 @@
-export 'api_exception.dart' show APIException;
 export 'models/book.dart' show Book;
 export 'models/book_images.dart' show BookImages;
 export 'models/book_title.dart' show BookTitle;

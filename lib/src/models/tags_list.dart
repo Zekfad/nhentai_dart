@@ -10,7 +10,12 @@ class TagsListMapper extends SimpleMapper<TagsList> {
   const TagsListMapper();
 
   @override
-  TagsList decode(dynamic value) => TagsList(Tag.parseList(value));
+  TagsList decode(dynamic value) {
+    if (value is TagsList)
+      return value;
+    
+    return TagsList(Tag.parseList(value));
+  }
 
   @override
   dynamic encode(TagsList self) => self.map((e) => e.toMap()).toList();

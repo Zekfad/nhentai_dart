@@ -16,48 +16,65 @@ class BookImagesHook extends MappingHook {
     if (value is! Map<String, dynamic>)
       throw MapperException.unexpectedType(value.runtimeType, BookImages, 'Map<String, dynamic>');
     
-    final _cover = value['cover'];
-    if (_cover is! Map<String, dynamic>)
-      throw MapperException.unexpectedType(_cover.runtimeType, Cover, 'Map<String, dynamic>');
-    
-    final _thumbnail = value['thumbnail'];
-    if (_thumbnail is! Map<String, dynamic>)
-      throw MapperException.unexpectedType(_thumbnail.runtimeType, CoverThumbnail, 'Map<String, dynamic>');
-  
-    final _pages = value['pages'];
-    if (_pages is! Iterable<dynamic>)
-      throw MapperException.unexpectedType(_pages.runtimeType, List<Image>, 'Iterable<dynamic>');
-    
+    final int media;
     final _media = value['media_id'];
-    if (_media is! String && _media is! int)
-      throw MapperException.unexpectedType(_media.runtimeType, int, 'String | int');
+    if (_media is int)
+      media = _media;
+    else if (_media is String)
+      media = int.parse(_media);
+    else 
+      throw MapperException.unexpectedType(_media.runtimeType, int, 'String');
     
-    final cover = Cover.parse({
-      ..._cover,
-      'media_id': _media,
-    });
+    final Cover cover;
+    final _cover = value['cover'];
+    if (_cover is Cover)
+      cover = _cover;
+    else if (_cover is Map<String, dynamic>)
+      cover = Cover.parse({
+        ..._cover,
+        'media_id': media,
+        'id': 0,
+      });
+    else
+      throw MapperException.unexpectedType(_cover.runtimeType, Cover, 'Map<String, dynamic>');
 
-		var i = 0;
-		final pages = [
-			for (final page in _pages)
-				if (page is! Map<String, dynamic>)
-					throw MapperException.unexpectedType(page.runtimeType, Image, 'Map<String, dynamic>')
-				else {
-					...page,
-					'media_id': _media,
-					'id': i++, 
-				},
-		];
-
-    return {
-      ...value,
-      'cover': cover,
-      'thumbnail': {
+    final CoverThumbnail thumbnail;
+    final _thumbnail = value['thumbnail'];
+    if (_thumbnail is CoverThumbnail)
+      thumbnail = _thumbnail;
+    else if (_thumbnail is Map<String, dynamic>)
+      thumbnail = CoverThumbnail.parse({
         ..._thumbnail,
         'parent': cover,
-      },
-      'pages': pages,
-    };
+      });
+    else
+      throw MapperException.unexpectedType(_thumbnail.runtimeType, CoverThumbnail, 'Map<String, dynamic>');
+  
+    var i = 0;
+    final List<Image> pages;
+    final _pages = value['pages'];
+    if(_pages is List<Image>)
+      pages = _pages;
+    else if(_pages is Iterable<dynamic>)
+      pages = [
+        for (final page in _pages)
+          if (page is! Map<String, dynamic>)
+            throw MapperException.unexpectedType(page.runtimeType, Image, 'Map<String, dynamic>')
+          else Image.parse({
+            ...page,
+            'media_id': _media,
+            'id': i++, 
+          }),
+      ];
+    else
+      throw MapperException.unexpectedType(_pages.runtimeType, List<Image>, 'Iterable<dynamic>');
+
+    return BookImages(
+      media: media, 
+      cover: cover, 
+      thumbnail: thumbnail, 
+      pages: pages,
+    );
   }
 }
 

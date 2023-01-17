@@ -6,7 +6,6 @@ import 'nhentai.dart';
 
 export 'data_model_prefixed.dart';
 
-
 /// [API] alias.
 typedef NHentai = API;
 /// [Hosts] alias.
@@ -21,3 +20,5 @@ typedef NHentaiApiHost = ApiHost;
 typedef NHentaiImageHost = ImageHost;
 /// [ThumbnailHost] alias.
 typedef NHentaiThumbnailHost = ThumbnailHost;
+/// [APIException] alias.
+typedef NHentaiAPIException = APIException;

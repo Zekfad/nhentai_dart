@@ -32,6 +32,24 @@ enum TagType {
   static TagType Function(dynamic value) get parse =>
     TagTypeMapper.container.fromValue<TagType>;
 
+  /// Parses [List] of [TagType] instances from a given value.
+  /// 
+  /// Value can be one of the following:
+  /// * [Iterable] of [dynamic] - then each object will be decoded same way as
+  ///   [parse] and resulting [Iterable] will be returned.
+  /// * [Iterable] of [TagType] - then value will be returned as-is.
+  static List<TagType> Function(dynamic value) get parseList =>
+    TagTypeMapper.container.fromValue<List<TagType>>;
+
+  /// Parses JSON string into [TagType] similarly to [parse]. 
+  static TagType Function(String json) get parseJson =>
+    TagTypeMapper.container.fromJson<TagType>;
+
+  /// Parses JSON string into [List] of [TagType] instances similarly to 
+  /// [parseList].
+  static List<TagType> Function(String json) get parseJsonList =>
+    TagTypeMapper.container.fromJson<List<TagType>>;
+
   /// Returns [TagType] by given [tagType] name.
   static TagType getByName(String tagType) =>
     TagType.values.firstWhere(

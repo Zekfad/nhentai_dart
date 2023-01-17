@@ -6,6 +6,7 @@ import 'dart:io'
 import 'package:meta/meta.dart';
 
 import '../data_model.container.dart';
+import 'api_exception.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';

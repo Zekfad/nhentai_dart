@@ -17,7 +17,7 @@ class BookHook extends MappingHook {
     if (value is! Map<String, dynamic>)
       throw MapperException.unexpectedType(value.runtimeType, Book, 'Map<String, dynamic>');
 
-    final _images = value['images'];
+    final _images = value['images'];  
     if (_images is! Map<String, dynamic>)
       throw MapperException.unexpectedType(_images.runtimeType, BookImages, 'Map<String, dynamic>');
 
@@ -26,7 +26,7 @@ class BookHook extends MappingHook {
       'images': {
         ..._images,
         'media_id': value['media_id'],
-      }
+      },
     };
   }
 }
