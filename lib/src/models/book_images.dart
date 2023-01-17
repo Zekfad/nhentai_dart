@@ -33,7 +33,6 @@ class BookImagesHook extends MappingHook {
       cover = Cover.parse({
         ..._cover,
         'media_id': media,
-        'id': 0,
       });
     else
       throw MapperException.unexpectedType(_cover.runtimeType, Cover, 'Map<String, dynamic>');
@@ -50,7 +49,7 @@ class BookImagesHook extends MappingHook {
     else
       throw MapperException.unexpectedType(_thumbnail.runtimeType, CoverThumbnail, 'Map<String, dynamic>');
   
-    var i = 0;
+    var i = 1;
     final List<Image> pages;
     final _pages = value['pages'];
     if(_pages is List<Image>)
