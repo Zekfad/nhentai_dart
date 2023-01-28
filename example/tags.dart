@@ -7,9 +7,7 @@ import 'package:nhentai/nhentai.dart' as nh;
 final api = nh.API();
 
 Future<void> main() async {
-  final nh.Book? book = await api.getBook(177013);
-  if (book == null)
-    throw Exception('Something went wrong.');
+  final nh.Book book = await api.getBook(177013);
   final tags = book.tags;
 
   // Use predefined filters
