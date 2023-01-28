@@ -7,8 +7,10 @@
 * Search by tag(s).
 * Get random book.
 * Configurable hosts.
-* Support for custom `HttpClient`.
-* Drop-in HTTP proxy support (configurable by URI).
+* Support for custom `Client` (via
+  [`package:http`](https://pub.dev/packages/http)).
+* Out-of-box HTTP proxy support (configurable via URI).
+* Out-of-box User Agent override and Cookies support.
 
 ### Notes about web usage
 
@@ -18,7 +20,9 @@ Using this module on web platform is experimental and has some drawbacks:
   * Workaround: use CORS enabled mirror (for example you can use
     [dev-mirror](https://github.com/Zekfad/dev-mirror)).
 * `API#getRandomBook` doesn't work due to limitations of `XHR`.
-* Proxy doesn't supported on web.
+* Proxy isn't supported on web.
+* User Agent override isn't supported.
+* Cookies helper functions aren't supported.
 
 ## Usage
 
@@ -33,9 +37,8 @@ final api = API();
 
 Get the data:
 ```dart
-final Book? book = await api.getBook(177013);
-if (book == null)
-  throw Exception('Something went wrong.');
+/// Throws if book is not found, or parse failed, see docs.
+final Book book = await api.getBook(177013);
 
 // Short book summary
 print(
