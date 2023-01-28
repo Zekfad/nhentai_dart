@@ -2,3 +2,4 @@
 *.code-workspace
 
 doc/
+example/_local_test.dart

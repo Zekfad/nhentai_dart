@@ -10,3 +10,4 @@ build/
 pubspec.lock
 
 doc/
+example/_local_test.dart
