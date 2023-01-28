@@ -1,11 +1,12 @@
-export 'api_exception.dart' show APIException;
-export 'book.dart' show Book;
-export 'book_title.dart' show BookTitle;
-export 'comment.dart' show Comment;
-export 'image.dart' show Image;
-export 'image_type.dart' show ImageType;
-export 'search.dart' show Search, SearchSort;
-export 'tag.dart' show Tag;
-export 'tag_type.dart' show TagType;
-export 'tags_list.dart' show TagsList;
-export 'user.dart' show User;
+export 'models/book.dart' show Book;
+export 'models/book_images.dart' show BookImages;
+export 'models/book_title.dart' show BookTitle;
+export 'models/comment.dart' show Comment;
+export 'models/image.dart' show Cover, CoverThumbnail, Image, ImageThumbnail,
+  ImageType;
+export 'models/search.dart' show Search, SearchSort, SearchResult, SearchQuery, 
+  SearchQueryTag, SearchQueryText;
+export 'models/tag.dart' show Tag;
+export 'models/tag_type.dart' show TagType;
+export 'models/tags_list.dart' show TagsList;
+export 'models/user.dart' show User;

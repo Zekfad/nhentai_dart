@@ -1,6 +1,6 @@
 import 'api.dart';
 import 'hosts.dart';
-import 'image.dart';
+import 'models/image.dart';
 
 
 /// Returns [image] url using hosts settings from [api] client or

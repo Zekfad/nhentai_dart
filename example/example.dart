@@ -46,9 +46,8 @@ Future<void> main() async {
 
   final api = pureApi;
 
-  final NHentaiBook? book = await api.getBook(177013);
-  if (book == null)
-    throw Exception('Something went wrong.');
+  // This will throw APIException if book was not found.
+  final NHentaiBook book = await api.getBook(177013);
   
   // Print short book summary.
   print(
@@ -83,8 +82,8 @@ Future<void> main() async {
   print(search1.books.first);
 
   // Pure single search request.
-  final NHentaiSearch? search2 = await api.searchSinglePage('test');
-  print(search2!.books.first);
+  final NHentaiSearch search2 = await api.searchSinglePage('test');
+  print(search2.books.first);
 
   return;
 }

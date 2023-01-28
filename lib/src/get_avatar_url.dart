@@ -1,6 +1,6 @@
 import 'api.dart';
 import 'hosts.dart';
-import 'user.dart';
+import 'models/user.dart';
 
 
 /// Returns [user]'s avatar url using hosts settings from [api] client or

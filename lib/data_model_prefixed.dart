@@ -5,21 +5,30 @@ library nhentai_data_model_prefixed;
 
 import 'data_model.dart';
 
-
-/// [APIException] alias.
-typedef NHentaiAPIException = APIException;
 /// [Book] alias.
 typedef NHentaiBook = Book;
+/// [BookImages] alias.
+typedef NHentaiBookImages = BookImages;
 /// [BookTitle] alias.
 typedef NHentaiBookTitle = BookTitle;
+/// [Comment] alias
+typedef NhentaiComment = Comment;
+/// [Cover] alias.
+typedef NHentaiCover = Cover;
+/// [CoverThumbnail] alias.
+typedef NHentaiCoverThumbnail = CoverThumbnail;
 /// [Image] alias.
 typedef NHentaiImage = Image;
+/// [ImageThumbnail] alias.
+typedef NHentaiImageThumbnail = ImageThumbnail;
 /// [ImageType] alias.
 typedef NHentaiImageType = ImageType;
 /// [Search] alias.
 typedef NHentaiSearch = Search;
 /// [SearchSort] alias.
 typedef NHentaiSearchSort = SearchSort;
+/// [SearchResult] alias.
+typedef NHentaiSearchResult = SearchResult;
 /// [Tag] alias.
 typedef NHentaiTag = Tag;
 /// [TagType] alias.
@@ -28,5 +37,3 @@ typedef NHentaiTagType = TagType;
 typedef NHentaiTagsList = TagsList;
 /// [User] alias
 typedef NHentaiUser = User;
-/// [Comment] alias
-typedef NhentaiComment = Comment;

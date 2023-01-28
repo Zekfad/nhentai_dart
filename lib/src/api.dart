@@ -5,13 +5,14 @@ import 'dart:io'
 
 import 'package:meta/meta.dart';
 
+import '../data_model.container.dart';
+import 'api_exception.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'models.dart';
-import 'parsers/parse_list.dart';
 import 'platform.dart' as platform;
-import 'search.dart';
+
 
 /// Simple one-to-one query parameters map.
 typedef SimpleQuery = Map<String, String>;
@@ -80,7 +81,8 @@ class API {
   final int maxRetries;
 
   /// Makes HTTP GET request to [url] and returns closed [HttpClientResponse].
-  Future<HttpClientResponse> _get(Uri url) async {
+  @protected
+  Future<HttpClientResponse> get(Uri url) async {
     var retries = 0;
     while (true) {
       try {
@@ -99,12 +101,12 @@ class API {
   /// 
   /// Throws [APIException] if parsed json is an API error.
   Future<dynamic> _getJson(Uri url) async {
-    final response = await _get(url);
+    final response = await get(url);
     final data = await utf8.decodeStream(response);
     final json = jsonDecode(data);
 
-    final jsonError = json is Map<String, dynamic>
-      ? json['error']
+    final jsonError = json is Map<String, dynamic> 
+      ? json['error'] 
       : null;
 
     if (jsonError != null) {
@@ -116,14 +118,14 @@ class API {
 
     return json;
   }
-
+  
   /// Makes HTTP GET request to [url] and returns redirect location.
   /// 
   /// Returns `null` if there was no redirect.
   /// 
   /// Note: doesn't work on web.
   Future<String?> _getRedirectUrl(Uri url) async {
-    final response = await _get(url);
+    final response = await get(url);
     final location = response.headers[HttpHeaders.locationHeader];
 
     // location == null || location.isEmpty
@@ -156,27 +158,25 @@ class API {
   }
 
   /// Returns book with given [id].
-  /// 
-  /// Returns `null` if book with such [id] doesn't exist.
-  Future<Book?> getBook(int id) async {
+  Future<Book> getBook(int id) async {
     assert(id > 0, 'ID must be positive integer.');
-    return Book.tryParse(
-      await _getJson(
-        hosts.api.getUri('/api/gallery/$id'),
-      ),
+        
+    final json = await _getJson(
+      hosts.api.getUri('/api/gallery/$id'),
     );
+
+    return nhentaiModelsContainer.fromValue<Book>(json);
   }
 
-  /// Returns book's comments.
-  /// 
-  /// Returns `null` if result can't be parsed to [Search].
-  Future<List<Comment>?> getComments(int bookId) async {
+  /// Returns comments for book with given [bookId].
+  Future<List<Comment>> getComments(int bookId) async {
     assert(bookId > 0, 'Book ID must be positive integer.');
-    return tryParseList(
-      await _getJson(
-        hosts.api.getUri('/api/gallery/$bookId/comments'),
-      ),
+    
+    final json = await _getJson(
+      hosts.api.getUri('/api/gallery/$bookId/comments'),
     );
+
+    return nhentaiModelsContainer.fromValue<List<Comment>>(json);
   }
 
   /// Returns single [Search] page for [query].
@@ -184,9 +184,7 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Returns `null` if result can't be parsed to [Search].
-  Future<Search?> _searchSinglePage(SearchQuery query, {
+  Future<Search> _searchSinglePage(SearchQuery query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) async {
@@ -194,24 +192,27 @@ class API {
       throw ArgumentError.value(page, 'page', 'Must be grater than 0');
 
     final isTagSearch = query is SearchQueryTag;
-    return Search.tryParse(
-      await _getJson(
-        hosts.api.getUri(
-          '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
-          {
-            if (isTagSearch)
-              'tag_id': query.tag.id.toString()
-            else
-              'query': query.toString(),
-            'page' : page.toString(),
-            if (sort != SearchSort.recent)
-              'sort': sort.toString(),
-          }
-        ),
+    
+    final json = await _getJson(
+      hosts.api.getUri(
+        '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
+        {
+          if (isTagSearch)
+            'tag_id': query.tag.id.toString()
+          else
+            'query': query.toString(),
+          'page' : page.toString(),
+          if (sort != SearchSort.recent)
+            'sort': sort.toString(),
+        }
       ),
+    );
+
+    return Search(
+      nhentaiModelsContainer.fromValue(json),
       query: query,
-      page : page,
-      sort : sort,
+      page: page,
+      sort: sort,
     );
   }
 
@@ -222,8 +223,6 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Throws [FormatException] if result can't be parsed to [Search].
   Stream<Search> _search(SearchQuery query, {
     int page = 1,
     int? count,
@@ -242,8 +241,8 @@ class API {
     Search? search;
     do {
       search = await _searchSinglePage(query, page: _page++, sort: sort);
-      if (search == null)
-        throw const FormatException('Cannot parse search result.');
+      // if (search == null)
+      //   throw const FormatException('Cannot parse search result.');
       if (count == null)
         _pages = search.pages;
       yield search;
@@ -255,9 +254,7 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Returns `null` if result can't be parsed to [Search].
-  Future<Search?> searchSinglePage(String query, {
+  Future<Search> searchSinglePage(String query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) => _searchSinglePage(SearchQueryText(query), page: page, sort: sort);
@@ -287,9 +284,7 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
-  /// 
-  /// Returns `null` if result can't be parsed to [Search].
-  Future<Search?> searchTaggedSinglePage(Tag tag, {
+  Future<Search> searchTaggedSinglePage(Tag tag, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) => _searchSinglePage(SearchQueryTag(tag), page: page, sort: sort);

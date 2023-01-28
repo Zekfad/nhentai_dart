@@ -1,0 +1,6 @@
+targets:
+  $default:
+    builders:
+      dart_mappable_builder:
+        options:
+          generateMethods: [decode, encode, stringify]
