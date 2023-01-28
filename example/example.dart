@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, unused_local_variable, omit_local_variable_types
 
 import 'dart:io';
+import 'package:http/io_client.dart';
 // Import with library prefix
 import 'package:nhentai/nhentai.dart' as nh;
 // Import prefixed version
@@ -25,14 +26,16 @@ Future<void> main() async {
   // Client with custom HTTP Client.
   final customClientApi = nh.API(
     // HTTP client with proxy.
-    client: HttpClient()
-      ..addProxyCredentials(
-        'example.com',
-        1337,
-        'Basic',
-        HttpClientBasicCredentials('0xdeadbeef', '0x0badf00d'),
-      )
-      ..findProxy = (uri) => 'PROXY example.com:1337',
+    client: IOClient(
+        HttpClient()
+        ..addProxyCredentials(
+          'example.com',
+          1337,
+          'Basic',
+          HttpClientBasicCredentials('0xdeadbeef', '0x0badf00d'),
+        )
+        ..findProxy = (uri) => 'PROXY example.com:1337',
+      ),
     // Multiple hosts config with 2 image hosts.
     hosts: NHentaiHosts.multiple(
       image: [
@@ -46,7 +49,7 @@ Future<void> main() async {
 
   final api = pureApi;
 
-  // This will throw APIException if book was not found.
+  // This will throw ApiException if book isn't found.
   final NHentaiBook book = await api.getBook(177013);
   
   // Print short book summary.
