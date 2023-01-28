@@ -1,6 +1,8 @@
 name: nhentai
-description: Client for nhentai.net undocumented APIs written in Dart.
-version: 1.0.0-dev.10
+description: |
+  Powerful client for nhentai.net undocumented APIs, with cookies,
+  proxy, full data model and more.
+version: 1.0.0-dev.11
 homepage: https://github.com/Zekfad/nhentai_dart
 repository: https://github.com/Zekfad/nhentai_dart
 issue_tracker: https://github.com/Zekfad/nhentai_dart/issues
@@ -10,11 +12,11 @@ environment:
   sdk: '>=2.17.0 <3.0.0'
 
 dev_dependencies:
-  build_runner: ^2.3.2
+  build_runner: ^2.3.3
   dart_mappable_builder: ^2.0.0
-  test: ^1.16.0
+  test: ^1.22.2
   zekfad_lints: ^1.1.0
 dependencies: 
   dart_mappable: ^2.0.1
+  http: ^0.13.5
   meta: ^1.8.0
-  universal_io: ^2.0.4
