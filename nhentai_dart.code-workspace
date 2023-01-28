@@ -1,13 +1,13 @@
 {
 	"extensions": {
 		"recommendations": [
-			"Dart-Code.dart-code"
-		]
+			"Dart-Code.dart-code",
+		],
 	},
 	"folders": [
 		{
 			"path": ".",
-		}
+		},
 	],
 	"settings": {
 		"cSpell.words": [
@@ -16,6 +16,10 @@
 			"unawaited",
 			"pubspec",
 			"bools",
-		]
-	}
+		],
+		"explorer.fileNesting.patterns": {
+			"pubspec.yaml": "pubspec.lock,pubspec_overrides.yaml,.packages,.flutter-plugins,.flutter-plugins-dependencies,.metadata",
+			"*.dart": "${capture}.g.dart,${capture}.mapper.dart",
+		},
+	},
 }
