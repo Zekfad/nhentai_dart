@@ -5,7 +5,7 @@ import '../date_hook.dart';
 import 'book_images.dart';
 import 'book_title.dart';
 import 'image.dart';
-import 'tags_list.dart';
+import 'tag.dart';
 
 part 'book.mapper.dart';
 
@@ -35,9 +35,6 @@ class BookHook extends MappingHook {
 @immutable
 @MappableClass(
   hook: BookHook(),
-  includeCustomMappers: [
-    TagsListMapper,
-  ],
 )
 class Book with BookMappable {
   /// Creates a book.
@@ -104,7 +101,7 @@ class Book with BookMappable {
 
   /// Book tags list.
   @MappableField(key: 'tags')
-  final TagsList tags;
+  final List<Tag> tags;
 
   /// Collection of images.
   @MappableField(key: 'images')

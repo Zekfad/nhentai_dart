@@ -1,32 +1,39 @@
 import 'dart:convert';
-import 'dart:io'
-  if (dart.library.js) 'package:universal_io/io.dart'
-  if (dart.library.html) 'package:universal_io/io.dart';
 
+import 'package:dart_mappable/dart_mappable.dart' show MapperException;
+import 'package:http/http.dart' show Client, Request, Response;
+import 'package:http/retry.dart';
 import 'package:meta/meta.dart';
 
-import '../data_model.container.dart';
+import 'api_client_exception.dart';
 import 'api_exception.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
+import 'models.container.dart';
 import 'models.dart';
 import 'platform.dart' as platform;
 
-
 /// Simple one-to-one query parameters map.
 typedef SimpleQuery = Map<String, String>;
+
+/// Before request callback.
+typedef BeforeRequestCallback = void Function(Request request);
 
 /// API client.
 @immutable
 class API {
   /// Creates API client with provided HTTP [client] (if any) and [hosts].
   API({
-    HttpClient? client,
+    Client? client,
     this.hosts = const Hosts(),
-    this.maxRetries = 5,
+    this.beforeRequest,
+    int maxRetries = 5,
   }) :
-    client = client ?? HttpClient();
+    client = client ?? RetryClient(
+      platform.getClient(userAgent),
+      retries: maxRetries,
+    );
 
   /// Creates API client with provided proxy config and [hosts].
   /// 
@@ -35,85 +42,62 @@ class API {
   /// 
   /// Throws [UnsupportedError] on web.
   /// 
-  /// Throws [ArgumentError] on malformed [proxyUri] or it is not HTTP proxy. 
-  factory API.proxy(String proxyUri, {
-    Hosts hosts = const Hosts(),
+  /// Throws [ArgumentError] with malformed [proxyUri] or if it isn't an HTTP
+  /// proxy. 
+  API.proxy(String proxyUri, {
+    this.hosts = const Hosts(),
+    this.beforeRequest,
     int maxRetries = 5,
-  }) {
-    if (platform.isJS())
-      throw UnsupportedError('Proxy is not supported on web');
-
-    final _proxyUri = Uri.tryParse(proxyUri);
-
-    if (_proxyUri == null || _proxyUri.scheme != 'http')
-      throw ArgumentError.value(proxyUri, 'uri', 'Proxy URI must be valid');
-
-    final match = RegExp(r'^(?<username>.+?):(?<password>.+?)$')
-      .firstMatch(_proxyUri.userInfo);
-
-    final username = match?.namedGroup('username');
-    final password = match?.namedGroup('password');
-
-    final proxyClient = HttpClient()
-      ..findProxy = (uri) => 'PROXY ${_proxyUri.host}:${_proxyUri.port}';
-
-    // Proxy authentication
-    if (username != null && password != null)
-      proxyClient.addProxyCredentials(
-        _proxyUri.host,
-        _proxyUri.port,
-        'Basic',
-        HttpClientBasicCredentials(username, password),
-      );
-
-    return API(
-      client: proxyClient,
-      hosts: hosts,
-      maxRetries: maxRetries,
+  }) :
+    client = RetryClient(
+      platform.getProxyClient(proxyUri, userAgent),
+      retries: maxRetries,
     );
-  }
 
-  /// [HttpClient] used for requests.
-  final HttpClient client;
+
+  /// Client version
+  static const _version = '1.0.0';
+
+  /// User agent string, you can override it via this property.
+  /// 
+  /// Note: in web this is ignored.
+  static String userAgent = 'nhentai-api-client/$_version ${platform.platformUserAgent}';
+
+  /// [Client] used for requests.
+  final Client client;
   /// Hosts settings.
   final Hosts hosts;
-  /// Maximum number of retries for failed HTTP requests.
-  final int maxRetries;
+  /// Before request callback. Used to pre process requests. 
+  final BeforeRequestCallback? beforeRequest;
 
-  /// Makes HTTP GET request to [url] and returns closed [HttpClientResponse].
-  @protected
-  Future<HttpClientResponse> get(Uri url) async {
-    var retries = 0;
-    while (true) {
-      try {
-        final request = await client.getUrl(url)
-          ..followRedirects = false;
-        final response = await request.close();
-        return response;
-      } on HttpException {
-        if (++retries > maxRetries)
-          rethrow;
-      }
-    }
-  }
-
-  /// Makes HTTP GET request to [url] and parses response to JSON.
+  /// Makes HTTP GET request to [uri] and parses response to JSON.
   /// 
-  /// Throws [APIException] if parsed json is an API error.
-  Future<dynamic> _getJson(Uri url) async {
-    final response = await get(url);
-    final data = await utf8.decodeStream(response);
-    final json = jsonDecode(data);
+  /// Throws [ApiException] if parsed json is an API error.
+  /// 
+  /// Throws [ApiClientException] if server responded with not a JSON.
+  Future<dynamic> _getJson(Uri uri) async {
+    final request = Request('GET', uri);
+    beforeRequest?.call(request);
+    final response = await Response.fromStream(await client.send(request));
+    final dynamic json;
+    try {
+      json = jsonDecode(response.body);
+    } on FormatException catch (exception) {
+      throw ApiClientException(
+        'Bad response type.',
+        response: response,
+        originalException: exception,
+      );
+    }
 
-    final jsonError = json is Map<String, dynamic> 
-      ? json['error'] 
-      : null;
+    final jsonError = json is! Map<String, dynamic> ? null
+      : json['error'];
 
     if (jsonError != null) {
       if (jsonError is String)
-        throw APIException(jsonError);
-      if (jsonError is bool)
-        throw const APIException('Generic exception.');
+        throw ApiException(jsonError);
+      if (jsonError is bool) // API can return `{"error":true}` with no info.
+        throw const ApiException('Generic API exception.');
     }
 
     return json;
@@ -125,58 +109,80 @@ class API {
   /// 
   /// Note: doesn't work on web.
   Future<String?> _getRedirectUrl(Uri url) async {
-    final response = await get(url);
-    final location = response.headers[HttpHeaders.locationHeader];
+    final request = Request('GET', url)
+      ..followRedirects = false;
+    final response = await client.send(request);
+    return response.headers['location'];
+  }
 
-    // location == null || location.isEmpty
-    if (location?.isNotEmpty != true)
-      return null;
-    return response.headers[HttpHeaders.locationHeader]!.first;
+  /// Makes HTTP GET request to [host]/[unencodedPath] and parses JSON response
+  /// into requested model.
+  /// 
+  /// {@template parser_throws}
+  /// Throws [ApiException] if server responded with JSON error.
+  /// 
+  /// Throws [ApiClientException] if server responded with not a JSON.
+  /// 
+  /// Throws [MapperException] if it is impossible to parse response into target
+  /// model.
+  /// {@endtemplate}
+  Future<T> _getModel<T>(String unencodedPath, {
+    Map<String, dynamic>? queryParameters,
+    Host? host,
+  }) async {
+    final json = await _getJson(
+      (host ?? hosts.api).getUri(
+        unencodedPath,
+        queryParameters,
+      ),
+    );
+    return InternalModelsContainer.fromValue<T>(json);
   }
 
   /// Returns [Uri] for [image] via [hosts] config.
   Uri getImageUrl(Image image) =>
     get_image_url.getImageUrl(image, api: this);
 
-  /// Returns [Uri] for [user]'avatar via [hosts] config.
+  /// Returns [Uri] for [user]'s avatar via [hosts] config.
   Uri getAvatarUrl(User user) =>
     get_avatar_url.getAvatarUrl(user, api: this);
 
   /// Returns random book.
+  /// 
+  /// {@macro parser_throws}
   /// 
   /// Note: doesn't work on web.
   Future<Book?> getRandomBook() async {
     final url = await _getRedirectUrl(
       hosts.api.getUri('/random/'),
     );
+
     if (url == null)
       return null;
+
     final id = RegExp(r'\d+').firstMatch(url)?.group(0);
     if (id == null)
       return null;
+
     return getBook(int.parse(id));
   }
 
   /// Returns book with given [id].
-  Future<Book> getBook(int id) async {
+  /// 
+  /// {@macro parser_throws}
+  Future<Book> getBook(int id) {
     assert(id > 0, 'ID must be positive integer.');
-        
-    final json = await _getJson(
-      hosts.api.getUri('/api/gallery/$id'),
-    );
 
-    return nhentaiModelsContainer.fromValue<Book>(json);
+    return _getModel('/api/gallery/$id');
   }
 
   /// Returns comments for book with given [bookId].
-  Future<List<Comment>> getComments(int bookId) async {
+  /// 
+  /// {@macro parser_throws}
+  Future<List<Comment>> getComments(int bookId) {
     assert(bookId > 0, 'Book ID must be positive integer.');
-    
-    final json = await _getJson(
-      hosts.api.getUri('/api/gallery/$bookId/comments'),
-    );
 
-    return nhentaiModelsContainer.fromValue<List<Comment>>(json);
+    return _getModel('/api/gallery/$bookId/comments');
   }
 
   /// Returns single [Search] page for [query].
@@ -184,6 +190,8 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
+  /// 
+  /// {@macro parser_throws}
   Future<Search> _searchSinglePage(SearchQuery query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
@@ -192,11 +200,11 @@ class API {
       throw ArgumentError.value(page, 'page', 'Must be grater than 0');
 
     final isTagSearch = query is SearchQueryTag;
-    
-    final json = await _getJson(
-      hosts.api.getUri(
+
+    return Search(
+      await _getModel(
         '/api/galleries/${isTagSearch ? 'tagged' : 'search'}',
-        {
+        queryParameters: {
           if (isTagSearch)
             'tag_id': query.tag.id.toString()
           else
@@ -204,12 +212,8 @@ class API {
           'page' : page.toString(),
           if (sort != SearchSort.recent)
             'sort': sort.toString(),
-        }
+        },
       ),
-    );
-
-    return Search(
-      nhentaiModelsContainer.fromValue(json),
       query: query,
       page: page,
       sort: sort,
@@ -223,6 +227,8 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
+  /// 
+  /// {@macro parser_throws}
   Stream<Search> _search(SearchQuery query, {
     int page = 1,
     int? count,
@@ -254,6 +260,8 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
+  /// 
+  /// {@macro parser_throws}
   Future<Search> searchSinglePage(String query, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
@@ -272,7 +280,7 @@ class API {
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 
-  /// Throws [FormatException] if result can't be parsed to [Search].
+  /// {@macro parser_throws}
   Stream<Search> search(String query, {
     int page = 1,
     int? count,
@@ -284,6 +292,8 @@ class API {
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
+  /// 
+  /// {@macro parser_throws}
   Future<Search> searchTaggedSinglePage(Tag tag, {
     int page = 1,
     SearchSort sort = SearchSort.recent,
@@ -301,7 +311,7 @@ class API {
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 
-  /// Throws [FormatException] if result can't be parsed to [Search].
+  /// {@macro parser_throws}
   Stream<Search> searchTagged(Tag tag, {
     int page = 1,
     int? count,

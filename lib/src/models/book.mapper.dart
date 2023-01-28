@@ -7,8 +7,12 @@ part of 'book.dart';
 
 class BookMapper extends MapperBase<Book> {
   static MapperContainer container = MapperContainer(
-    mappers: {BookMapper(), TagsListMapper()},
-  )..linkAll({BookTitleMapper.container, BookImagesMapper.container});
+    mappers: {BookMapper()},
+  )..linkAll({
+      BookTitleMapper.container,
+      TagMapper.container,
+      BookImagesMapper.container,
+    });
 
   @override
   BookMapperElement createElement(MapperContainer container) {

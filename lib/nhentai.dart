@@ -7,5 +7,6 @@ import 'src/hosts.dart';
 
 export 'data_model.dart';
 export 'src/api.dart';
+export 'src/api_client_exception.dart';
 export 'src/api_exception.dart';
 export 'src/hosts.dart';

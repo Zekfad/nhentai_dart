@@ -8,6 +8,10 @@ export 'data_model_prefixed.dart';
 
 /// [API] alias.
 typedef NHentai = API;
+/// [SimpleQuery] alias.
+typedef NHentaiSimpleQuery = SimpleQuery;
+/// [BeforeRequestCallback] alias.
+typedef NHentaiBeforeRequestCallback = BeforeRequestCallback;
 /// [Hosts] alias.
 typedef NHentaiHosts = Hosts;
 /// [HostType] alias.
@@ -20,5 +24,7 @@ typedef NHentaiApiHost = ApiHost;
 typedef NHentaiImageHost = ImageHost;
 /// [ThumbnailHost] alias.
 typedef NHentaiThumbnailHost = ThumbnailHost;
-/// [APIException] alias.
-typedef NHentaiAPIException = APIException;
+/// [ApiException] alias.
+typedef NHentaiAPIException = ApiException;
+/// [ApiClientException] alias.
+typedef NHentaiClientException = ApiClientException;

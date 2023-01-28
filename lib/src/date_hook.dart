@@ -9,7 +9,10 @@ class DateHook extends MappingHook {
     if (value is! int)
       throw MapperException.unexpectedType(value.runtimeType, DateTime, 'int');
 
-    return DateTime.fromMillisecondsSinceEpoch(value * Duration.millisecondsPerSecond);
+    return DateTime.fromMillisecondsSinceEpoch(
+      value * Duration.millisecondsPerSecond,
+      isUtc: true,
+    );
   }
 
   @override

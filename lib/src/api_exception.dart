@@ -1,11 +1,11 @@
 import 'package:meta/meta.dart';
 
 
-/// API exception.
+/// API exception as returned from server.
 @immutable
-class APIException implements Exception {
+class ApiException implements Exception {
   /// Create an API exception.
-  const APIException(this.message);
+  const ApiException(this.message);
 
   /// Exception message.
   final String message;

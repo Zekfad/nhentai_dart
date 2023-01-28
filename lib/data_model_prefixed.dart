@@ -1,6 +1,9 @@
 /// Prefixed data model library.
 /// It contains data models for API objects, such as [NHentaiBook]s,
 /// [NHentaiTag]s, [NHentaiImage]s, [NHentaiSearch] response bodies and so on.
+/// 
+/// But it missing [TagsListExtension], as the extensions are not supported
+/// for `typedef`s.
 library nhentai_data_model_prefixed;
 
 import 'data_model.dart';
@@ -33,7 +36,5 @@ typedef NHentaiSearchResult = SearchResult;
 typedef NHentaiTag = Tag;
 /// [TagType] alias.
 typedef NHentaiTagType = TagType;
-/// [TagsList] alias
-typedef NHentaiTagsList = TagsList;
 /// [User] alias
 typedef NHentaiUser = User;
