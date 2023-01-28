@@ -1,3 +1,20 @@
+## 1.0.0-dev.11
+- BREAKING: Migrated from
+  [`universal_io`](https://pub.dev/packages/universal_io) to
+  [`http`](https://pub.dev/packages/http).
+- BREAKING: `API` now accepts `Client` from
+  [`package:http`](https://pub.dev/packages/http).
+- BREAKING: `APIException` renamed to `ApiException`.
+- BREAKING: `TagsList` is now `TagsListExtension`.
+  This opens path for a more flexible API for tags.
+- Now if server responded with not a JSON `ApiClientException` is thrown.
+- `API` now has `userAgent` setter/getter for `User Agent` on Dart VM targets.
+- Completely new parsing system.
+- Added simple cookies support for Dart VM targets
+  `package:nhentai/before_request_add_cookies.dart` exports 2 functions:
+  - `beforeRequestAddCookies` - accepts callback to generate list of `Cookie`s.
+  - `beforeRequestAddCookiesStatic` - accepts list of `Cookie`s.
+
 ## 1.0.0-dev.10
 - BREAKING: completely new hosts system
   - `Hosts` class.
