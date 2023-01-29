@@ -1,5 +1,3 @@
-library images;
-
 export 'images/cover.dart' show Cover;
 export 'images/cover_thumbnail.dart' show CoverThumbnail;
 export 'images/image.dart' show Image;
