@@ -8,7 +8,7 @@
 - BREAKING: `TagsList` is now `TagsListExtension`.
   This opens path for a more flexible API for tags.
 - Now if server responded with not a JSON `ApiClientException` is thrown.
-- `API` now has `userAgent` setter/getter for `User Agent` on Dart VM targets.
+- `API` now has `userAgent` argument for `User Agent` on Dart VM targets.
 - Completely new parsing system.
 - Added simple cookies support for Dart VM targets
   `package:nhentai/before_request_add_cookies.dart` exports 2 functions:
@@ -56,7 +56,8 @@
 
 ## 1.0.0-dev.4
 
-- BREAKING: rename `doSearch` to `searchSinglePage` and `doSearchTagged` to `searchTaggedSinglePage`
+- BREAKING: rename `doSearch` to `searchSinglePage` and
+  `doSearchTagged` to `searchTaggedSinglePage`
 - Update main usage example.
 - Add tags example.
 - Update docs.

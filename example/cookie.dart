@@ -7,18 +7,19 @@ import 'package:nhentai/nhentai.dart' as nh;
 
 
 Future<void> main() async {
-  /// Override User Agent
-  nh.API.userAgent = 'User Agent Override';
 
-  /// Add static list of Cookies to every request.
+  // Add static list of Cookies to every request.
   final api = nh.API.proxy(
     'http://0xdeadbeef:0x0badf00d@example.com:1337/',
+    // Override User Agent
+    userAgent: 'User Agent Override',
+    // Add before request handler
     beforeRequest: beforeRequestAddCookiesStatic([
       Cookie('some_cookie', 'some_value'),
     ]),
   );
 
-  print('Getting');
+  print('Requesting book...');
   final nh.Book book = await api.getBook(177013);
   
   // Print short book summary.
