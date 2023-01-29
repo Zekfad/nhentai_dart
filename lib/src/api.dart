@@ -23,22 +23,39 @@ typedef BeforeRequestCallback = void Function(Request request);
 /// API client.
 @immutable
 class API {
-  /// Creates API client with provided HTTP [client] (if any) and [hosts].
+  /// Creates API client.
+  /// 
+  /// * [client] is an optional HTTP [Client] from `package:http`,
+  ///   by default [RetryClient] with platform appropriate client is used.
+  ///   Note that this option is negates effect of [maxRetries].
+  /// {@template api_constructor_shared_arguments}
+  /// * [hosts] is an optional hosts config. It's used to configure client to
+  ///   different than default servers, e.g. transparent or reverse proxy.
+  /// * [beforeRequest] is an optional callback that is called right before
+  ///   the execution of request, so you could modify headers, add cookies
+  ///   and so on.
+  /// * [maxRetries] is an optional argument to default [RetryClient], that
+  ///   configures how many times request should retry before giving up.
+  /// * [userAgent] is an optional User Agent string to use with this client.
+  ///   Be default it is [defaultUserAgent].
+  /// {@endtemplate}
   API({
     Client? client,
     this.hosts = const Hosts(),
     this.beforeRequest,
     int maxRetries = 5,
+    String? userAgent,
   }) :
     client = client ?? RetryClient(
-      platform.getClient(userAgent),
+      platform.getClient(userAgent ?? defaultUserAgent),
       retries: maxRetries,
     );
 
-  /// Creates API client with provided proxy config and [hosts].
+  /// Creates API client with provided proxy config.
   /// 
-  /// * [proxyUri] must be in format of `http://host:port` or 
-  ///   `http://username:password@host:port`.
+  /// * [proxyUri] is proxy address that must be in format of `http://host:port`
+  ///    or `http://username:password@host:port`.
+  /// {@macro api_constructor_shared_arguments}
   /// 
   /// Throws [UnsupportedError] on web.
   /// 
@@ -48,20 +65,21 @@ class API {
     this.hosts = const Hosts(),
     this.beforeRequest,
     int maxRetries = 5,
+    String? userAgent,
   }) :
     client = RetryClient(
-      platform.getProxyClient(proxyUri, userAgent),
+      platform.getProxyClient(proxyUri, userAgent ?? defaultUserAgent),
       retries: maxRetries,
     );
 
 
-  /// Client version
+  /// Internal client version used for User Agent.
   static const _version = '1.0.0';
 
-  /// User agent string, you can override it via this property.
+  /// Default API client User Agent string.
   /// 
   /// Note: in web this is ignored.
-  static String userAgent = 'nhentai-api-client/$_version ${platform.platformUserAgent}';
+  static String defaultUserAgent = 'nhentai-api-client/$_version ${platform.platformUserAgent}';
 
   /// [Client] used for requests.
   final Client client;
