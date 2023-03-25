@@ -15,6 +15,13 @@ class ImageThumbnail extends Image {
     type: parent.type,
     media: parent.media,
   );
-  
+
   final Image parent;
+
+  @override
+  String get filename => getFullFilename('$id');
+
+  @override
+  String getFullFilename(String filename) =>
+    super.getFullFilename('${filename}t');
 }
