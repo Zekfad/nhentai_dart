@@ -19,9 +19,6 @@ class ImageThumbnail extends Image {
   final Image parent;
 
   @override
-  String get filename => getFullFilename('$id');
-
-  @override
   String getFullFilename(String filename) =>
     super.getFullFilename('${filename}t');
 }
