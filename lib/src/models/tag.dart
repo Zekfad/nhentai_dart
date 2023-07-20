@@ -1,6 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
+import '../api.dart';
 import 'tag_type.dart';
 
 part 'tag.mapper.dart';
@@ -19,14 +20,28 @@ class Tag with TagMappable {
     required this.url,
   });
 
-  /// Creates a "dummy" tag.
+  /// Creates a tag from ID.
   /// 
-  /// Such tag can be used with search, for example if you know
-  /// tag [id] beforehand.
-  const Tag.dummy(this.id, [this.name = 'dummy']) :
-    type = TagType.unknown,
-    count = 0,
-    url = '';
+  /// Such tag can be used in [API.searchTagged] and
+  /// [API.searchTaggedSinglePage].
+  const Tag.id(this.id, {
+    this.name = '',
+    this.type = TagType.unknown,
+    this.count = 0,
+    this.url = '',
+  });
+
+  /// Creates a tag from ID.
+  /// 
+  /// Such tag can be used for query based search ([API.search] and
+  /// [API.searchSinglePage]).
+  const Tag.named({
+    required this.type,
+    required this.name,
+    this.id = 0,
+    this.count = 0,
+    this.url = '',
+  });
 
   /// Parses [Tag] instance from a given value.
   /// 
