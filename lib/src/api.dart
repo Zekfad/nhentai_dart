@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_mappable/dart_mappable.dart' show MapperException;
+import 'package:dart_mappable/dart_mappable.dart' show MapperContainer, MapperException;
 import 'package:http/http.dart' show Client, Request, Response;
 import 'package:http/retry.dart';
 import 'package:meta/meta.dart';
@@ -10,8 +10,8 @@ import 'api_exception.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
-import 'models.container.dart';
 import 'models.dart';
+import 'models.init.dart';
 import 'platform.dart' as platform;
 
 /// Simple one-to-one query parameters map.
@@ -49,7 +49,9 @@ class API {
     client = client ?? RetryClient(
       platform.getClient(userAgent ?? defaultUserAgent),
       retries: maxRetries,
-    );
+    ) {
+    initializeMappers();
+  }
 
   /// Creates API client with provided proxy config.
   /// 
@@ -70,8 +72,9 @@ class API {
     client = RetryClient(
       platform.getProxyClient(proxyUri, userAgent ?? defaultUserAgent),
       retries: maxRetries,
-    );
-
+    ) {
+    initializeMappers();
+  }
 
   /// Internal client version used for User Agent.
   static const _version = '1.0.0';
@@ -154,7 +157,7 @@ class API {
         queryParameters,
       ),
     );
-    return InternalModelsContainer.fromValue<T>(json);
+    return MapperContainer.globals.fromValue<T>(json);
   }
 
   /// Returns [Uri] for [image] via [hosts] config.

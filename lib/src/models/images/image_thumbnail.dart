@@ -1,11 +1,13 @@
-import 'package:meta/meta.dart';
-
-import 'image.dart';
+part of 'images.dart';
 
 
 /// Thumbnail.
+/// Inherits [parent]'s [Image.id], [Image.type], [Image.media].
+@MappableClass(
+  hook: EncodeImageHook(),
+)
 @immutable
-class ImageThumbnail extends Image {
+final class ImageThumbnail extends Image with ImageThumbnailMappable {
   ImageThumbnail({
     required this.parent,
     super.width,
@@ -15,6 +17,6 @@ class ImageThumbnail extends Image {
     type: parent.type,
     media: parent.media,
   );
-  
+
   final Image parent;
 }

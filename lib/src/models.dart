@@ -1,6 +1,5 @@
 @MappableLib(
-  createCombinedContainer: true,
-  discoveryMode: DiscoveryMode.package,
+  generateInitializerForScope: InitializerScope.package,
 )
 library _internal_models;
 

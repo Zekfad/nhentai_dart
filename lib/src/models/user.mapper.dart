@@ -5,60 +5,85 @@
 
 part of 'user.dart';
 
-class UserMapper extends MapperBase<User> {
-  static MapperContainer container = MapperContainer(
-    mappers: {UserMapper()},
-  );
+class UserMapper extends ClassMapperBase<User> {
+  UserMapper._();
 
-  @override
-  UserMapperElement createElement(MapperContainer container) {
-    return UserMapperElement._(this, container);
+  static UserMapper? _instance;
+  static UserMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = UserMapper._());
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'User';
+  final String id = 'User';
 
-  static final fromMap = container.fromMap<User>;
-  static final fromJson = container.fromJson<User>;
-}
-
-class UserMapperElement extends MapperElementBase<User> {
-  UserMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  User decode(dynamic v) =>
-      checkedType(v, (Map<String, dynamic> map) => fromMap(map));
-  User fromMap(Map<String, dynamic> map) => User(
-      id: container.$get(map, 'id'),
-      username: container.$get(map, 'username'),
-      slug: container.$get(map, 'slug'),
-      avatarFilename:
-          container.$get(map, 'avatar_url', const AvatarFilenameHook()),
-      superuser: container.$get(map, 'is_superuser'),
-      staff: container.$get(map, 'is_staff'));
+  static int _$id(User v) => v.id;
+  static const Field<User, int> _f$id = Field('id', _$id);
+  static String _$username(User v) => v.username;
+  static const Field<User, String> _f$username = Field('username', _$username);
+  static String _$slug(User v) => v.slug;
+  static const Field<User, String> _f$slug = Field('slug', _$slug);
+  static String _$avatarFilename(User v) => v.avatarFilename;
+  static const Field<User, String> _f$avatarFilename = Field(
+      'avatarFilename', _$avatarFilename,
+      key: 'avatar_url', hook: AvatarFilenameHook());
+  static bool _$superuser(User v) => v.superuser;
+  static const Field<User, bool> _f$superuser =
+      Field('superuser', _$superuser, key: 'is_superuser');
+  static bool _$staff(User v) => v.staff;
+  static const Field<User, bool> _f$staff =
+      Field('staff', _$staff, key: 'is_staff');
 
   @override
-  Function get encoder => encode;
-  dynamic encode(User v) => toMap(v);
-  Map<String, dynamic> toMap(User u) => {
-        'id': container.$enc(u.id, 'id'),
-        'username': container.$enc(u.username, 'username'),
-        'slug': container.$enc(u.slug, 'slug'),
-        'avatar_url': container.$enc(
-            u.avatarFilename, 'avatarFilename', const AvatarFilenameHook()),
-        'is_superuser': container.$enc(u.superuser, 'superuser'),
-        'is_staff': container.$enc(u.staff, 'staff')
-      };
+  final Map<Symbol, Field<User, dynamic>> fields = const {
+    #id: _f$id,
+    #username: _f$username,
+    #slug: _f$slug,
+    #avatarFilename: _f$avatarFilename,
+    #superuser: _f$superuser,
+    #staff: _f$staff,
+  };
+
+  static User _instantiate(DecodingData data) {
+    return User(
+        id: data.dec(_f$id),
+        username: data.dec(_f$username),
+        slug: data.dec(_f$slug),
+        avatarFilename: data.dec(_f$avatarFilename),
+        superuser: data.dec(_f$superuser),
+        staff: data.dec(_f$staff));
+  }
 
   @override
-  String stringify(User self) =>
-      'User(id: ${container.asString(self.id)}, username: ${container.asString(self.username)}, slug: ${container.asString(self.slug)}, avatarFilename: ${container.asString(self.avatarFilename)}, superuser: ${container.asString(self.superuser)}, staff: ${container.asString(self.staff)})';
+  final Function instantiate = _instantiate;
+
+  static User fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<User>(map));
+  }
+
+  static User fromJson(String json) {
+    return _guard((c) => c.fromJson<User>(json));
+  }
 }
 
 mixin UserMappable {
-  String toJson() => UserMapper.container.toJson(this as User);
-  Map<String, dynamic> toMap() => UserMapper.container.toMap(this as User);
+  String toJson() {
+    return UserMapper._guard((c) => c.toJson(this as User));
+  }
+
+  Map<String, dynamic> toMap() {
+    return UserMapper._guard((c) => c.toMap(this as User));
+  }
+
   @override
-  String toString() => UserMapper.container.asString(this);
+  String toString() {
+    return UserMapper._guard((c) => c.asString(this));
+  }
 }

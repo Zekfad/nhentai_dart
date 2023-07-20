@@ -1,7 +1,7 @@
-import 'image.dart';
+part of 'images.dart';
 
 
-mixin ImageWithKnownDimensions on Image {
+base mixin ImageWithKnownDimensions on Image {
   @override
   int get width => super.width!;
 

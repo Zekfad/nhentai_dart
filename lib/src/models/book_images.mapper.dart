@@ -5,62 +5,81 @@
 
 part of 'book_images.dart';
 
-class BookImagesMapper extends MapperBase<BookImages> {
-  static MapperContainer container = MapperContainer(
-    mappers: {BookImagesMapper()},
-  )..linkAll({
-      CoverMapper.container,
-      CoverThumbnailMapper.container,
-      ImageMapper.container,
-    });
+class BookImagesMapper extends ClassMapperBase<BookImages> {
+  BookImagesMapper._();
 
-  @override
-  BookImagesMapperElement createElement(MapperContainer container) {
-    return BookImagesMapperElement._(this, container);
+  static BookImagesMapper? _instance;
+  static BookImagesMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = BookImagesMapper._());
+      CoverMapper.ensureInitialized();
+      CoverThumbnailMapper.ensureInitialized();
+      ImageMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'BookImages';
+  final String id = 'BookImages';
 
-  static final fromMap = container.fromMap<BookImages>;
-  static final fromJson = container.fromJson<BookImages>;
-}
-
-class BookImagesMapperElement extends MapperElementBase<BookImages> {
-  BookImagesMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  BookImages decode(dynamic v) => const BookImagesHook().decode(
-      v,
-      (v) => checkedType(v, (Map<String, dynamic> map) => fromMap(map)),
-      container);
-  BookImages fromMap(Map<String, dynamic> map) => BookImages(
-      media: container.$get(map, 'media_id'),
-      cover: container.$get(map, 'cover'),
-      thumbnail: container.$get(map, 'thumbnail'),
-      pages: container.$get(map, 'pages'));
+  static int _$media(BookImages v) => v.media;
+  static const Field<BookImages, int> _f$media =
+      Field('media', _$media, key: 'media_id');
+  static Cover _$cover(BookImages v) => v.cover;
+  static const Field<BookImages, Cover> _f$cover = Field('cover', _$cover);
+  static CoverThumbnail _$thumbnail(BookImages v) => v.thumbnail;
+  static const Field<BookImages, CoverThumbnail> _f$thumbnail =
+      Field('thumbnail', _$thumbnail);
+  static List<Image> _$pages(BookImages v) => v.pages;
+  static const Field<BookImages, List<Image>> _f$pages =
+      Field('pages', _$pages);
 
   @override
-  Function get encoder => encode;
-  dynamic encode(BookImages v) =>
-      const BookImagesHook().encode<BookImages>(v, (v) => toMap(v), container);
-  Map<String, dynamic> toMap(BookImages b) => {
-        'media_id': container.$enc(b.media, 'media'),
-        'cover': container.$enc(b.cover, 'cover'),
-        'thumbnail': container.$enc(b.thumbnail, 'thumbnail'),
-        'pages': container.$enc(b.pages, 'pages')
-      };
+  final Map<Symbol, Field<BookImages, dynamic>> fields = const {
+    #media: _f$media,
+    #cover: _f$cover,
+    #thumbnail: _f$thumbnail,
+    #pages: _f$pages,
+  };
 
   @override
-  String stringify(BookImages self) =>
-      'BookImages(media: ${container.asString(self.media)}, cover: ${container.asString(self.cover)}, thumbnail: ${container.asString(self.thumbnail)}, pages: ${container.asString(self.pages)})';
+  final MappingHook hook = const BookImagesHook();
+  static BookImages _instantiate(DecodingData data) {
+    return BookImages(
+        media: data.dec(_f$media),
+        cover: data.dec(_f$cover),
+        thumbnail: data.dec(_f$thumbnail),
+        pages: data.dec(_f$pages));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static BookImages fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<BookImages>(map));
+  }
+
+  static BookImages fromJson(String json) {
+    return _guard((c) => c.fromJson<BookImages>(json));
+  }
 }
 
 mixin BookImagesMappable {
-  String toJson() => BookImagesMapper.container.toJson(this as BookImages);
-  Map<String, dynamic> toMap() =>
-      BookImagesMapper.container.toMap(this as BookImages);
+  String toJson() {
+    return BookImagesMapper._guard((c) => c.toJson(this as BookImages));
+  }
+
+  Map<String, dynamic> toMap() {
+    return BookImagesMapper._guard((c) => c.toMap(this as BookImages));
+  }
+
   @override
-  String toString() => BookImagesMapper.container.asString(this);
+  String toString() {
+    return BookImagesMapper._guard((c) => c.asString(this));
+  }
 }

@@ -5,53 +5,73 @@
 
 part of 'search_result.dart';
 
-class SearchResultMapper extends MapperBase<SearchResult> {
-  static MapperContainer container = MapperContainer(
-    mappers: {SearchResultMapper()},
-  )..linkAll({BookMapper.container});
+class SearchResultMapper extends ClassMapperBase<SearchResult> {
+  SearchResultMapper._();
 
-  @override
-  SearchResultMapperElement createElement(MapperContainer container) {
-    return SearchResultMapperElement._(this, container);
+  static SearchResultMapper? _instance;
+  static SearchResultMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = SearchResultMapper._());
+      BookMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'SearchResult';
+  final String id = 'SearchResult';
 
-  static final fromMap = container.fromMap<SearchResult>;
-  static final fromJson = container.fromJson<SearchResult>;
-}
-
-class SearchResultMapperElement extends MapperElementBase<SearchResult> {
-  SearchResultMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  SearchResult decode(dynamic v) =>
-      checkedType(v, (Map<String, dynamic> map) => fromMap(map));
-  SearchResult fromMap(Map<String, dynamic> map) => SearchResult(
-      pages: container.$get(map, 'num_pages'),
-      perPage: container.$get(map, 'per_page'),
-      books: container.$get(map, 'result'));
+  static int _$pages(SearchResult v) => v.pages;
+  static const Field<SearchResult, int> _f$pages =
+      Field('pages', _$pages, key: 'num_pages');
+  static int _$perPage(SearchResult v) => v.perPage;
+  static const Field<SearchResult, int> _f$perPage =
+      Field('perPage', _$perPage, key: 'per_page');
+  static List<Book> _$books(SearchResult v) => v.books;
+  static const Field<SearchResult, List<Book>> _f$books =
+      Field('books', _$books, key: 'result');
 
   @override
-  Function get encoder => encode;
-  dynamic encode(SearchResult v) => toMap(v);
-  Map<String, dynamic> toMap(SearchResult s) => {
-        'num_pages': container.$enc(s.pages, 'pages'),
-        'per_page': container.$enc(s.perPage, 'perPage'),
-        'result': container.$enc(s.books, 'books')
-      };
+  final Map<Symbol, Field<SearchResult, dynamic>> fields = const {
+    #pages: _f$pages,
+    #perPage: _f$perPage,
+    #books: _f$books,
+  };
+
+  static SearchResult _instantiate(DecodingData data) {
+    return SearchResult(
+        pages: data.dec(_f$pages),
+        perPage: data.dec(_f$perPage),
+        books: data.dec(_f$books));
+  }
 
   @override
-  String stringify(SearchResult self) =>
-      'SearchResult(pages: ${container.asString(self.pages)}, perPage: ${container.asString(self.perPage)}, books: ${container.asString(self.books)})';
+  final Function instantiate = _instantiate;
+
+  static SearchResult fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<SearchResult>(map));
+  }
+
+  static SearchResult fromJson(String json) {
+    return _guard((c) => c.fromJson<SearchResult>(json));
+  }
 }
 
 mixin SearchResultMappable {
-  String toJson() => SearchResultMapper.container.toJson(this as SearchResult);
-  Map<String, dynamic> toMap() =>
-      SearchResultMapper.container.toMap(this as SearchResult);
+  String toJson() {
+    return SearchResultMapper._guard((c) => c.toJson(this as SearchResult));
+  }
+
+  Map<String, dynamic> toMap() {
+    return SearchResultMapper._guard((c) => c.toMap(this as SearchResult));
+  }
+
   @override
-  String toString() => SearchResultMapper.container.asString(this);
+  String toString() {
+    return SearchResultMapper._guard((c) => c.asString(this));
+  }
 }

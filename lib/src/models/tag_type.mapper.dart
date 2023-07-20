@@ -6,11 +6,20 @@
 part of 'tag_type.dart';
 
 class TagTypeMapper extends EnumMapper<TagType> {
-  static MapperContainer container = MapperContainer(
-    mappers: {TagTypeMapper()},
-  );
+  TagTypeMapper._();
 
-  static final fromValue = container.fromValue<TagType>;
+  static TagTypeMapper? _instance;
+  static TagTypeMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = TagTypeMapper._());
+    }
+    return _instance!;
+  }
+
+  static TagType fromValue(dynamic value) {
+    ensureInitialized();
+    return MapperContainer.globals.fromValue(value);
+  }
 
   @override
   TagType decode(dynamic value) {
@@ -60,5 +69,8 @@ class TagTypeMapper extends EnumMapper<TagType> {
 }
 
 extension TagTypeMapperExtension on TagType {
-  String toValue() => TagTypeMapper.container.toValue(this) as String;
+  String toValue() {
+    TagTypeMapper.ensureInitialized();
+    return MapperContainer.globals.toValue(this) as String;
+  }
 }

@@ -1,31 +1,5 @@
-import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
-
-class ImageTypeMapper extends SimpleMapper<ImageType> {
-  const ImageTypeMapper();
-
-  @override
-  ImageType decode(dynamic value) {
-    if (value is ImageType)
-      return value;
-
-    if (value is! String)
-      throw MapperException.unexpectedType(value.runtimeType, ImageType, 'String');
-
-    final type = ImageType.getByType(value);
-    assert(
-      !type.isUnknown,
-      'Unknown image type found while parsing JSON. '
-      'If that\'s not an error open new issue for adding support for "${type.extension}" type.',
-    );
-
-    return type;
-  }
-
-  @override
-  dynamic encode(ImageType self) => self.extension;
-}
 
 /// Image type.
 /// Represents type name and extension.

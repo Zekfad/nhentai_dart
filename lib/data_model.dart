@@ -5,5 +5,5 @@ library nhentai_data_model;
 
 import 'src/models.dart';
 
-
 export 'src/models.dart';
+export 'src/models.init.dart';

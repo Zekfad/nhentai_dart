@@ -5,56 +5,78 @@
 
 part of 'tag.dart';
 
-class TagMapper extends MapperBase<Tag> {
-  static MapperContainer container = MapperContainer(
-    mappers: {TagMapper()},
-  )..linkAll({TagTypeMapper.container});
+class TagMapper extends ClassMapperBase<Tag> {
+  TagMapper._();
 
-  @override
-  TagMapperElement createElement(MapperContainer container) {
-    return TagMapperElement._(this, container);
+  static TagMapper? _instance;
+  static TagMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = TagMapper._());
+      TagTypeMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'Tag';
+  final String id = 'Tag';
 
-  static final fromMap = container.fromMap<Tag>;
-  static final fromJson = container.fromJson<Tag>;
-}
-
-class TagMapperElement extends MapperElementBase<Tag> {
-  TagMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  Tag decode(dynamic v) =>
-      checkedType(v, (Map<String, dynamic> map) => fromMap(map));
-  Tag fromMap(Map<String, dynamic> map) => Tag(
-      id: container.$get(map, 'id'),
-      type: container.$get(map, 'type'),
-      name: container.$get(map, 'name'),
-      count: container.$get(map, 'count'),
-      url: container.$get(map, 'url'));
+  static int _$id(Tag v) => v.id;
+  static const Field<Tag, int> _f$id = Field('id', _$id);
+  static TagType _$type(Tag v) => v.type;
+  static const Field<Tag, TagType> _f$type = Field('type', _$type);
+  static String _$name(Tag v) => v.name;
+  static const Field<Tag, String> _f$name = Field('name', _$name);
+  static int _$count(Tag v) => v.count;
+  static const Field<Tag, int> _f$count = Field('count', _$count);
+  static String _$url(Tag v) => v.url;
+  static const Field<Tag, String> _f$url = Field('url', _$url);
 
   @override
-  Function get encoder => encode;
-  dynamic encode(Tag v) => toMap(v);
-  Map<String, dynamic> toMap(Tag t) => {
-        'id': container.$enc(t.id, 'id'),
-        'type': container.$enc(t.type, 'type'),
-        'name': container.$enc(t.name, 'name'),
-        'count': container.$enc(t.count, 'count'),
-        'url': container.$enc(t.url, 'url')
-      };
+  final Map<Symbol, Field<Tag, dynamic>> fields = const {
+    #id: _f$id,
+    #type: _f$type,
+    #name: _f$name,
+    #count: _f$count,
+    #url: _f$url,
+  };
+
+  static Tag _instantiate(DecodingData data) {
+    return Tag(
+        id: data.dec(_f$id),
+        type: data.dec(_f$type),
+        name: data.dec(_f$name),
+        count: data.dec(_f$count),
+        url: data.dec(_f$url));
+  }
 
   @override
-  String stringify(Tag self) =>
-      'Tag(id: ${container.asString(self.id)}, type: ${container.asString(self.type)}, name: ${container.asString(self.name)}, count: ${container.asString(self.count)}, url: ${container.asString(self.url)})';
+  final Function instantiate = _instantiate;
+
+  static Tag fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<Tag>(map));
+  }
+
+  static Tag fromJson(String json) {
+    return _guard((c) => c.fromJson<Tag>(json));
+  }
 }
 
 mixin TagMappable {
-  String toJson() => TagMapper.container.toJson(this as Tag);
-  Map<String, dynamic> toMap() => TagMapper.container.toMap(this as Tag);
+  String toJson() {
+    return TagMapper._guard((c) => c.toJson(this as Tag));
+  }
+
+  Map<String, dynamic> toMap() {
+    return TagMapper._guard((c) => c.toMap(this as Tag));
+  }
+
   @override
-  String toString() => TagMapper.container.asString(this);
+  String toString() {
+    return TagMapper._guard((c) => c.asString(this));
+  }
 }

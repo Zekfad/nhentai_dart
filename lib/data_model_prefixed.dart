@@ -36,5 +36,7 @@ typedef NHentaiSearchResult = SearchResult;
 typedef NHentaiTag = Tag;
 /// [TagType] alias.
 typedef NHentaiTagType = TagType;
-/// [User] alias
+/// [User] alias.
 typedef NHentaiUser = User;
+/// [initializeMappers] alias.
+const nHentaiInitializeMappers = initializeMappers;

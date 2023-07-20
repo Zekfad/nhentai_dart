@@ -1,35 +1,19 @@
-import 'package:dart_mappable/dart_mappable.dart';
+part of 'images.dart';
 
-import 'cover_thumbnail.dart';
-import 'image.dart';
-import 'image_with_known_dimensions.dart';
-
-part 'cover.mapper.dart';
-
-
-/// Mapping hook for [Cover].
-class CoverHook extends MappingHook {
-  const CoverHook();
-
-  @override
-  dynamic beforeEncode(dynamic value) => 
-    ImageMapper.container.toMap<Image>(value as Image); 
-}
 
 /// Cover.
 @MappableClass(
-  hook: CoverHook(),
+  hook: EncodeImageHook(),
 )
-class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
+@immutable
+final class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
   Cover({
     required super.media,
     required super.type,
-    required int width,
-    required int height,
+    required int super.width,
+    required int super.height,
   }) : super(
-    id: 0, 
-    width: width, 
-    height: height,
+    id: 0,
   );
 
   /// Parses [Cover] instance from a given value.
@@ -38,7 +22,7 @@ class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
   /// * [Map] - then object will be parsed into [Cover] object.
   /// * [Cover] - then value will be returned as-is.
   static Cover Function(dynamic value) get parse =>
-    CoverMapper.container.fromValue<Cover>;
+    CoverMapper.ensureInitialized().container.fromValue<Cover>;
 
   /// Parses [List] of [Cover] instances from a given value.
   /// 
@@ -47,16 +31,16 @@ class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [Cover] - then value will be returned as-is.
   static List<Cover> Function(dynamic value) get parseList =>
-    CoverMapper.container.fromValue<List<Cover>>;
+    CoverMapper.ensureInitialized().container.fromValue<List<Cover>>;
 
   /// Parses JSON string into [Cover] similarly to [parse]. 
   static Cover Function(String json) get parseJson =>
-    CoverMapper.container.fromJson<Cover>;
+    CoverMapper.ensureInitialized().container.fromJson<Cover>;
 
   /// Parses JSON string into [List] of [Cover] instances similarly to 
   /// [parseList].
   static List<Cover> Function(String json) get parseJsonList =>
-    CoverMapper.container.fromJson<List<Cover>>;
+    CoverMapper.ensureInitialized().container.fromJson<List<Cover>>;
 
   @override
   String getFullFilename(String filename) =>

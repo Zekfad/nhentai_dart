@@ -1,35 +1,15 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
-import '../date_hook.dart';
+import 'book_hook.dart';
 import 'book_images.dart';
 import 'book_title.dart';
+import 'date_hook.dart';
 import 'image.dart';
+import 'mapper_base_container_extension.dart';
 import 'tag.dart';
 
 part 'book.mapper.dart';
-
-class BookHook extends MappingHook {
-  const BookHook();
-
-  @override
-  dynamic beforeDecode(dynamic value) {
-    if (value is! Map<String, dynamic>)
-      throw MapperException.unexpectedType(value.runtimeType, Book, 'Map<String, dynamic>');
-
-    final _images = value['images'];
-    if (_images is! Map<String, dynamic>)
-      throw MapperException.unexpectedType(_images.runtimeType, BookImages, 'Map<String, dynamic>');
-
-    return {
-      ...value,
-      'images': {
-        ..._images,
-        'media_id': value['media_id'],
-      },
-    };
-  }
-}
 
 /// Book.
 @immutable
@@ -55,7 +35,7 @@ class Book with BookMappable {
   /// * [Map] - then object will be parsed into [Book] object.
   /// * [Book] - then value will be returned as-is.
   static Book Function(dynamic value) get parse =>
-    BookMapper.container.fromValue<Book>;
+    BookMapper.ensureInitialized().container.fromValue<Book>;
 
   /// Parses [List] of [Book] instances from a given value.
   /// 
@@ -64,16 +44,16 @@ class Book with BookMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [Book] - then value will be returned as-is.
   static List<Book> Function(dynamic value) get parseList =>
-    BookMapper.container.fromValue<List<Book>>;
+    BookMapper.ensureInitialized().container.fromValue<List<Book>>;
 
   /// Parses JSON string into [Book] similarly to [parse]. 
   static Book Function(String json) get parseJson =>
-    BookMapper.container.fromJson<Book>;
+    BookMapper.ensureInitialized().container.fromJson<Book>;
 
   /// Parses JSON string into [List] of [Book] instances similarly to 
   /// [parseList].
   static List<Book> Function(String json) get parseJsonList =>
-    BookMapper.container.fromJson<List<Book>>;
+    BookMapper.ensureInitialized().container.fromJson<List<Book>>;
 
   /// Book title.
   @MappableField(key: 'title')

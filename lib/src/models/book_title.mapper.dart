@@ -5,53 +5,71 @@
 
 part of 'book_title.dart';
 
-class BookTitleMapper extends MapperBase<BookTitle> {
-  static MapperContainer container = MapperContainer(
-    mappers: {BookTitleMapper()},
-  );
+class BookTitleMapper extends ClassMapperBase<BookTitle> {
+  BookTitleMapper._();
 
-  @override
-  BookTitleMapperElement createElement(MapperContainer container) {
-    return BookTitleMapperElement._(this, container);
+  static BookTitleMapper? _instance;
+  static BookTitleMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = BookTitleMapper._());
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'BookTitle';
+  final String id = 'BookTitle';
 
-  static final fromMap = container.fromMap<BookTitle>;
-  static final fromJson = container.fromJson<BookTitle>;
-}
-
-class BookTitleMapperElement extends MapperElementBase<BookTitle> {
-  BookTitleMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  BookTitle decode(dynamic v) =>
-      checkedType(v, (Map<String, dynamic> map) => fromMap(map));
-  BookTitle fromMap(Map<String, dynamic> map) => BookTitle(
-      english: container.$getOpt(map, 'english'),
-      japanese: container.$getOpt(map, 'japanese'),
-      pretty: container.$get(map, 'pretty'));
+  static String? _$english(BookTitle v) => v.english;
+  static const Field<BookTitle, String> _f$english =
+      Field('english', _$english);
+  static String? _$japanese(BookTitle v) => v.japanese;
+  static const Field<BookTitle, String> _f$japanese =
+      Field('japanese', _$japanese);
+  static String _$pretty(BookTitle v) => v.pretty;
+  static const Field<BookTitle, String> _f$pretty = Field('pretty', _$pretty);
 
   @override
-  Function get encoder => encode;
-  dynamic encode(BookTitle v) => toMap(v);
-  Map<String, dynamic> toMap(BookTitle b) => {
-        'english': container.$enc(b.english, 'english'),
-        'japanese': container.$enc(b.japanese, 'japanese'),
-        'pretty': container.$enc(b.pretty, 'pretty')
-      };
+  final Map<Symbol, Field<BookTitle, dynamic>> fields = const {
+    #english: _f$english,
+    #japanese: _f$japanese,
+    #pretty: _f$pretty,
+  };
+
+  static BookTitle _instantiate(DecodingData data) {
+    return BookTitle(
+        english: data.dec(_f$english),
+        japanese: data.dec(_f$japanese),
+        pretty: data.dec(_f$pretty));
+  }
 
   @override
-  String stringify(BookTitle self) =>
-      'BookTitle(english: ${container.asString(self.english)}, japanese: ${container.asString(self.japanese)}, pretty: ${container.asString(self.pretty)})';
+  final Function instantiate = _instantiate;
+
+  static BookTitle fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<BookTitle>(map));
+  }
+
+  static BookTitle fromJson(String json) {
+    return _guard((c) => c.fromJson<BookTitle>(json));
+  }
 }
 
 mixin BookTitleMappable {
-  String toJson() => BookTitleMapper.container.toJson(this as BookTitle);
-  Map<String, dynamic> toMap() =>
-      BookTitleMapper.container.toMap(this as BookTitle);
+  String toJson() {
+    return BookTitleMapper._guard((c) => c.toJson(this as BookTitle));
+  }
+
+  Map<String, dynamic> toMap() {
+    return BookTitleMapper._guard((c) => c.toMap(this as BookTitle));
+  }
+
   @override
-  String toString() => BookTitleMapper.container.asString(this);
+  String toString() {
+    return BookTitleMapper._guard((c) => c.asString(this));
+  }
 }

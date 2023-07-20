@@ -5,69 +5,98 @@
 
 part of 'book.dart';
 
-class BookMapper extends MapperBase<Book> {
-  static MapperContainer container = MapperContainer(
-    mappers: {BookMapper()},
-  )..linkAll({
-      BookTitleMapper.container,
-      TagMapper.container,
-      BookImagesMapper.container,
-    });
+class BookMapper extends ClassMapperBase<Book> {
+  BookMapper._();
 
-  @override
-  BookMapperElement createElement(MapperContainer container) {
-    return BookMapperElement._(this, container);
+  static BookMapper? _instance;
+  static BookMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = BookMapper._());
+      BookTitleMapper.ensureInitialized();
+      TagMapper.ensureInitialized();
+      BookImagesMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'Book';
+  final String id = 'Book';
 
-  static final fromMap = container.fromMap<Book>;
-  static final fromJson = container.fromJson<Book>;
-}
-
-class BookMapperElement extends MapperElementBase<Book> {
-  BookMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  Book decode(dynamic v) => const BookHook().decode(
-      v,
-      (v) => checkedType(v, (Map<String, dynamic> map) => fromMap(map)),
-      container);
-  Book fromMap(Map<String, dynamic> map) => Book(
-      title: container.$get(map, 'title'),
-      id: container.$get(map, 'id'),
-      media: container.$get(map, 'media_id'),
-      favorites: container.$get(map, 'num_favorites'),
-      scanlator: container.$getOpt(map, 'scanlator'),
-      uploaded: container.$get(map, 'upload_date', const DateHook()),
-      tags: container.$get(map, 'tags'),
-      images: container.$get(map, 'images'));
+  static BookTitle _$title(Book v) => v.title;
+  static const Field<Book, BookTitle> _f$title = Field('title', _$title);
+  static int _$id(Book v) => v.id;
+  static const Field<Book, int> _f$id = Field('id', _$id);
+  static int _$media(Book v) => v.media;
+  static const Field<Book, int> _f$media =
+      Field('media', _$media, key: 'media_id');
+  static int _$favorites(Book v) => v.favorites;
+  static const Field<Book, int> _f$favorites =
+      Field('favorites', _$favorites, key: 'num_favorites');
+  static String? _$scanlator(Book v) => v.scanlator;
+  static const Field<Book, String> _f$scanlator =
+      Field('scanlator', _$scanlator);
+  static DateTime _$uploaded(Book v) => v.uploaded;
+  static const Field<Book, DateTime> _f$uploaded =
+      Field('uploaded', _$uploaded, key: 'upload_date', hook: DateHook());
+  static List<Tag> _$tags(Book v) => v.tags;
+  static const Field<Book, List<Tag>> _f$tags = Field('tags', _$tags);
+  static BookImages _$images(Book v) => v.images;
+  static const Field<Book, BookImages> _f$images = Field('images', _$images);
 
   @override
-  Function get encoder => encode;
-  dynamic encode(Book v) =>
-      const BookHook().encode<Book>(v, (v) => toMap(v), container);
-  Map<String, dynamic> toMap(Book b) => {
-        'title': container.$enc(b.title, 'title'),
-        'id': container.$enc(b.id, 'id'),
-        'media_id': container.$enc(b.media, 'media'),
-        'num_favorites': container.$enc(b.favorites, 'favorites'),
-        'scanlator': container.$enc(b.scanlator, 'scanlator'),
-        'upload_date': container.$enc(b.uploaded, 'uploaded', const DateHook()),
-        'tags': container.$enc(b.tags, 'tags'),
-        'images': container.$enc(b.images, 'images')
-      };
+  final Map<Symbol, Field<Book, dynamic>> fields = const {
+    #title: _f$title,
+    #id: _f$id,
+    #media: _f$media,
+    #favorites: _f$favorites,
+    #scanlator: _f$scanlator,
+    #uploaded: _f$uploaded,
+    #tags: _f$tags,
+    #images: _f$images,
+  };
 
   @override
-  String stringify(Book self) =>
-      'Book(title: ${container.asString(self.title)}, id: ${container.asString(self.id)}, media: ${container.asString(self.media)}, favorites: ${container.asString(self.favorites)}, scanlator: ${container.asString(self.scanlator)}, uploaded: ${container.asString(self.uploaded)}, tags: ${container.asString(self.tags)}, images: ${container.asString(self.images)})';
+  final MappingHook hook = const BookHook();
+  static Book _instantiate(DecodingData data) {
+    return Book(
+        title: data.dec(_f$title),
+        id: data.dec(_f$id),
+        media: data.dec(_f$media),
+        favorites: data.dec(_f$favorites),
+        scanlator: data.dec(_f$scanlator),
+        uploaded: data.dec(_f$uploaded),
+        tags: data.dec(_f$tags),
+        images: data.dec(_f$images));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static Book fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<Book>(map));
+  }
+
+  static Book fromJson(String json) {
+    return _guard((c) => c.fromJson<Book>(json));
+  }
 }
 
 mixin BookMappable {
-  String toJson() => BookMapper.container.toJson(this as Book);
-  Map<String, dynamic> toMap() => BookMapper.container.toMap(this as Book);
+  String toJson() {
+    return BookMapper._guard((c) => c.toJson(this as Book));
+  }
+
+  Map<String, dynamic> toMap() {
+    return BookMapper._guard((c) => c.toMap(this as Book));
+  }
+
   @override
-  String toString() => BookMapper.container.asString(this);
+  String toString() {
+    return BookMapper._guard((c) => c.asString(this));
+  }
 }

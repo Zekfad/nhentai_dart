@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
 import '../api.dart';
+import 'mapper_base_container_extension.dart';
 import 'tag_type.dart';
 
 part 'tag.mapper.dart';
@@ -49,7 +50,7 @@ class Tag with TagMappable {
   /// * [Map] - then object will be parsed into [Tag] object.
   /// * [Tag] - then value will be returned as-is.
   static Tag Function(dynamic value) get parse =>
-    TagMapper.container.fromValue<Tag>;
+    TagMapper.ensureInitialized().container.fromValue<Tag>;
 
   /// Parses [List] of [Tag] instances from a given value.
   /// 
@@ -58,16 +59,16 @@ class Tag with TagMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [Tag] - then value will be returned as-is.
   static List<Tag> Function(dynamic value) get parseList =>
-    TagMapper.container.fromValue<List<Tag>>;
+    TagMapper.ensureInitialized().container.fromValue<List<Tag>>;
 
   /// Parses JSON string into [Tag] similarly to [parse]. 
   static Tag Function(String json) get parseJson =>
-    TagMapper.container.fromJson<Tag>;
+    TagMapper.ensureInitialized().container.fromJson<Tag>;
 
   /// Parses JSON string into [List] of [Tag] instances similarly to 
   /// [parseList].
   static List<Tag> Function(String json) get parseJsonList =>
-    TagMapper.container.fromJson<List<Tag>>;
+    TagMapper.ensureInitialized().container.fromJson<List<Tag>>;
 
   /// Tag ID.
   @MappableField(key: 'id')

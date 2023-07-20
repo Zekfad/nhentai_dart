@@ -5,57 +5,81 @@
 
 part of 'comment.dart';
 
-class CommentMapper extends MapperBase<Comment> {
-  static MapperContainer container = MapperContainer(
-    mappers: {CommentMapper()},
-  )..linkAll({UserMapper.container});
+class CommentMapper extends ClassMapperBase<Comment> {
+  CommentMapper._();
 
-  @override
-  CommentMapperElement createElement(MapperContainer container) {
-    return CommentMapperElement._(this, container);
+  static CommentMapper? _instance;
+  static CommentMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = CommentMapper._());
+      UserMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  static T _guard<T>(T Function(MapperContainer) fn) {
+    ensureInitialized();
+    return fn(MapperContainer.globals);
   }
 
   @override
-  String get id => 'Comment';
+  final String id = 'Comment';
 
-  static final fromMap = container.fromMap<Comment>;
-  static final fromJson = container.fromJson<Comment>;
-}
-
-class CommentMapperElement extends MapperElementBase<Comment> {
-  CommentMapperElement._(super.mapper, super.container);
-
-  @override
-  Function get decoder => decode;
-  Comment decode(dynamic v) =>
-      checkedType(v, (Map<String, dynamic> map) => fromMap(map));
-  Comment fromMap(Map<String, dynamic> map) => Comment(
-      id: container.$get(map, 'id'),
-      bookId: container.$get(map, 'gallery_id'),
-      author: container.$get(map, 'poster'),
-      date: container.$get(map, 'post_date', const DateHook()),
-      body: container.$get(map, 'body'));
+  static int _$id(Comment v) => v.id;
+  static const Field<Comment, int> _f$id = Field('id', _$id);
+  static int _$bookId(Comment v) => v.bookId;
+  static const Field<Comment, int> _f$bookId =
+      Field('bookId', _$bookId, key: 'gallery_id');
+  static User _$author(Comment v) => v.author;
+  static const Field<Comment, User> _f$author =
+      Field('author', _$author, key: 'poster');
+  static DateTime _$date(Comment v) => v.date;
+  static const Field<Comment, DateTime> _f$date =
+      Field('date', _$date, key: 'post_date', hook: DateHook());
+  static String _$body(Comment v) => v.body;
+  static const Field<Comment, String> _f$body = Field('body', _$body);
 
   @override
-  Function get encoder => encode;
-  dynamic encode(Comment v) => toMap(v);
-  Map<String, dynamic> toMap(Comment c) => {
-        'id': container.$enc(c.id, 'id'),
-        'gallery_id': container.$enc(c.bookId, 'bookId'),
-        'poster': container.$enc(c.author, 'author'),
-        'post_date': container.$enc(c.date, 'date', const DateHook()),
-        'body': container.$enc(c.body, 'body')
-      };
+  final Map<Symbol, Field<Comment, dynamic>> fields = const {
+    #id: _f$id,
+    #bookId: _f$bookId,
+    #author: _f$author,
+    #date: _f$date,
+    #body: _f$body,
+  };
+
+  static Comment _instantiate(DecodingData data) {
+    return Comment(
+        id: data.dec(_f$id),
+        bookId: data.dec(_f$bookId),
+        author: data.dec(_f$author),
+        date: data.dec(_f$date),
+        body: data.dec(_f$body));
+  }
 
   @override
-  String stringify(Comment self) =>
-      'Comment(id: ${container.asString(self.id)}, bookId: ${container.asString(self.bookId)}, author: ${container.asString(self.author)}, date: ${container.asString(self.date)}, body: ${container.asString(self.body)})';
+  final Function instantiate = _instantiate;
+
+  static Comment fromMap(Map<String, dynamic> map) {
+    return _guard((c) => c.fromMap<Comment>(map));
+  }
+
+  static Comment fromJson(String json) {
+    return _guard((c) => c.fromJson<Comment>(json));
+  }
 }
 
 mixin CommentMappable {
-  String toJson() => CommentMapper.container.toJson(this as Comment);
-  Map<String, dynamic> toMap() =>
-      CommentMapper.container.toMap(this as Comment);
+  String toJson() {
+    return CommentMapper._guard((c) => c.toJson(this as Comment));
+  }
+
+  Map<String, dynamic> toMap() {
+    return CommentMapper._guard((c) => c.toMap(this as Comment));
+  }
+
   @override
-  String toString() => CommentMapper.container.asString(this);
+  String toString() {
+    return CommentMapper._guard((c) => c.asString(this));
+  }
 }
