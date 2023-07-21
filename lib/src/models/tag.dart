@@ -104,10 +104,12 @@ class Tag with TagMappable {
   /// 
   /// Tags are considered equal when they have the same [id], [type] and [name].
   @override
-  bool operator ==(Object other) => (other is Tag)
-    && id == other.id
-    && type == other.type
-    && name == other.name;
+  bool operator ==(Object other) => identical(this, other) || (
+    (other is Tag)
+      && id == other.id
+      && type == other.type
+      && name == other.name
+  );
 
   @override
   int get hashCode => Object.hash(id, type, name);
