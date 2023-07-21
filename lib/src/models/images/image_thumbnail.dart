@@ -19,4 +19,8 @@ final class ImageThumbnail extends Image with ImageThumbnailMappable {
   );
 
   final Image parent;
+
+  @override
+  String getFullFilename(String filename) =>
+    super.getFullFilename('${filename}t');
 }
