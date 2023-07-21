@@ -295,10 +295,6 @@ class API {
   /// 
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
   /// 
-  /// Note: __Always specify [count] if you need only
-  /// a certain number of pages__, otherwise stream will keep making additional
-  /// requests for subsequent pages even if you `break` out of `await for` loop.
-  /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 
   /// {@macro parser_throws}
@@ -325,10 +321,6 @@ class API {
   /// [count] parameter defines a maximum amount of pages to request.
   /// 
   /// Optionally you can provide _positive_ [page] number and [sort] parameter.
-  /// 
-  /// Note: __Always specify [count] if you need only
-  /// a certain number of pages__, otherwise stream will keep making additional
-  /// requests for subsequent pages even if you `break` out of `await for` loop.
   /// 
   /// Throws [ArgumentError] if [page] is less than 1.
   /// 

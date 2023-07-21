@@ -70,11 +70,11 @@ Future<void> main() async {
     print(search);
     print(search.books.take(2).join(', '));
 
-    // This is a bad approach because the stream is already in process of
-    // requesting new page at this point.
-    // Use `count` option instead of breaking by condition like this.
-    // if (search.page >= 2)
-    //   break;
+    // You can use break as well.
+    // In Dart prior 2.18 there was a bug in generators behavior
+    // Ref: https://github.com/dart-lang/sdk/issues/34775
+    if (search.page >= 2)
+      break;
   }
 
   // Make a single query and print name of the first book.
