@@ -12,7 +12,7 @@ export 'models/comment.dart' show Comment;
 export 'models/image.dart' show Cover, CoverThumbnail, Image, ImageThumbnail,
   ImageType;
 export 'models/search.dart' show Search, SearchQuery, SearchQueryTag,
-  SearchQueryText, SearchResult, SearchSort;
+  SearchQueryTagExtension, SearchQueryText, SearchResult, SearchSort;
 export 'models/tag.dart' show Tag;
 export 'models/tag_type.dart' show TagType;
 export 'models/tags_list_extension.dart' show TagsListExtension;
