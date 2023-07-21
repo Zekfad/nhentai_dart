@@ -14,9 +14,9 @@ class ImageTypeMapper extends SimpleMapper<ImageType> {
     if (value is! String)
       throw MapperException.unexpectedType(value.runtimeType, 'String');
 
-    final type = ImageType.getByType(value);
+    final type = ImageType(value);
     assert(
-      !type.isUnknown,
+      type is KnownImageType,
       'Unknown image type found while parsing JSON. '
       'If that\'s not an error open new issue for adding support for "${type.extension}" type.',
     );

@@ -1,64 +1,40 @@
 import 'package:meta/meta.dart';
 
+part 'known_image_type.dart';
+part 'unknown_image_type.dart';
 
 /// Image type.
+/// 
 /// Represents type name and extension.
+/// 
+/// Refer to [KnownImageType] enum for known types.
 @immutable
-class ImageType {
+sealed class ImageType {
+  /// Returns [KnownImageType] type if possible otherwise [UnknownImageType].
+  factory ImageType(String type) =>
+    KnownImageType._typesMap[type.toLowerCase()] ??
+      UnknownImageType(type);
+
+  /// Creates new "unknown" image type.
+  const factory ImageType.unknown(
+    String extension, [
+      String name,
+    ]
+  ) = UnknownImageType;
+
   /// Internal constructor.
-  /// 
-  /// Creates "known" image type with known file extension.
   const ImageType._(
+    this.extension,
     this.name,
-    this.extension,
-  ) :
-    isUnknown = false;
+  );
 
-
-  /// Internal constructor.
-  /// 
-  /// Creates unknown image type.
-  const ImageType._unknown(
-    this.extension,
-  ) :
-    name = 'Unknown',
-    isUnknown = true;
-
-  /// Returns [ImageType] by corresponding [type] string.
-  /// 
-  /// If no such type is known, new "unknown" image type instance returned.
-  factory ImageType.getByType(String type) =>
-    _typesMap[type.toLowerCase()] ?? ImageType._unknown(type);
+  /// Check whether [type] is known.
+  static bool isKnown(String type) => KnownImageType._typesMap.containsKey(
+    type.toLowerCase(),
+  );
 
   /// Human-readable type name.
   final String name;
   /// File extension.
   final String extension;
-  /// Whether is image type is unknown.
-  @internal
-  final bool isUnknown;
-
-  /// Joint Photographic Experts Group image type.
-  static const jpeg = ImageType._('JPEG', 'jpg');
-  /// Portable Network Graphics image type.
-  static const png  = ImageType._('PNG', 'png');
-  /// Graphics Interchange Format image type.
-  static const gif  = ImageType._('GIF', 'gif');
-  /// Unknown image type.
-  static const unknown = ImageType._unknown('');
-
-  /// Types map used in [ImageType.getByType].
-  static const Map<String, ImageType> _typesMap = {
-    'j'   : jpeg,
-    'jpg' : jpeg,
-    'jpeg': jpeg,
-    'p'   : png,
-    'png' : png,
-    'g'   : gif,
-    'gif' : gif,
-  };
-
-  /// Returns human-readable type name.
-  @override
-  String toString() => name;
 }
