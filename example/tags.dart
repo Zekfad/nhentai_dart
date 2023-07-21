@@ -33,5 +33,23 @@ Future<void> main() async {
   // Almost the same as this (this one returns unmodifiable list)
   print(tags.get([nh.TagType.artist, nh.TagType.category]));
 
+  // Search by multiple tags
+
+  // Via query constructor (allows const)
+  const query = nh.SearchQueryTag(
+    nh.Tag.named(
+      type: nh.TagType.language,
+      name: 'english',
+    ),
+  );
+
+  // Via query extension (using SearchQueryTagExtension)
+  final queryDynamic =  const nh.Tag.named(
+    type: nh.TagType.language,
+    name: 'translated',
+  ).query;
+
+  final res = await api.search('$query -$queryDynamic').first;
+
   return;
 }
