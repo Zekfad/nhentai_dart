@@ -1,3 +1,28 @@
+## 1.0.0-wip
+- BREAKING: Requires Dart 3.0.0
+- BREAKING: Make `SearchQuery` `sealed`.
+- Change `http` constraint to `>=0.13.5 <2.0.0` to allow ^1.0.0 versions.
+- BREAKING: remove `Tag.dummy` constructor.
+- BREAKING: Migrate to `dart_mappable: ^3.1.0`.
+  You may need to call `initializeMappers` if you use data models not via parse
+  methods.
+- BREAKING: `Image`, `ImageThumbnail`, `Cover` and `CoverThumbnail`
+  now `final`.
+- BREAKING: `SearchQuery` is now an `interface` class.
+- BREAKING: `ImageType` is now `sealed` class, change existing declarations to
+  `KnownImageType` `enum`.
+  Now you can use `ImageType('type')` to get known (enum) if possible value
+  or new instance of `UnknownImageType`.
+- BREAKING: Removed unused `SimpleQuery` typedef.
+- Remove note about streams, as async generators was fixed in Dart 2.18.
+- Add `SearchQueryTagExtension` on `Tag` that will help to make combined tag
+  search easier.
+- JSON encoding of Objects are now aligns to original API schemas,
+  allowing to use data classes for custom server implementation.
+- Split API into implementation and abstract class.
+  This allows external API implementations.
+
+
 ## 1.0.0-dev.11
 - BREAKING: Migrated from
   [`universal_io`](https://pub.dev/packages/universal_io) to
