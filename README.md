@@ -20,9 +20,11 @@ Using this module on web platform is experimental and has some drawbacks:
   * Workaround: use CORS enabled mirror (for example you can use
     [dev-mirror](https://github.com/Zekfad/dev-mirror)).
 * `API#getRandomBook` doesn't work due to limitations of `XHR`.
+  * Workaround: use
+  [`package:fetch_client`](https://pub.dev/packages/fetch_client).
 * Proxy isn't supported on web.
-* User Agent override isn't supported.
-* Cookies helper functions aren't supported.
+* User Agent override isn't supported on web.
+* Cookies helper functions aren't supported on web.
 
 ## Usage
 
