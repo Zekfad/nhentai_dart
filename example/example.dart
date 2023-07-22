@@ -50,7 +50,7 @@ Future<void> main() async {
   final api = pureApi;
 
   // This will throw ApiException if book isn't found.
-  final NHentaiBook book = await api.getBook(177013);
+  final NHentaiBook book = await api.getBook(421025);
   
   // Print short book summary.
   print(
@@ -79,8 +79,7 @@ Future<void> main() async {
 
   // Make a single query and print name of the first book.
 
-  // Request via generator, here you must specify `count` to 1, otherwise stream
-  // will make 2 request and you'll wait for 2 requests instead of single one.
+  // Request via generator.
   final nh.Search search1 = await api.search('test', count: 1).first;
   print(search1.books.first);
 
