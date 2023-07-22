@@ -22,7 +22,7 @@ final class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
   /// * [Map] - then object will be parsed into [Cover] object.
   /// * [Cover] - then value will be returned as-is.
   static Cover Function(dynamic value) get parse =>
-    CoverMapper.ensureInitialized().container.fromValue<Cover>;
+    MapperContainer.globals.initialized.fromValue<Cover>;
 
   /// Parses [List] of [Cover] instances from a given value.
   /// 
@@ -31,16 +31,16 @@ final class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [Cover] - then value will be returned as-is.
   static List<Cover> Function(dynamic value) get parseList =>
-    CoverMapper.ensureInitialized().container.fromValue<List<Cover>>;
+    MapperContainer.globals.initialized.fromValue<List<Cover>>;
 
   /// Parses JSON string into [Cover] similarly to [parse]. 
   static Cover Function(String json) get parseJson =>
-    CoverMapper.ensureInitialized().container.fromJson<Cover>;
+    MapperContainer.globals.initialized.fromJson<Cover>;
 
   /// Parses JSON string into [List] of [Cover] instances similarly to 
   /// [parseList].
   static List<Cover> Function(String json) get parseJsonList =>
-    CoverMapper.ensureInitialized().container.fromJson<List<Cover>>;
+    MapperContainer.globals.initialized.fromJson<List<Cover>>;
 
   @override
   String getFullFilename(String filename) =>

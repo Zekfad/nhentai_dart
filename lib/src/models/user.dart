@@ -4,15 +4,15 @@ import 'package:meta/meta.dart';
 import '../api.dart';
 import '../get_avatar_url.dart' as get_avatar_url;
 import '../hosts.dart';
-import 'mapper_base_container_extension.dart';
+import 'mapper_container_extension.dart';
 import 'user_avatar_filename_hook.dart';
 
 part 'user.mapper.dart';
 
 
 /// User.
-@immutable
 @MappableClass()
+@immutable
 class User with UserMappable {
   /// Creates user.
   const User({
@@ -30,7 +30,7 @@ class User with UserMappable {
   /// * [Map] - then object will be parsed into [User] object.
   /// * [User] - then value will be returned as-is.
   static User Function(dynamic value) get parse =>
-    UserMapper.ensureInitialized().container.fromValue<User>;
+    MapperContainer.globals.initialized.fromValue<User>;
 
   /// Parses [List] of [User] instances from a given value.
   /// 
@@ -39,16 +39,16 @@ class User with UserMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [User] - then value will be returned as-is.
   static List<User> Function(dynamic value) get parseList =>
-    UserMapper.ensureInitialized().container.fromValue<List<User>>;
+    MapperContainer.globals.initialized.fromValue<List<User>>;
 
   /// Parses JSON string into [User] similarly to [parse]. 
   static User Function(String json) get parseJson =>
-    UserMapper.ensureInitialized().container.fromJson<User>;
+    MapperContainer.globals.initialized.fromJson<User>;
 
   /// Parses JSON string into [List] of [User] instances similarly to 
   /// [parseList].
   static List<User> Function(String json) get parseJsonList =>
-    UserMapper.ensureInitialized().container.fromJson<List<User>>;
+    MapperContainer.globals.initialized.fromJson<List<User>>;
 
   /// User ID.
   @MappableField(key: 'id')

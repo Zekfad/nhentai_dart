@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import '../../api.dart';
 import '../../get_image_url.dart' as get_image_url;
 import '../../hosts.dart';
-import '../mapper_base_container_extension.dart';
+import '../mapper_container_extension.dart';
 import 'encode_image_hook.dart';
 import 'image_type.dart';
 import 'image_type_mapper.dart';

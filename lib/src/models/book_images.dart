@@ -3,16 +3,16 @@ import 'package:meta/meta.dart';
 
 import 'book_images_hook.dart';
 import 'images/images.dart';
-import 'mapper_base_container_extension.dart';
+import 'mapper_container_extension.dart';
 
 part 'book_images.mapper.dart';
 
 
 /// Book's images.
-@immutable
 @MappableClass(
   hook: BookImagesHook(),
 )
+@immutable
 class BookImages with BookImagesMappable {
   const BookImages({
     required this.media,
@@ -27,7 +27,7 @@ class BookImages with BookImagesMappable {
   /// * [Map] - then object will be parsed into [BookImages] object.
   /// * [BookImages] - then value will be returned as-is.
   static BookImages Function(dynamic value) get parse =>
-    BookImagesMapper.ensureInitialized().container.fromValue<BookImages>;
+    MapperContainer.globals.initialized.fromValue<BookImages>;
 
   /// Parses [List] of [BookImages] instances from a given value.
   /// 
@@ -36,16 +36,16 @@ class BookImages with BookImagesMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [BookImages] - then value will be returned as-is.
   static List<BookImages> Function(dynamic value) get parseList =>
-    BookImagesMapper.ensureInitialized().container.fromValue<List<BookImages>>;
+    MapperContainer.globals.initialized.fromValue<List<BookImages>>;
 
   /// Parses JSON string into [BookImages] similarly to [parse]. 
   static BookImages Function(String json) get parseJson =>
-    BookImagesMapper.ensureInitialized().container.fromJson<BookImages>;
+    MapperContainer.globals.initialized.fromJson<BookImages>;
 
   /// Parses JSON string into [List] of [BookImages] instances similarly to 
   /// [parseList].
   static List<BookImages> Function(String json) get parseJsonList =>
-    BookImagesMapper.ensureInitialized().container.fromJson<List<BookImages>>;
+    MapperContainer.globals.initialized.fromJson<List<BookImages>>;
 
   /// Image associated media id.
   @MappableField(key: 'media_id')

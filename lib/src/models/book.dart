@@ -6,16 +6,16 @@ import 'book_images.dart';
 import 'book_title.dart';
 import 'date_hook.dart';
 import 'image.dart';
-import 'mapper_base_container_extension.dart';
+import 'mapper_container_extension.dart';
 import 'tag.dart';
 
 part 'book.mapper.dart';
 
 /// Book.
-@immutable
 @MappableClass(
   hook: BookHook(),
 )
+@immutable
 class Book with BookMappable {
   /// Creates a book.
   const Book({
@@ -35,7 +35,7 @@ class Book with BookMappable {
   /// * [Map] - then object will be parsed into [Book] object.
   /// * [Book] - then value will be returned as-is.
   static Book Function(dynamic value) get parse =>
-    BookMapper.ensureInitialized().container.fromValue<Book>;
+    MapperContainer.globals.initialized.fromValue<Book>;
 
   /// Parses [List] of [Book] instances from a given value.
   /// 
@@ -44,16 +44,16 @@ class Book with BookMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [Book] - then value will be returned as-is.
   static List<Book> Function(dynamic value) get parseList =>
-    BookMapper.ensureInitialized().container.fromValue<List<Book>>;
+    MapperContainer.globals.initialized.fromValue<List<Book>>;
 
   /// Parses JSON string into [Book] similarly to [parse]. 
   static Book Function(String json) get parseJson =>
-    BookMapper.ensureInitialized().container.fromJson<Book>;
+    MapperContainer.globals.initialized.fromJson<Book>;
 
   /// Parses JSON string into [List] of [Book] instances similarly to 
   /// [parseList].
   static List<Book> Function(String json) get parseJsonList =>
-    BookMapper.ensureInitialized().container.fromJson<List<Book>>;
+    MapperContainer.globals.initialized.fromJson<List<Book>>;
 
   /// Book title.
   @MappableField(key: 'title')

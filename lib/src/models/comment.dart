@@ -2,15 +2,15 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
 import 'date_hook.dart';
-import 'mapper_base_container_extension.dart';
+import 'mapper_container_extension.dart';
 import 'user.dart';
 
 part 'comment.mapper.dart';
 
 
 /// Comment.
-@immutable
 @MappableClass()
+@immutable
 class Comment with CommentMappable {
   /// Creates comment.
   const Comment({
@@ -27,7 +27,7 @@ class Comment with CommentMappable {
   /// * [Map] - then object will be parsed into [Comment] object.
   /// * [Comment] - then value will be returned as-is.
   static Comment Function(dynamic value) get parse =>
-    CommentMapper.ensureInitialized().container.fromValue<Comment>;
+    MapperContainer.globals.initialized.fromValue<Comment>;
 
   /// Parses [List] of [Comment] instances from a given value.
   /// 
@@ -36,16 +36,16 @@ class Comment with CommentMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [Comment] - then value will be returned as-is.
   static List<Comment> Function(dynamic value) get parseList =>
-    CommentMapper.ensureInitialized().container.fromValue<List<Comment>>;
+    MapperContainer.globals.initialized.fromValue<List<Comment>>;
 
   /// Parses JSON string into [Comment] similarly to [parse]. 
   static Comment Function(String json) get parseJson =>
-    CommentMapper.ensureInitialized().container.fromJson<Comment>;
+    MapperContainer.globals.initialized.fromJson<Comment>;
 
   /// Parses JSON string into [List] of [Comment] instances similarly to 
   /// [parseList].
   static List<Comment> Function(String json) get parseJsonList =>
-    CommentMapper.ensureInitialized().container.fromJson<List<Comment>>;
+    MapperContainer.globals.initialized.fromJson<List<Comment>>;
   /// Comment ID.
   @MappableField(key: 'id')
   final int id;

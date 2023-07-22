@@ -24,7 +24,7 @@ final class CoverThumbnail extends Image with ImageWithKnownDimensions, CoverThu
   /// * [Map] - then object will be parsed into [CoverThumbnail] object.
   /// * [CoverThumbnail] - then value will be returned as-is.
   static CoverThumbnail Function(dynamic value) get parse =>
-    CoverThumbnailMapper.ensureInitialized().container.fromValue<CoverThumbnail>;
+    MapperContainer.globals.initialized.fromValue<CoverThumbnail>;
 
   /// Parses [List] of [CoverThumbnail] instances from a given value.
   /// 
@@ -33,16 +33,16 @@ final class CoverThumbnail extends Image with ImageWithKnownDimensions, CoverThu
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [CoverThumbnail] - then value will be returned as-is.
   static List<CoverThumbnail> Function(dynamic value) get parseList =>
-    CoverThumbnailMapper.ensureInitialized().container.fromValue<List<CoverThumbnail>>;
+    MapperContainer.globals.initialized.fromValue<List<CoverThumbnail>>;
 
   /// Parses JSON string into [CoverThumbnail] similarly to [parse]. 
   static CoverThumbnail Function(String json) get parseJson =>
-    CoverThumbnailMapper.ensureInitialized().container.fromJson<CoverThumbnail>;
+    MapperContainer.globals.initialized.fromJson<CoverThumbnail>;
 
   /// Parses JSON string into [List] of [CoverThumbnail] instances similarly to 
   /// [parseList].
   static List<CoverThumbnail> Function(String json) get parseJsonList =>
-    CoverThumbnailMapper.ensureInitialized().container.fromJson<List<CoverThumbnail>>;
+    MapperContainer.globals.initialized.fromJson<List<CoverThumbnail>>;
 
   @override
   final Cover parent;

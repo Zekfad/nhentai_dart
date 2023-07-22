@@ -1,14 +1,14 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
-import 'mapper_base_container_extension.dart';
+import 'mapper_container_extension.dart';
 
 part 'book_title.mapper.dart';
 
 
 /// Book title.
-@immutable
 @MappableClass()
+@immutable
 class BookTitle with BookTitleMappable {
   /// Creates a book title.
   const BookTitle({
@@ -23,7 +23,7 @@ class BookTitle with BookTitleMappable {
   /// * [Map] - then object will be parsed into [BookTitle] object.
   /// * [BookTitle] - then value will be returned as-is.
   static BookTitle Function(dynamic value) get parse =>
-    BookTitleMapper.ensureInitialized().container.fromValue<BookTitle>;
+    MapperContainer.globals.initialized.fromValue<BookTitle>;
 
   /// Parses [List] of [BookTitle] instances from a given value.
   /// 
@@ -32,16 +32,16 @@ class BookTitle with BookTitleMappable {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [BookTitle] - then value will be returned as-is.
   static List<BookTitle> Function(dynamic value) get parseList =>
-    BookTitleMapper.ensureInitialized().container.fromValue<List<BookTitle>>;
+    MapperContainer.globals.initialized.fromValue<List<BookTitle>>;
 
   /// Parses JSON string into [BookTitle] similarly to [parse]. 
   static BookTitle Function(String json) get parseJson =>
-    BookTitleMapper.ensureInitialized().container.fromJson<BookTitle>;
+    MapperContainer.globals.initialized.fromJson<BookTitle>;
 
   /// Parses JSON string into [List] of [BookTitle] instances similarly to 
   /// [parseList].
   static List<BookTitle> Function(String json) get parseJsonList =>
-    BookTitleMapper.ensureInitialized().container.fromJson<List<BookTitle>>;
+    MapperContainer.globals.initialized.fromJson<List<BookTitle>>;
 
   /// English title.
   @MappableField(key: 'english')

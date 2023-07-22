@@ -1,6 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-import 'image_type_mapper.dart';
 import 'images.dart';
 
 
@@ -15,7 +14,7 @@ class EncodeImageHook extends MappingHook {
         'h': height,
       if (value.width case final width?)
         'w': width,
-      't': const ImageTypeMapper().encode(value.type),
+      't': MapperContainer.globals.toValue<String>(value.type),
     },
     _ => throw MapperException.unexpectedType(value.runtimeType, 'Image'),
   };

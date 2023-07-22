@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 
-import 'mapper_base_container_extension.dart';
+import 'mapper_container_extension.dart';
 
 part 'tag_type.mapper.dart';
 
@@ -32,7 +32,7 @@ enum TagType {
   /// * [String] - then object will be parsed into [TagType] object.
   /// * [TagType] - then value will be returned as-is.
   static TagType Function(dynamic value) get parse =>
-    MapperBaseContainer(TagTypeMapper.ensureInitialized()).container.fromValue<TagType>;
+    MapperContainer.globals.initialized.fromValue<TagType>;
 
   /// Parses [List] of [TagType] instances from a given value.
   /// 
@@ -41,16 +41,16 @@ enum TagType {
   ///   [parse] and resulting [Iterable] will be returned.
   /// * [Iterable] of [TagType] - then value will be returned as-is.
   static List<TagType> Function(dynamic value) get parseList =>
-    MapperBaseContainer(TagTypeMapper.ensureInitialized()).container.fromValue<List<TagType>>;
+    MapperContainer.globals.initialized.fromValue<List<TagType>>;
 
   /// Parses JSON string into [TagType] similarly to [parse]. 
   static TagType Function(String json) get parseJson =>
-    MapperBaseContainer(TagTypeMapper.ensureInitialized()).container.fromJson<TagType>;
+    MapperContainer.globals.initialized.fromJson<TagType>;
 
   /// Parses JSON string into [List] of [TagType] instances similarly to 
   /// [parseList].
   static List<TagType> Function(String json) get parseJsonList =>
-    MapperBaseContainer(TagTypeMapper.ensureInitialized()).container.fromJson<List<TagType>>;
+    MapperContainer.globals.initialized.fromJson<List<TagType>>;
 
   /// Returns [TagType] by given [tagType] name.
   static TagType getByName(String tagType) =>
