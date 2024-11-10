@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'book.dart';
 
@@ -17,11 +18,6 @@ class BookMapper extends ClassMapperBase<Book> {
       BookImagesMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -49,7 +45,7 @@ class BookMapper extends ClassMapperBase<Book> {
   static const Field<Book, BookImages> _f$images = Field('images', _$images);
 
   @override
-  final Map<Symbol, Field<Book, dynamic>> fields = const {
+  final MappableFields<Book> fields = const {
     #title: _f$title,
     #id: _f$id,
     #media: _f$media,
@@ -78,25 +74,100 @@ class BookMapper extends ClassMapperBase<Book> {
   final Function instantiate = _instantiate;
 
   static Book fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<Book>(map));
+    return ensureInitialized().decodeMap<Book>(map);
   }
 
   static Book fromJson(String json) {
-    return _guard((c) => c.fromJson<Book>(json));
+    return ensureInitialized().decodeJson<Book>(json);
   }
 }
 
 mixin BookMappable {
   String toJson() {
-    return BookMapper._guard((c) => c.toJson(this as Book));
+    return BookMapper.ensureInitialized().encodeJson<Book>(this as Book);
   }
 
   Map<String, dynamic> toMap() {
-    return BookMapper._guard((c) => c.toMap(this as Book));
+    return BookMapper.ensureInitialized().encodeMap<Book>(this as Book);
   }
 
+  BookCopyWith<Book, Book, Book> get copyWith =>
+      _BookCopyWithImpl(this as Book, $identity, $identity);
   @override
   String toString() {
-    return BookMapper._guard((c) => c.asString(this));
+    return BookMapper.ensureInitialized().stringifyValue(this as Book);
   }
+}
+
+extension BookValueCopy<$R, $Out> on ObjectCopyWith<$R, Book, $Out> {
+  BookCopyWith<$R, Book, $Out> get $asBook =>
+      $base.as((v, t, t2) => _BookCopyWithImpl(v, t, t2));
+}
+
+abstract class BookCopyWith<$R, $In extends Book, $Out>
+    implements ClassCopyWith<$R, $In, $Out> {
+  BookTitleCopyWith<$R, BookTitle, BookTitle> get title;
+  ListCopyWith<$R, Tag, TagCopyWith<$R, Tag, Tag>> get tags;
+  BookImagesCopyWith<$R, BookImages, BookImages> get images;
+  $R call(
+      {BookTitle? title,
+      int? id,
+      int? media,
+      int? favorites,
+      String? scanlator,
+      DateTime? uploaded,
+      List<Tag>? tags,
+      BookImages? images});
+  BookCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _BookCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Book, $Out>
+    implements BookCopyWith<$R, Book, $Out> {
+  _BookCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<Book> $mapper = BookMapper.ensureInitialized();
+  @override
+  BookTitleCopyWith<$R, BookTitle, BookTitle> get title =>
+      $value.title.copyWith.$chain((v) => call(title: v));
+  @override
+  ListCopyWith<$R, Tag, TagCopyWith<$R, Tag, Tag>> get tags => ListCopyWith(
+      $value.tags, (v, t) => v.copyWith.$chain(t), (v) => call(tags: v));
+  @override
+  BookImagesCopyWith<$R, BookImages, BookImages> get images =>
+      $value.images.copyWith.$chain((v) => call(images: v));
+  @override
+  $R call(
+          {BookTitle? title,
+          int? id,
+          int? media,
+          int? favorites,
+          Object? scanlator = $none,
+          DateTime? uploaded,
+          List<Tag>? tags,
+          BookImages? images}) =>
+      $apply(FieldCopyWithData({
+        if (title != null) #title: title,
+        if (id != null) #id: id,
+        if (media != null) #media: media,
+        if (favorites != null) #favorites: favorites,
+        if (scanlator != $none) #scanlator: scanlator,
+        if (uploaded != null) #uploaded: uploaded,
+        if (tags != null) #tags: tags,
+        if (images != null) #images: images
+      }));
+  @override
+  Book $make(CopyWithData data) => Book(
+      title: data.get(#title, or: $value.title),
+      id: data.get(#id, or: $value.id),
+      media: data.get(#media, or: $value.media),
+      favorites: data.get(#favorites, or: $value.favorites),
+      scanlator: data.get(#scanlator, or: $value.scanlator),
+      uploaded: data.get(#uploaded, or: $value.uploaded),
+      tags: data.get(#tags, or: $value.tags),
+      images: data.get(#images, or: $value.images));
+
+  @override
+  BookCopyWith<$R2, Book, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+      _BookCopyWithImpl($value, $cast, t);
 }

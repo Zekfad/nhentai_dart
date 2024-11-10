@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'book_images.dart';
 
@@ -17,11 +18,6 @@ class BookImagesMapper extends ClassMapperBase<BookImages> {
       ImageMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -40,7 +36,7 @@ class BookImagesMapper extends ClassMapperBase<BookImages> {
       Field('pages', _$pages);
 
   @override
-  final Map<Symbol, Field<BookImages, dynamic>> fields = const {
+  final MappableFields<BookImages> fields = const {
     #media: _f$media,
     #cover: _f$cover,
     #thumbnail: _f$thumbnail,
@@ -61,25 +57,92 @@ class BookImagesMapper extends ClassMapperBase<BookImages> {
   final Function instantiate = _instantiate;
 
   static BookImages fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<BookImages>(map));
+    return ensureInitialized().decodeMap<BookImages>(map);
   }
 
   static BookImages fromJson(String json) {
-    return _guard((c) => c.fromJson<BookImages>(json));
+    return ensureInitialized().decodeJson<BookImages>(json);
   }
 }
 
 mixin BookImagesMappable {
   String toJson() {
-    return BookImagesMapper._guard((c) => c.toJson(this as BookImages));
+    return BookImagesMapper.ensureInitialized()
+        .encodeJson<BookImages>(this as BookImages);
   }
 
   Map<String, dynamic> toMap() {
-    return BookImagesMapper._guard((c) => c.toMap(this as BookImages));
+    return BookImagesMapper.ensureInitialized()
+        .encodeMap<BookImages>(this as BookImages);
   }
 
+  BookImagesCopyWith<BookImages, BookImages, BookImages> get copyWith =>
+      _BookImagesCopyWithImpl(this as BookImages, $identity, $identity);
   @override
   String toString() {
-    return BookImagesMapper._guard((c) => c.asString(this));
+    return BookImagesMapper.ensureInitialized()
+        .stringifyValue(this as BookImages);
   }
+}
+
+extension BookImagesValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, BookImages, $Out> {
+  BookImagesCopyWith<$R, BookImages, $Out> get $asBookImages =>
+      $base.as((v, t, t2) => _BookImagesCopyWithImpl(v, t, t2));
+}
+
+abstract class BookImagesCopyWith<$R, $In extends BookImages, $Out>
+    implements ClassCopyWith<$R, $In, $Out> {
+  CoverCopyWith<$R, Cover, Cover> get cover;
+  CoverThumbnailCopyWith<$R, CoverThumbnail, CoverThumbnail> get thumbnail;
+  ListCopyWith<$R, Image, ImageCopyWith<$R, Image, Image>> get pages;
+  $R call(
+      {int? media,
+      Cover? cover,
+      CoverThumbnail? thumbnail,
+      List<Image>? pages});
+  BookImagesCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _BookImagesCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, BookImages, $Out>
+    implements BookImagesCopyWith<$R, BookImages, $Out> {
+  _BookImagesCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<BookImages> $mapper =
+      BookImagesMapper.ensureInitialized();
+  @override
+  CoverCopyWith<$R, Cover, Cover> get cover =>
+      $value.cover.copyWith.$chain((v) => call(cover: v));
+  @override
+  CoverThumbnailCopyWith<$R, CoverThumbnail, CoverThumbnail> get thumbnail =>
+      $value.thumbnail.copyWith.$chain((v) => call(thumbnail: v));
+  @override
+  ListCopyWith<$R, Image, ImageCopyWith<$R, Image, Image>> get pages =>
+      ListCopyWith(
+          $value.pages, (v, t) => v.copyWith.$chain(t), (v) => call(pages: v));
+  @override
+  $R call(
+          {int? media,
+          Cover? cover,
+          CoverThumbnail? thumbnail,
+          List<Image>? pages}) =>
+      $apply(FieldCopyWithData({
+        if (media != null) #media: media,
+        if (cover != null) #cover: cover,
+        if (thumbnail != null) #thumbnail: thumbnail,
+        if (pages != null) #pages: pages
+      }));
+  @override
+  BookImages $make(CopyWithData data) => BookImages(
+      media: data.get(#media, or: $value.media),
+      cover: data.get(#cover, or: $value.cover),
+      thumbnail: data.get(#thumbnail, or: $value.thumbnail),
+      pages: data.get(#pages, or: $value.pages));
+
+  @override
+  BookImagesCopyWith<$R2, BookImages, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _BookImagesCopyWithImpl($value, $cast, t);
 }

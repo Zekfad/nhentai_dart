@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'user.dart';
 
@@ -14,11 +15,6 @@ class UserMapper extends ClassMapperBase<User> {
       MapperContainer.globals.use(_instance = UserMapper._());
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -42,7 +38,7 @@ class UserMapper extends ClassMapperBase<User> {
       Field('staff', _$staff, key: 'is_staff');
 
   @override
-  final Map<Symbol, Field<User, dynamic>> fields = const {
+  final MappableFields<User> fields = const {
     #id: _f$id,
     #username: _f$username,
     #slug: _f$slug,
@@ -65,25 +61,80 @@ class UserMapper extends ClassMapperBase<User> {
   final Function instantiate = _instantiate;
 
   static User fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<User>(map));
+    return ensureInitialized().decodeMap<User>(map);
   }
 
   static User fromJson(String json) {
-    return _guard((c) => c.fromJson<User>(json));
+    return ensureInitialized().decodeJson<User>(json);
   }
 }
 
 mixin UserMappable {
   String toJson() {
-    return UserMapper._guard((c) => c.toJson(this as User));
+    return UserMapper.ensureInitialized().encodeJson<User>(this as User);
   }
 
   Map<String, dynamic> toMap() {
-    return UserMapper._guard((c) => c.toMap(this as User));
+    return UserMapper.ensureInitialized().encodeMap<User>(this as User);
   }
 
+  UserCopyWith<User, User, User> get copyWith =>
+      _UserCopyWithImpl(this as User, $identity, $identity);
   @override
   String toString() {
-    return UserMapper._guard((c) => c.asString(this));
+    return UserMapper.ensureInitialized().stringifyValue(this as User);
   }
+}
+
+extension UserValueCopy<$R, $Out> on ObjectCopyWith<$R, User, $Out> {
+  UserCopyWith<$R, User, $Out> get $asUser =>
+      $base.as((v, t, t2) => _UserCopyWithImpl(v, t, t2));
+}
+
+abstract class UserCopyWith<$R, $In extends User, $Out>
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call(
+      {int? id,
+      String? username,
+      String? slug,
+      String? avatarFilename,
+      bool? superuser,
+      bool? staff});
+  UserCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _UserCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, User, $Out>
+    implements UserCopyWith<$R, User, $Out> {
+  _UserCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<User> $mapper = UserMapper.ensureInitialized();
+  @override
+  $R call(
+          {int? id,
+          String? username,
+          String? slug,
+          String? avatarFilename,
+          bool? superuser,
+          bool? staff}) =>
+      $apply(FieldCopyWithData({
+        if (id != null) #id: id,
+        if (username != null) #username: username,
+        if (slug != null) #slug: slug,
+        if (avatarFilename != null) #avatarFilename: avatarFilename,
+        if (superuser != null) #superuser: superuser,
+        if (staff != null) #staff: staff
+      }));
+  @override
+  User $make(CopyWithData data) => User(
+      id: data.get(#id, or: $value.id),
+      username: data.get(#username, or: $value.username),
+      slug: data.get(#slug, or: $value.slug),
+      avatarFilename: data.get(#avatarFilename, or: $value.avatarFilename),
+      superuser: data.get(#superuser, or: $value.superuser),
+      staff: data.get(#staff, or: $value.staff));
+
+  @override
+  UserCopyWith<$R2, User, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+      _UserCopyWithImpl($value, $cast, t);
 }

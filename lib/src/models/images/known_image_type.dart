@@ -10,6 +10,8 @@ enum KnownImageType implements ImageType {
   png('png', 'PNG'),
   /// Graphics Interchange Format image type.
   gif('gif', 'GIF'),
+  /// WebP image type.
+  webp('webp', 'WEBP')
 
   ;
   /// Internal constructor.
@@ -29,6 +31,9 @@ enum KnownImageType implements ImageType {
     'png' : png,
     'g'   : gif,
     'gif' : gif,
+    'w'   : webp,
+    'webp': webp,
+
   };
 
   /// File extension.
