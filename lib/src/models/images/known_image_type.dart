@@ -33,7 +33,6 @@ enum KnownImageType implements ImageType {
     'gif' : gif,
     'w'   : webp,
     'webp': webp,
-
   };
 
   /// File extension.
