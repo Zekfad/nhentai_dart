@@ -1,7 +1,8 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, unnecessary_cast, override_on_non_overriding_member
+// ignore_for_file: strict_raw_type, inference_failure_on_untyped_parameter
 
 part of 'tag.dart';
 
@@ -15,11 +16,6 @@ class TagMapper extends ClassMapperBase<Tag> {
       TagTypeMapper.ensureInitialized();
     }
     return _instance!;
-  }
-
-  static T _guard<T>(T Function(MapperContainer) fn) {
-    ensureInitialized();
-    return fn(MapperContainer.globals);
   }
 
   @override
@@ -37,7 +33,7 @@ class TagMapper extends ClassMapperBase<Tag> {
   static const Field<Tag, String> _f$url = Field('url', _$url);
 
   @override
-  final Map<Symbol, Field<Tag, dynamic>> fields = const {
+  final MappableFields<Tag> fields = const {
     #id: _f$id,
     #type: _f$type,
     #name: _f$name,
@@ -58,25 +54,66 @@ class TagMapper extends ClassMapperBase<Tag> {
   final Function instantiate = _instantiate;
 
   static Tag fromMap(Map<String, dynamic> map) {
-    return _guard((c) => c.fromMap<Tag>(map));
+    return ensureInitialized().decodeMap<Tag>(map);
   }
 
   static Tag fromJson(String json) {
-    return _guard((c) => c.fromJson<Tag>(json));
+    return ensureInitialized().decodeJson<Tag>(json);
   }
 }
 
 mixin TagMappable {
   String toJson() {
-    return TagMapper._guard((c) => c.toJson(this as Tag));
+    return TagMapper.ensureInitialized().encodeJson<Tag>(this as Tag);
   }
 
   Map<String, dynamic> toMap() {
-    return TagMapper._guard((c) => c.toMap(this as Tag));
+    return TagMapper.ensureInitialized().encodeMap<Tag>(this as Tag);
   }
 
+  TagCopyWith<Tag, Tag, Tag> get copyWith =>
+      _TagCopyWithImpl(this as Tag, $identity, $identity);
   @override
   String toString() {
-    return TagMapper._guard((c) => c.asString(this));
+    return TagMapper.ensureInitialized().stringifyValue(this as Tag);
   }
+}
+
+extension TagValueCopy<$R, $Out> on ObjectCopyWith<$R, Tag, $Out> {
+  TagCopyWith<$R, Tag, $Out> get $asTag =>
+      $base.as((v, t, t2) => _TagCopyWithImpl(v, t, t2));
+}
+
+abstract class TagCopyWith<$R, $In extends Tag, $Out>
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call({int? id, TagType? type, String? name, int? count, String? url});
+  TagCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _TagCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Tag, $Out>
+    implements TagCopyWith<$R, Tag, $Out> {
+  _TagCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<Tag> $mapper = TagMapper.ensureInitialized();
+  @override
+  $R call({int? id, TagType? type, String? name, int? count, String? url}) =>
+      $apply(FieldCopyWithData({
+        if (id != null) #id: id,
+        if (type != null) #type: type,
+        if (name != null) #name: name,
+        if (count != null) #count: count,
+        if (url != null) #url: url
+      }));
+  @override
+  Tag $make(CopyWithData data) => Tag(
+      id: data.get(#id, or: $value.id),
+      type: data.get(#type, or: $value.type),
+      name: data.get(#name, or: $value.name),
+      count: data.get(#count, or: $value.count),
+      url: data.get(#url, or: $value.url));
+
+  @override
+  TagCopyWith<$R2, Tag, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+      _TagCopyWithImpl($value, $cast, t);
 }
