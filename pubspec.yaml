@@ -15,7 +15,7 @@ dev_dependencies:
   build_runner: ^2.4.13
   dart_mappable_builder: ^4.3.0
   test: ^1.22.2
-  zekfad_lints: ^2.0.0
+  zekfad_lints: ^2.3.1
 dependencies: 
   dart_mappable: ^4.3.0
   http: '>=0.13.5 <2.0.0'
