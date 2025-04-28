@@ -46,9 +46,9 @@ class Hosts {
   /// Default API host.
   static const defaultApiHost = ApiHost('nhentai.net');
   /// Default image host.
-  static const defaultImageHost = ImageHost('i.nhentai.net');
+  static const defaultImageHost = ImageHost('i1.nhentai.net');
   /// Default thumbnail host.
-  static const defaultThumbnailHost = ThumbnailHost('t.nhentai.net');
+  static const defaultThumbnailHost = ThumbnailHost('t1.nhentai.net');
 
   /// Default API hosts.
   static const defaultApiHosts = [
@@ -59,16 +59,14 @@ class Hosts {
     defaultImageHost,
     ImageHost('i2.nhentai.net'),
     ImageHost('i3.nhentai.net'),
-    ImageHost('i5.nhentai.net'),
-    ImageHost('i7.nhentai.net'),
+    ImageHost('i4.nhentai.net'),
   ];
   /// Default thumbnail hosts.
   static const defaultThumbnailHosts = [
     defaultThumbnailHost,
     ThumbnailHost('t2.nhentai.net'),
     ThumbnailHost('t3.nhentai.net'),
-    ThumbnailHost('t5.nhentai.net'),
-    ThumbnailHost('t7.nhentai.net'),
+    ThumbnailHost('t4.nhentai.net'),
   ];
 
   /// Hosts map.
