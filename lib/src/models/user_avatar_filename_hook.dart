@@ -5,6 +5,7 @@ import 'user.dart';
 
 /// Decodes and encodes [User.avatarFilename].
 class AvatarFilenameHook extends MappingHook {
+  /// Decodes and encodes [User.avatarFilename].
   const AvatarFilenameHook();
 
   @override

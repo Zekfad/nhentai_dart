@@ -8,14 +8,15 @@ class HttpProxyConfig {
   /// [uri] must be in format of `http://host:port` or
   /// `http://username:password@host:port`.
   HttpProxyConfig(String uri) {
-    final _uri = Uri.tryParse(uri);
+    final proxyUri = Uri.tryParse(uri);
 
-    if (_uri == null || _uri.scheme != 'http')
+    if (proxyUri == null || proxyUri.scheme != 'http') {
       throw ArgumentError.value(uri, 'uri', 'Proxy URI must be valid.');
+    }
 
-    this.uri = _uri;
+    this.uri = proxyUri;
 
-    final credentials = _uri.userInfo;
+    final credentials = proxyUri.userInfo;
     if (credentials.indexOf(':') case final index when index != -1) {
       username = credentials.substring(0, index);
       password = credentials.substring(index + 1);

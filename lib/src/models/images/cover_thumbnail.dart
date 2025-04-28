@@ -8,6 +8,8 @@ part of 'images.dart';
 )
 @immutable
 final class CoverThumbnail extends Image with ImageWithKnownDimensions, CoverThumbnailMappable implements Cover, ImageThumbnail {
+  /// Cover thumbnail.
+  /// Inherits [parent]'s [Image.id], [Image.type], [Image.media].
   CoverThumbnail({
     required this.parent,
     required int super.width,

@@ -7,6 +7,7 @@ part of 'images.dart';
 )
 @immutable
 final class Cover extends Image with ImageWithKnownDimensions, CoverMappable {
+  /// Cover.
   Cover({
     required super.media,
     required super.type,

@@ -7,52 +7,55 @@ import 'image.dart';
 /// Parses [BookImages] object, passes down `media_id` and assign relations
 /// between thumbnail and cover.
 class BookImagesHook extends MappingHook {
+  /// Parses [BookImages] object, passes down `media_id` and assign relations
+  /// between thumbnail and cover.
   const BookImagesHook();
 
   @override
   dynamic beforeDecode(dynamic value) {
-    if (value is! Map<String, dynamic>)
+    if (value is! Map<String, dynamic>) {
       throw MapperException.unexpectedType(value.runtimeType, 'Map<String, dynamic>');
+    }
     
     final media = switch(value['media_id']) {
-      final int _media => _media,
-      final String _media => int.parse(_media),
-      final _media => throw MapperException.unexpectedType(_media.runtimeType, 'String'),
+      final int media => media,
+      final String media => int.parse(media),
+      final media => throw MapperException.unexpectedType(media.runtimeType, 'String'),
     };
 
     final cover = switch(value['cover']) {
-      final Cover _cover => _cover,
-      final Map<String, dynamic> _cover => Cover.parse({
-        ..._cover,
+      final Cover cover => cover,
+      final Map<String, dynamic> cover => Cover.parse({
+        ...cover,
         'media_id': media,
       }),
-      final _cover => throw MapperException.unexpectedType(_cover.runtimeType, 'Map<String, dynamic>'),
+      final cover => throw MapperException.unexpectedType(cover.runtimeType, 'Map<String, dynamic>'),
     };
 
     final thumbnail = switch(value['thumbnail']) {
-      final CoverThumbnail _thumbnail => _thumbnail,
-      final Map<String, dynamic> _thumbnail => CoverThumbnail.parse({
-        ..._thumbnail,
+      final CoverThumbnail thumbnail => thumbnail,
+      final Map<String, dynamic> thumbnail => CoverThumbnail.parse({
+        ...thumbnail,
         'parent': cover,
       }),
-      final _thumbnail => throw MapperException.unexpectedType(_thumbnail.runtimeType, 'Map<String, dynamic>'),
+      final thumbnail => throw MapperException.unexpectedType(thumbnail.runtimeType, 'Map<String, dynamic>'),
     };
 
     var pageNo = 1;
     final pages = switch(value['pages']) {
-      final List<Image> _pages => _pages,
-      final Iterable<dynamic> _pages => [
-        for (final page in _pages)
+      final List<Image> pages => pages,
+      final Iterable<dynamic> pages => [
+        for (final page in pages)
           switch(page) {
-            final Map<String, dynamic> _page => Image.parse({
-              ..._page,
+            final Map<String, dynamic> page => Image.parse({
+              ...page,
               'media_id': media,
               'id': pageNo++,
             }),
-            final _page => throw MapperException.unexpectedType(_page.runtimeType, 'Map<String, dynamic>')
+            final page => throw MapperException.unexpectedType(page.runtimeType, 'Map<String, dynamic>')
           },
       ],
-      final _pages => throw MapperException.unexpectedType(_pages.runtimeType, 'Iterable<dynamic>'),
+      final pages => throw MapperException.unexpectedType(pages.runtimeType, 'Iterable<dynamic>'),
     };
 
     return BookImages(

@@ -14,6 +14,7 @@ part 'book_images.mapper.dart';
 )
 @immutable
 class BookImages with BookImagesMappable {
+  /// Book's images.
   const BookImages({
     required this.media,
     required this.cover,

@@ -5,6 +5,7 @@ import 'book.dart';
 
 /// [Book] hook that passes down `media_id` to `images`.
 class BookHook extends MappingHook {
+  /// [Book] hook that passes down `media_id` to `images`.
   const BookHook();
 
   @override

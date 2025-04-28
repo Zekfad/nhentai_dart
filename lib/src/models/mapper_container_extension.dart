@@ -5,6 +5,7 @@ import '../models.init.dart';
 
 var _initialized = false;
 
+/// Extension with mappers initialization safeguard. 
 extension MapperContainerExtension on MapperContainer {
   /// Returns this mapper, calling [initializeMappers] if needed.
   MapperContainer get initialized {

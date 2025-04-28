@@ -2,6 +2,7 @@ import 'package:dart_mappable/dart_mappable.dart';
 
 /// Decodes and encodes [DateTime] as [int] with Unix timestamp in seconds.
 class DateHook extends MappingHook {
+  /// Decodes and encodes [DateTime] as [int] with Unix timestamp in seconds.
   const DateHook();
 
   @override

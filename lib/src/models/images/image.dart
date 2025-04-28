@@ -10,6 +10,7 @@ part of 'images.dart';
 )
 @immutable
 final class Image with ImageMappable {
+  /// Image.
   const Image({
     required this.id,
     required this.media,
@@ -84,8 +85,10 @@ final class Image with ImageMappable {
       parent: this,
     );
 
+  /// Filename of this image.
   String get filename => getFullFilename('$id');
 
+  /// Helper method for generating correct [filename] for different image types.
   @mustCallSuper
   @visibleForOverriding
   String getFullFilename(String filename) => '$filename.${type.extension}';

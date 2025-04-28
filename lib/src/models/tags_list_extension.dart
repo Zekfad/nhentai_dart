@@ -2,6 +2,7 @@ import 'tag.dart';
 import 'tag_type.dart';
 
 
+/// Extension with convenience methods for list of tags.
 extension TagsListExtension on List<Tag> {
   /// Get unmodifiable subset of tags with requested [types].
   Iterable<Tag> get(List<TagType> types) => List.unmodifiable(

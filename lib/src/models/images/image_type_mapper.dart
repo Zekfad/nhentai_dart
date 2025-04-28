@@ -3,16 +3,20 @@ import 'package:dart_mappable/dart_mappable.dart';
 import 'image_type.dart';
 
 
+/// Mapper for [ImageType].
 class ImageTypeMapper extends SimpleMapper<ImageType> {
+  /// Mapper for [ImageType].
   const ImageTypeMapper();
 
   @override
   ImageType decode(dynamic value) {
-    if (value is ImageType)
+    if (value is ImageType) {
       return value;
+    }
 
-    if (value is! String)
+    if (value is! String) {
       throw MapperException.unexpectedType(value.runtimeType, 'String');
+    }
 
     final type = ImageType(value);
     assert(

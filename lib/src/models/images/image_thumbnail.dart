@@ -8,6 +8,8 @@ part of 'images.dart';
 )
 @immutable
 final class ImageThumbnail extends Image with ImageThumbnailMappable {
+  /// Thumbnail.
+  /// Inherits [parent]'s [Image.id], [Image.type], [Image.media].
   ImageThumbnail({
     required this.parent,
     super.width,

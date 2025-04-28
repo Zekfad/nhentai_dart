@@ -93,10 +93,13 @@ class ApiRestfulImplementation extends API {
       : json['error'];
 
     if (jsonError != null) {
-      if (jsonError is String)
+      if (jsonError is String) {
         throw ApiException(jsonError);
-      if (jsonError is bool) // API can return `{"error":true}` with no info.
+      }
+      if (jsonError is bool) {
+        // API can return `{"error":true}` with no info.
         throw const ApiException('Generic API exception.');
+      }
     }
 
     return json;
@@ -137,12 +140,14 @@ class ApiRestfulImplementation extends API {
       hosts.api.getUri('/random/'),
     );
 
-    if (url == null)
+    if (url == null) {
       return null;
+    }
 
     final id = RegExp(r'\d+').firstMatch(url)?.group(0);
-    if (id == null)
+    if (id == null) {
       return null;
+    }
 
     return getBook(int.parse(id));
   }
@@ -172,8 +177,9 @@ class ApiRestfulImplementation extends API {
     int page = 1,
     SearchSort sort = SearchSort.recent,
   }) async {
-    if (page < 1)
+    if (page < 1) {
       throw ArgumentError.value(page, 'page', 'Must be grater than 0');
+    }
 
     final isTagSearch = query is SearchQueryTag;
 
@@ -210,25 +216,28 @@ class ApiRestfulImplementation extends API {
     int? count,
     SearchSort sort = SearchSort.recent,
   }) async* {
-    if (page < 1)
+    if (page < 1) {
       throw ArgumentError.value(page, 'page', 'Must be grater than 0');
+    }
 
-    late int _pages;
+    late int pages;
 
-    if (count != null)
-      _pages = page + count - 1;
+    if (count != null) {
+      pages = page + count - 1;
+    }
 
-    var _page = page;
+    var currentPage = page;
 
     Search? search;
     do {
-      search = await _searchSinglePage(query, page: _page++, sort: sort);
+      search = await _searchSinglePage(query, page: currentPage++, sort: sort);
       // if (search == null)
       //   throw const FormatException('Cannot parse search result.');
-      if (count == null)
-        _pages = search.pages;
+      if (count == null) {
+        pages = search.pages;
+      }
       yield search;
-    } while (_page <= _pages);
+    } while (currentPage <= pages);
   }
 
   @override

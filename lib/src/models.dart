@@ -1,6 +1,8 @@
 @MappableLib(
   generateInitializerForScope: InitializerScope.package,
 )
+// Internal API
+// ignore: unnecessary_library_name
 library _internal_models;
 
 import 'package:dart_mappable/dart_mappable.dart';

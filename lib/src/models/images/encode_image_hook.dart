@@ -6,6 +6,7 @@ import 'images.dart';
 
 /// Mapping hook that forces [Image] encoder.
 class EncodeImageHook extends MappingHook {
+  /// Mapping hook that forces [Image] encoder.
   const EncodeImageHook();
 
   @override

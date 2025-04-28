@@ -14,7 +14,7 @@ BeforeRequestCallback beforeRequestAddCookies(List<Cookie> Function() getCookies
 
 /// Creates [BeforeRequestCallback] that adds static list of [Cookie]s to requests. 
 BeforeRequestCallback beforeRequestAddCookiesStatic(List<Cookie> cookies) {
-  final _cookies = cookies.map((e) => e.toString()).join('; ');
+  final cookieString = cookies.map((e) => e.toString()).join('; ');
   return (request) => request
-    ..headers['cookie'] = _cookies;
+    ..headers['cookie'] = cookieString;
 }

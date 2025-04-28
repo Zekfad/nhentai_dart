@@ -27,13 +27,14 @@ Client getProxyClient(String proxyUri, String userAgent) {
     ..findProxy = (uri) => proxyConfig.pacString;
 
   // Proxy authentication
-  if (proxyConfig.hasCredentials)
+  if (proxyConfig.hasCredentials) {
     proxyClient.addProxyCredentials(
       proxyConfig.host,
       proxyConfig.port,
       'Basic',
       proxyConfig.credentials!,
     );
+  }
 
   return IOClient(proxyClient);
 }

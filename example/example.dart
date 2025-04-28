@@ -72,8 +72,9 @@ Future<void> main() async {
     // You can use break as well.
     // In Dart prior 2.18 there was a bug in generators behavior
     // Ref: https://github.com/dart-lang/sdk/issues/34775
-    if (search.page >= 2)
+    if (search.page >= 2) {
       break;
+    }
   }
 
   // Make a single query and print name of the first book.
