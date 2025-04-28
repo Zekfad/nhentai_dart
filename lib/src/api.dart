@@ -4,7 +4,7 @@ import 'package:http/retry.dart';
 
 import 'api_client_exception.dart';
 import 'api_exception.dart';
-import 'api_restful_api_implementation.dart';
+import 'api_restful_implementation.dart';
 import 'get_avatar_url.dart' as get_avatar_url;
 import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
@@ -41,7 +41,7 @@ abstract class API {
     BeforeRequestCallback? beforeRequest,
     int maxRetries = 5,
     String? userAgent,
-  }) => ApiRestfulApiImplementation(
+  }) => ApiRestfulImplementation(
     client: client,
     hosts: hosts,
     beforeRequest: beforeRequest,
@@ -68,7 +68,7 @@ abstract class API {
     BeforeRequestCallback? beforeRequest,
     int maxRetries = 5,
     String? userAgent,
-  }) => ApiRestfulApiImplementation.proxy(
+  }) => ApiRestfulImplementation.proxy(
     proxyUri,
     hosts: hosts,
     beforeRequest: beforeRequest,

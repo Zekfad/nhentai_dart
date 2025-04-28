@@ -17,12 +17,12 @@ import 'platform.dart' as platform;
 
 /// API client implementation that uses restful API.
 @immutable
-class ApiRestfulApiImplementation extends API {
+class ApiRestfulImplementation extends API {
   /// Creates API client.
   /// 
   /// {@macro api_default_constructor_arguments}
   /// {@macro api_constructor_shared_arguments}
-  ApiRestfulApiImplementation({
+  ApiRestfulImplementation({
     Client? client,
     this.hosts = const Hosts(),
     this.beforeRequest,
@@ -43,7 +43,7 @@ class ApiRestfulApiImplementation extends API {
   /// {@macro api_proxy_constructor_arguments}
   /// 
   /// {@macro api_proxy_constructor_throws}
-  ApiRestfulApiImplementation.proxy(String proxyUri, {
+  ApiRestfulImplementation.proxy(String proxyUri, {
     this.hosts = const Hosts(),
     this.beforeRequest,
     int maxRetries = 5,
