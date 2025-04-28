@@ -25,7 +25,7 @@ class BookImagesMapper extends ClassMapperBase<BookImages> {
 
   static int _$media(BookImages v) => v.media;
   static const Field<BookImages, int> _f$media =
-      Field('media', _$media, key: 'media_id');
+      Field('media', _$media, key: r'media_id');
   static Cover _$cover(BookImages v) => v.cover;
   static const Field<BookImages, Cover> _f$cover = Field('cover', _$cover);
   static CoverThumbnail _$thumbnail(BookImages v) => v.thumbnail;
@@ -77,7 +77,8 @@ mixin BookImagesMappable {
   }
 
   BookImagesCopyWith<BookImages, BookImages, BookImages> get copyWith =>
-      _BookImagesCopyWithImpl(this as BookImages, $identity, $identity);
+      _BookImagesCopyWithImpl<BookImages, BookImages>(
+          this as BookImages, $identity, $identity);
   @override
   String toString() {
     return BookImagesMapper.ensureInitialized()
@@ -88,7 +89,7 @@ mixin BookImagesMappable {
 extension BookImagesValueCopy<$R, $Out>
     on ObjectCopyWith<$R, BookImages, $Out> {
   BookImagesCopyWith<$R, BookImages, $Out> get $asBookImages =>
-      $base.as((v, t, t2) => _BookImagesCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _BookImagesCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class BookImagesCopyWith<$R, $In extends BookImages, $Out>
@@ -144,5 +145,5 @@ class _BookImagesCopyWithImpl<$R, $Out>
   @override
   BookImagesCopyWith<$R2, BookImages, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _BookImagesCopyWithImpl($value, $cast, t);
+      _BookImagesCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

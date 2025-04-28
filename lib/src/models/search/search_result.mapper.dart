@@ -23,13 +23,13 @@ class SearchResultMapper extends ClassMapperBase<SearchResult> {
 
   static int _$pages(SearchResult v) => v.pages;
   static const Field<SearchResult, int> _f$pages =
-      Field('pages', _$pages, key: 'num_pages');
+      Field('pages', _$pages, key: r'num_pages');
   static int _$perPage(SearchResult v) => v.perPage;
   static const Field<SearchResult, int> _f$perPage =
-      Field('perPage', _$perPage, key: 'per_page');
+      Field('perPage', _$perPage, key: r'per_page');
   static List<Book> _$books(SearchResult v) => v.books;
   static const Field<SearchResult, List<Book>> _f$books =
-      Field('books', _$books, key: 'result');
+      Field('books', _$books, key: r'result');
 
   @override
   final MappableFields<SearchResult> fields = const {
@@ -69,7 +69,8 @@ mixin SearchResultMappable {
   }
 
   SearchResultCopyWith<SearchResult, SearchResult, SearchResult> get copyWith =>
-      _SearchResultCopyWithImpl(this as SearchResult, $identity, $identity);
+      _SearchResultCopyWithImpl<SearchResult, SearchResult>(
+          this as SearchResult, $identity, $identity);
   @override
   String toString() {
     return SearchResultMapper.ensureInitialized()
@@ -80,7 +81,7 @@ mixin SearchResultMappable {
 extension SearchResultValueCopy<$R, $Out>
     on ObjectCopyWith<$R, SearchResult, $Out> {
   SearchResultCopyWith<$R, SearchResult, $Out> get $asSearchResult =>
-      $base.as((v, t, t2) => _SearchResultCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _SearchResultCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class SearchResultCopyWith<$R, $In extends SearchResult, $Out>
@@ -118,5 +119,5 @@ class _SearchResultCopyWithImpl<$R, $Out>
   @override
   SearchResultCopyWith<$R2, SearchResult, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _SearchResultCopyWithImpl($value, $cast, t);
+      _SearchResultCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

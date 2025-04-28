@@ -67,7 +67,8 @@ mixin BookTitleMappable {
   }
 
   BookTitleCopyWith<BookTitle, BookTitle, BookTitle> get copyWith =>
-      _BookTitleCopyWithImpl(this as BookTitle, $identity, $identity);
+      _BookTitleCopyWithImpl<BookTitle, BookTitle>(
+          this as BookTitle, $identity, $identity);
   @override
   String toString() {
     return BookTitleMapper.ensureInitialized()
@@ -77,7 +78,7 @@ mixin BookTitleMappable {
 
 extension BookTitleValueCopy<$R, $Out> on ObjectCopyWith<$R, BookTitle, $Out> {
   BookTitleCopyWith<$R, BookTitle, $Out> get $asBookTitle =>
-      $base.as((v, t, t2) => _BookTitleCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _BookTitleCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class BookTitleCopyWith<$R, $In extends BookTitle, $Out>
@@ -113,5 +114,5 @@ class _BookTitleCopyWithImpl<$R, $Out>
   @override
   BookTitleCopyWith<$R2, BookTitle, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _BookTitleCopyWithImpl($value, $cast, t);
+      _BookTitleCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

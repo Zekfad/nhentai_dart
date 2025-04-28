@@ -25,13 +25,13 @@ class CommentMapper extends ClassMapperBase<Comment> {
   static const Field<Comment, int> _f$id = Field('id', _$id);
   static int _$bookId(Comment v) => v.bookId;
   static const Field<Comment, int> _f$bookId =
-      Field('bookId', _$bookId, key: 'gallery_id');
+      Field('bookId', _$bookId, key: r'gallery_id');
   static User _$author(Comment v) => v.author;
   static const Field<Comment, User> _f$author =
-      Field('author', _$author, key: 'poster');
+      Field('author', _$author, key: r'poster');
   static DateTime _$date(Comment v) => v.date;
   static const Field<Comment, DateTime> _f$date =
-      Field('date', _$date, key: 'post_date', hook: DateHook());
+      Field('date', _$date, key: r'post_date', hook: DateHook());
   static String _$body(Comment v) => v.body;
   static const Field<Comment, String> _f$body = Field('body', _$body);
 
@@ -77,7 +77,8 @@ mixin CommentMappable {
   }
 
   CommentCopyWith<Comment, Comment, Comment> get copyWith =>
-      _CommentCopyWithImpl(this as Comment, $identity, $identity);
+      _CommentCopyWithImpl<Comment, Comment>(
+          this as Comment, $identity, $identity);
   @override
   String toString() {
     return CommentMapper.ensureInitialized().stringifyValue(this as Comment);
@@ -86,7 +87,7 @@ mixin CommentMappable {
 
 extension CommentValueCopy<$R, $Out> on ObjectCopyWith<$R, Comment, $Out> {
   CommentCopyWith<$R, Comment, $Out> get $asComment =>
-      $base.as((v, t, t2) => _CommentCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _CommentCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class CommentCopyWith<$R, $In extends Comment, $Out>
@@ -126,5 +127,5 @@ class _CommentCopyWithImpl<$R, $Out>
 
   @override
   CommentCopyWith<$R2, Comment, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _CommentCopyWithImpl($value, $cast, t);
+      _CommentCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

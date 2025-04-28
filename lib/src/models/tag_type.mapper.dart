@@ -25,21 +25,21 @@ class TagTypeMapper extends EnumMapper<TagType> {
   @override
   TagType decode(dynamic value) {
     switch (value) {
-      case 'unknown':
+      case r'unknown':
         return TagType.unknown;
-      case 'tag':
+      case r'tag':
         return TagType.tag;
-      case 'category':
+      case r'category':
         return TagType.category;
-      case 'artist':
+      case r'artist':
         return TagType.artist;
-      case 'parody':
+      case r'parody':
         return TagType.parody;
-      case 'character':
+      case r'character':
         return TagType.character;
-      case 'group':
+      case r'group':
         return TagType.group;
-      case 'language':
+      case r'language':
         return TagType.language;
       default:
         return TagType.values[0];
@@ -50,21 +50,21 @@ class TagTypeMapper extends EnumMapper<TagType> {
   dynamic encode(TagType self) {
     switch (self) {
       case TagType.unknown:
-        return 'unknown';
+        return r'unknown';
       case TagType.tag:
-        return 'tag';
+        return r'tag';
       case TagType.category:
-        return 'category';
+        return r'category';
       case TagType.artist:
-        return 'artist';
+        return r'artist';
       case TagType.parody:
-        return 'parody';
+        return r'parody';
       case TagType.character:
-        return 'character';
+        return r'character';
       case TagType.group:
-        return 'group';
+        return r'group';
       case TagType.language:
-        return 'language';
+        return r'language';
     }
   }
 }

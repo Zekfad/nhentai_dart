@@ -28,16 +28,16 @@ class ImageMapper extends ClassMapperBase<Image> {
   static const Field<Image, int> _f$id = Field('id', _$id);
   static int _$media(Image v) => v.media;
   static const Field<Image, int> _f$media =
-      Field('media', _$media, key: 'media_id');
+      Field('media', _$media, key: r'media_id');
   static ImageType _$type(Image v) => v.type;
   static const Field<Image, ImageType> _f$type =
-      Field('type', _$type, key: 't');
+      Field('type', _$type, key: r't');
   static int? _$width(Image v) => v.width;
   static const Field<Image, int> _f$width =
-      Field('width', _$width, key: 'w', opt: true);
+      Field('width', _$width, key: r'w', opt: true);
   static int? _$height(Image v) => v.height;
   static const Field<Image, int> _f$height =
-      Field('height', _$height, key: 'h', opt: true);
+      Field('height', _$height, key: r'h', opt: true);
 
   @override
   final MappableFields<Image> fields = const {
@@ -81,7 +81,7 @@ mixin ImageMappable {
   }
 
   ImageCopyWith<Image, Image, Image> get copyWith =>
-      _ImageCopyWithImpl(this as Image, $identity, $identity);
+      _ImageCopyWithImpl<Image, Image>(this as Image, $identity, $identity);
   @override
   String toString() {
     return ImageMapper.ensureInitialized().stringifyValue(this as Image);
@@ -90,7 +90,7 @@ mixin ImageMappable {
 
 extension ImageValueCopy<$R, $Out> on ObjectCopyWith<$R, Image, $Out> {
   ImageCopyWith<$R, Image, $Out> get $asImage =>
-      $base.as((v, t, t2) => _ImageCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _ImageCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class ImageCopyWith<$R, $In extends Image, $Out>
@@ -121,7 +121,7 @@ class _ImageCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Image, $Out>
 
   @override
   ImageCopyWith<$R2, Image, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _ImageCopyWithImpl($value, $cast, t);
+      _ImageCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
 
 class ImageThumbnailMapper extends ClassMapperBase<ImageThumbnail> {
@@ -146,18 +146,18 @@ class ImageThumbnailMapper extends ClassMapperBase<ImageThumbnail> {
       Field('parent', _$parent);
   static int? _$width(ImageThumbnail v) => v.width;
   static const Field<ImageThumbnail, int> _f$width =
-      Field('width', _$width, key: 'w', opt: true);
+      Field('width', _$width, key: r'w', opt: true);
   static int? _$height(ImageThumbnail v) => v.height;
   static const Field<ImageThumbnail, int> _f$height =
-      Field('height', _$height, key: 'h', opt: true);
+      Field('height', _$height, key: r'h', opt: true);
   static int _$media(ImageThumbnail v) => v.media;
   static const Field<ImageThumbnail, int> _f$media =
-      Field('media', _$media, key: 'media_id');
+      Field('media', _$media, key: r'media_id');
   static int _$id(ImageThumbnail v) => v.id;
   static const Field<ImageThumbnail, int> _f$id = Field('id', _$id);
   static ImageType _$type(ImageThumbnail v) => v.type;
   static const Field<ImageThumbnail, ImageType> _f$type =
-      Field('type', _$type, key: 't');
+      Field('type', _$type, key: r't');
 
   @override
   final MappableFields<ImageThumbnail> fields = const {
@@ -205,8 +205,9 @@ mixin ImageThumbnailMappable {
   }
 
   ImageThumbnailCopyWith<ImageThumbnail, ImageThumbnail, ImageThumbnail>
-      get copyWith => _ImageThumbnailCopyWithImpl(
-          this as ImageThumbnail, $identity, $identity);
+      get copyWith =>
+          _ImageThumbnailCopyWithImpl<ImageThumbnail, ImageThumbnail>(
+              this as ImageThumbnail, $identity, $identity);
   @override
   String toString() {
     return ImageThumbnailMapper.ensureInitialized()
@@ -217,7 +218,7 @@ mixin ImageThumbnailMappable {
 extension ImageThumbnailValueCopy<$R, $Out>
     on ObjectCopyWith<$R, ImageThumbnail, $Out> {
   ImageThumbnailCopyWith<$R, ImageThumbnail, $Out> get $asImageThumbnail =>
-      $base.as((v, t, t2) => _ImageThumbnailCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _ImageThumbnailCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class ImageThumbnailCopyWith<$R, $In extends ImageThumbnail, $Out>
@@ -256,7 +257,7 @@ class _ImageThumbnailCopyWithImpl<$R, $Out>
   @override
   ImageThumbnailCopyWith<$R2, ImageThumbnail, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _ImageThumbnailCopyWithImpl($value, $cast, t);
+      _ImageThumbnailCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
 
 class CoverMapper extends ClassMapperBase<Cover> {
@@ -277,15 +278,15 @@ class CoverMapper extends ClassMapperBase<Cover> {
 
   static int _$media(Cover v) => v.media;
   static const Field<Cover, int> _f$media =
-      Field('media', _$media, key: 'media_id');
+      Field('media', _$media, key: r'media_id');
   static ImageType _$type(Cover v) => v.type;
   static const Field<Cover, ImageType> _f$type =
-      Field('type', _$type, key: 't');
+      Field('type', _$type, key: r't');
   static int? _$width(Cover v) => v.width;
-  static const Field<Cover, int> _f$width = Field('width', _$width, key: 'w');
+  static const Field<Cover, int> _f$width = Field('width', _$width, key: r'w');
   static int? _$height(Cover v) => v.height;
   static const Field<Cover, int> _f$height =
-      Field('height', _$height, key: 'h');
+      Field('height', _$height, key: r'h');
   static int _$id(Cover v) => v.id;
   static const Field<Cover, int> _f$id = Field('id', _$id);
 
@@ -333,7 +334,7 @@ mixin CoverMappable {
   }
 
   CoverCopyWith<Cover, Cover, Cover> get copyWith =>
-      _CoverCopyWithImpl(this as Cover, $identity, $identity);
+      _CoverCopyWithImpl<Cover, Cover>(this as Cover, $identity, $identity);
   @override
   String toString() {
     return CoverMapper.ensureInitialized().stringifyValue(this as Cover);
@@ -342,7 +343,7 @@ mixin CoverMappable {
 
 extension CoverValueCopy<$R, $Out> on ObjectCopyWith<$R, Cover, $Out> {
   CoverCopyWith<$R, Cover, $Out> get $asCover =>
-      $base.as((v, t, t2) => _CoverCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _CoverCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class CoverCopyWith<$R, $In extends Cover, $Out>
@@ -370,7 +371,7 @@ class _CoverCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Cover, $Out>
 
   @override
   CoverCopyWith<$R2, Cover, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _CoverCopyWithImpl($value, $cast, t);
+      _CoverCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
 
 class CoverThumbnailMapper extends ClassMapperBase<CoverThumbnail> {
@@ -394,18 +395,18 @@ class CoverThumbnailMapper extends ClassMapperBase<CoverThumbnail> {
       Field('parent', _$parent);
   static int? _$width(CoverThumbnail v) => v.width;
   static const Field<CoverThumbnail, int> _f$width =
-      Field('width', _$width, key: 'w');
+      Field('width', _$width, key: r'w');
   static int? _$height(CoverThumbnail v) => v.height;
   static const Field<CoverThumbnail, int> _f$height =
-      Field('height', _$height, key: 'h');
+      Field('height', _$height, key: r'h');
   static int _$media(CoverThumbnail v) => v.media;
   static const Field<CoverThumbnail, int> _f$media =
-      Field('media', _$media, key: 'media_id');
+      Field('media', _$media, key: r'media_id');
   static int _$id(CoverThumbnail v) => v.id;
   static const Field<CoverThumbnail, int> _f$id = Field('id', _$id);
   static ImageType _$type(CoverThumbnail v) => v.type;
   static const Field<CoverThumbnail, ImageType> _f$type =
-      Field('type', _$type, key: 't');
+      Field('type', _$type, key: r't');
 
   @override
   final MappableFields<CoverThumbnail> fields = const {
@@ -453,8 +454,9 @@ mixin CoverThumbnailMappable {
   }
 
   CoverThumbnailCopyWith<CoverThumbnail, CoverThumbnail, CoverThumbnail>
-      get copyWith => _CoverThumbnailCopyWithImpl(
-          this as CoverThumbnail, $identity, $identity);
+      get copyWith =>
+          _CoverThumbnailCopyWithImpl<CoverThumbnail, CoverThumbnail>(
+              this as CoverThumbnail, $identity, $identity);
   @override
   String toString() {
     return CoverThumbnailMapper.ensureInitialized()
@@ -465,7 +467,7 @@ mixin CoverThumbnailMappable {
 extension CoverThumbnailValueCopy<$R, $Out>
     on ObjectCopyWith<$R, CoverThumbnail, $Out> {
   CoverThumbnailCopyWith<$R, CoverThumbnail, $Out> get $asCoverThumbnail =>
-      $base.as((v, t, t2) => _CoverThumbnailCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _CoverThumbnailCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class CoverThumbnailCopyWith<$R, $In extends CoverThumbnail, $Out>
@@ -508,5 +510,5 @@ class _CoverThumbnailCopyWithImpl<$R, $Out>
   @override
   CoverThumbnailCopyWith<$R2, CoverThumbnail, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _CoverThumbnailCopyWithImpl($value, $cast, t);
+      _CoverThumbnailCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

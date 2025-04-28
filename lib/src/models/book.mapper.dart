@@ -29,16 +29,16 @@ class BookMapper extends ClassMapperBase<Book> {
   static const Field<Book, int> _f$id = Field('id', _$id);
   static int _$media(Book v) => v.media;
   static const Field<Book, int> _f$media =
-      Field('media', _$media, key: 'media_id');
+      Field('media', _$media, key: r'media_id');
   static int _$favorites(Book v) => v.favorites;
   static const Field<Book, int> _f$favorites =
-      Field('favorites', _$favorites, key: 'num_favorites');
+      Field('favorites', _$favorites, key: r'num_favorites');
   static String? _$scanlator(Book v) => v.scanlator;
   static const Field<Book, String> _f$scanlator =
       Field('scanlator', _$scanlator);
   static DateTime _$uploaded(Book v) => v.uploaded;
   static const Field<Book, DateTime> _f$uploaded =
-      Field('uploaded', _$uploaded, key: 'upload_date', hook: DateHook());
+      Field('uploaded', _$uploaded, key: r'upload_date', hook: DateHook());
   static List<Tag> _$tags(Book v) => v.tags;
   static const Field<Book, List<Tag>> _f$tags = Field('tags', _$tags);
   static BookImages _$images(Book v) => v.images;
@@ -92,7 +92,7 @@ mixin BookMappable {
   }
 
   BookCopyWith<Book, Book, Book> get copyWith =>
-      _BookCopyWithImpl(this as Book, $identity, $identity);
+      _BookCopyWithImpl<Book, Book>(this as Book, $identity, $identity);
   @override
   String toString() {
     return BookMapper.ensureInitialized().stringifyValue(this as Book);
@@ -101,7 +101,7 @@ mixin BookMappable {
 
 extension BookValueCopy<$R, $Out> on ObjectCopyWith<$R, Book, $Out> {
   BookCopyWith<$R, Book, $Out> get $asBook =>
-      $base.as((v, t, t2) => _BookCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _BookCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class BookCopyWith<$R, $In extends Book, $Out>
@@ -169,5 +169,5 @@ class _BookCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, Book, $Out>
 
   @override
   BookCopyWith<$R2, Book, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _BookCopyWithImpl($value, $cast, t);
+      _BookCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

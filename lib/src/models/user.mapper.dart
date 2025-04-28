@@ -29,13 +29,13 @@ class UserMapper extends ClassMapperBase<User> {
   static String _$avatarFilename(User v) => v.avatarFilename;
   static const Field<User, String> _f$avatarFilename = Field(
       'avatarFilename', _$avatarFilename,
-      key: 'avatar_url', hook: AvatarFilenameHook());
+      key: r'avatar_url', hook: AvatarFilenameHook());
   static bool _$superuser(User v) => v.superuser;
   static const Field<User, bool> _f$superuser =
-      Field('superuser', _$superuser, key: 'is_superuser');
+      Field('superuser', _$superuser, key: r'is_superuser');
   static bool _$staff(User v) => v.staff;
   static const Field<User, bool> _f$staff =
-      Field('staff', _$staff, key: 'is_staff');
+      Field('staff', _$staff, key: r'is_staff');
 
   @override
   final MappableFields<User> fields = const {
@@ -79,7 +79,7 @@ mixin UserMappable {
   }
 
   UserCopyWith<User, User, User> get copyWith =>
-      _UserCopyWithImpl(this as User, $identity, $identity);
+      _UserCopyWithImpl<User, User>(this as User, $identity, $identity);
   @override
   String toString() {
     return UserMapper.ensureInitialized().stringifyValue(this as User);
@@ -88,7 +88,7 @@ mixin UserMappable {
 
 extension UserValueCopy<$R, $Out> on ObjectCopyWith<$R, User, $Out> {
   UserCopyWith<$R, User, $Out> get $asUser =>
-      $base.as((v, t, t2) => _UserCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _UserCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class UserCopyWith<$R, $In extends User, $Out>
@@ -136,5 +136,5 @@ class _UserCopyWithImpl<$R, $Out> extends ClassCopyWithBase<$R, User, $Out>
 
   @override
   UserCopyWith<$R2, User, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _UserCopyWithImpl($value, $cast, t);
+      _UserCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
