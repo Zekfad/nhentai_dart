@@ -1,26 +1,34 @@
 ## 1.0.0-wip
 - BREAKING: Requires Dart 3.0.0
-- BREAKING: Make `SearchQuery` `sealed`.
-- Change `http` constraint to `>=0.13.5 <2.0.0` to allow ^1.0.0 versions.
-- BREAKING: remove `Tag.dummy` constructor.
+- **BREAKING**: Removed `_prefixed` libraries use Dart prefixes instead
+  if needed.
+- BREAKING: Removed library `nhentai_functions`.
+  - Use `API` methods directly instead.
+- BREAKING: Hosts system updates:
+  - `selectHost` is removed, override `getHost` instead if needed.
+- BREAKING: Removed `Image.getUrl` use `API` method instead.
+- BREAKING: Removed `User.getAvatarUrl` use `API` method instead.
+- BREAKING: Made `SearchQuery` `sealed`.
+- Changed `http` constraint to `>=0.13.5 <2.0.0` to allow ^1.0.0 versions.
+- BREAKING: Removed `Tag.dummy` constructor.
 - BREAKING: Migrate to `dart_mappable: ^3.1.0`.
-  You may need to call `initializeMappers` if you use data models not via parse
-  methods.
-- BREAKING: `Image`, `ImageThumbnail`, `Cover` and `CoverThumbnail`
-  now `final`.
+  You may need to call `initializeMappers` if you use data models other than via
+  `parse` methods.
+- BREAKING: `Image`, `ImageThumbnail`, `Cover` and `CoverThumbnail` are now 
+  `final`.
 - BREAKING: `SearchQuery` is now an `interface` class.
-- BREAKING: `ImageType` is now `sealed` class, change existing declarations to
+- BREAKING: `ImageType` is now a `sealed` class, change existing declarations to
   `KnownImageType` `enum`.
-  Now you can use `ImageType('type')` to get known (enum) if possible value
-  or new instance of `UnknownImageType`.
+  Now you can use `ImageType('type')` to get known (enum) value or new instance
+  of `UnknownImageType`.
 - BREAKING: Removed unused `SimpleQuery` typedef.
-- Remove note about streams, as async generators was fixed in Dart 2.18.
-- Add `SearchQueryTagExtension` on `Tag` that will help to make combined tag
-  search easier.
+- Remove note about streams, as async generators were fixed in Dart 2.18.
+- Add `SearchQueryTagExtension` on `Tag` that will help creating combined tag
+  search queries easier.
 - JSON encoding of Objects are now aligns to original API schemas,
   allowing to use data classes for custom server implementation.
 - Split API into implementation and abstract class.
-  This allows external API implementations.
+  This will allow to make external API implementation.
 
 
 ## 1.0.0-dev.11
