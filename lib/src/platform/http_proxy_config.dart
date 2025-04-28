@@ -15,11 +15,11 @@ class HttpProxyConfig {
 
     this.uri = _uri;
 
-    final _match = RegExp(r'^(?<username>.+?):(?<password>.+?)$')
-      .firstMatch(_uri.userInfo);
-
-    username = _match?.namedGroup('username');
-    password = _match?.namedGroup('password');
+    final credentials = _uri.userInfo;
+    if (credentials.indexOf(':') case final index when index != -1) {
+      username = credentials.substring(0, index);
+      password = credentials.substring(index + 1);
+    }
   }
 
   /// Proxy [Uri].
