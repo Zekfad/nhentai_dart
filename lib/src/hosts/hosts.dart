@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import '../models.dart';
 import 'api_host.dart';
 import 'host.dart';
 import 'host_type.dart';
@@ -74,15 +75,11 @@ class Hosts {
   final Map<HostType, List<Host>> hosts;
 
   /// Preferred API host.
-  ApiHost get api => this[HostType.api] as ApiHost;
+  ApiHost get api => getHost(HostType.api) as ApiHost;
   /// Preferred image host.
-  ImageHost get image => this[HostType.image] as ImageHost;
+  ImageHost get image => getHost(HostType.image) as ImageHost;
   /// Preferred thumbnail host.
-  ThumbnailHost get thumbnail => this[HostType.thumbnail] as ThumbnailHost;
-
-  /// Returns [List] of hosts of given [type].
-  List<T> _getHostsList<T extends Host>(HostType type) =>
-    hosts[type]! as List<T>;
+  ThumbnailHost get thumbnail => getHost(HostType.thumbnail) as ThumbnailHost;
 
   /// Returns preferred host of given [type] from [hosts] list.
   /// 
@@ -90,9 +87,19 @@ class Hosts {
   /// 
   /// By default returns first host in a list.
   @visibleForOverriding
-  T selectHost<T extends Host>(HostType type, List<T> hosts) =>
-    hosts.first;
+  Host getHost(HostType type) =>
+    hosts[type]!.first;
 
   /// Returns preferred host of given [type].
-  Host operator[](HostType type) => selectHost(type, _getHostsList(type));
+  Host operator[](HostType type) => getHost(type);
+
+  /// Returns [Uri] for [image].
+  Uri getImageUrl(Image image) => ((image.isThumbnail || image.isCover)
+    ? thumbnail
+    : this.image
+  ).getUri('/galleries/${image.media}/${image.filename}');
+
+  /// Returns [Uri] for [user]'s avatar.
+  Uri getAvatarUrl(User user) =>
+    image.getUri('/avatars/${user.avatarFilename}');
 }

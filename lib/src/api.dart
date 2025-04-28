@@ -5,8 +5,6 @@ import 'package:http/retry.dart';
 import 'api_client_exception.dart';
 import 'api_exception.dart';
 import 'api_restful_implementation.dart';
-import 'get_avatar_url.dart' as get_avatar_url;
-import 'get_image_url.dart' as get_image_url;
 import 'hosts.dart';
 import 'models.dart';
 import 'platform.dart' as platform;
@@ -93,14 +91,6 @@ abstract class API {
   Hosts get hosts;
   /// Before request callback. Used to pre process requests. 
   BeforeRequestCallback? get beforeRequest;
-
-  /// Returns [Uri] for [image] via [hosts] config.
-  Uri getImageUrl(Image image) =>
-    get_image_url.getImageUrl(image, api: this);
-
-  /// Returns [Uri] for [user]'s avatar via [hosts] config.
-  Uri getAvatarUrl(User user) =>
-    get_avatar_url.getAvatarUrl(user, api: this);
 
   /// Returns random book.
   /// 

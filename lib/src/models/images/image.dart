@@ -84,15 +84,6 @@ final class Image with ImageMappable {
       parent: this,
     );
 
-  /// Returns image url using hosts settings from [api] client or
-  /// provided [hosts] config.
-  /// 
-  /// Throws [ArgumentError] if [hosts] and [api] are both missing.
-  Uri getUrl({
-    API? api,
-    Hosts? hosts,
-  }) => get_image_url.getImageUrl(this, api: api, hosts: hosts);
-
   String get filename => getFullFilename('$id');
 
   @mustCallSuper

@@ -1,9 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:meta/meta.dart';
 
-import '../api.dart';
-import '../get_avatar_url.dart' as get_avatar_url;
-import '../hosts.dart';
 import 'mapper_container_extension.dart';
 import 'user_avatar_filename_hook.dart';
 
@@ -73,15 +70,6 @@ class User with UserMappable {
   /// Whether user is staff member.
   @MappableField(key: 'is_staff')
   final bool staff;
-
-  /// Returns avatar url using hosts settings from [api] client or
-  /// provided [hosts] config.
-  /// 
-  /// Throws [ArgumentError] if [hosts] and [api] are both missing.
-  Uri getAvatarUrl({
-    API? api,
-    Hosts? hosts,
-  }) => get_avatar_url.getAvatarUrl(this, api: api, hosts: hosts);
 
   /// Returns [username].
   @override
