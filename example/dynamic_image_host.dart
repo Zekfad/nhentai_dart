@@ -1,25 +1,19 @@
 // Example
-// ignore_for_file: avoid_print, omit_local_variable_types
+// ignore_for_file: avoid_print, unused_local_variable, omit_local_variable_types
 
-import 'dart:io';
-import 'package:nhentai/before_request_add_cookies.dart';
+// Import with library prefix
 import 'package:nhentai/nhentai.dart' as nh;
 
-
 Future<void> main() async {
-
-  // Add static list of Cookies to every request.
+  // API client with HTTP proxy.
   final api = nh.API.proxy(
+    // Proxy URI.
     'http://0xdeadbeef:0x0badf00d@example.com:1337/',
-    // Override User Agent
-    userAgent: 'User Agent Override',
-    // Add before request handler
-    beforeRequest: beforeRequestAddCookiesStatic([
-      Cookie('some_cookie', 'some_value'),
-    ]),
+    hosts: nh.SelectedHosts(),
+    maxRetries: 1,
   );
 
-  print('Requesting book...');
+  // This will throw ApiException if book isn't found.
   final nh.Book book = await api.getBook(421025);
   
   // Print short book summary.
@@ -32,5 +26,6 @@ Future<void> main() async {
     'First page thumbnail: ${api.hosts.getImageUrl(book.pages.first.thumbnail)}',
   );
 
-  return;
+  print('Initial cover link: ${api.hosts.getImageUrl(book.cover)}');
+  print('Final cover link: ${await api.getImageUrl(book.cover)}');
 }

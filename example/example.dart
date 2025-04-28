@@ -1,11 +1,10 @@
+// Example
 // ignore_for_file: avoid_print, unused_local_variable, omit_local_variable_types
 
 import 'dart:io';
 import 'package:http/io_client.dart';
 // Import with library prefix
 import 'package:nhentai/nhentai.dart' as nh;
-// Import prefixed version
-import 'package:nhentai/nhentai_prefixed.dart';
 
 
 Future<void> main() async {
@@ -13,13 +12,13 @@ Future<void> main() async {
   final pureApi = nh.API();
 
   // API client with HTTP proxy.
-  final proxyApi = NHentai.proxy(
+  final proxyApi = nh.API.proxy(
     // Proxy URI.
     'http://0xdeadbeef:0x0badf00d@example.com:1337/',
     // Custom hosts config with changed image and thumbnail hosts.
-    hosts: NHentaiHosts.only(
-      image    : const NHentaiImageHost('i2.nhentai.net'),
-      thumbnail: const NHentaiThumbnailHost('t7.nhentai.net'),
+    hosts: nh.Hosts.only(
+      image    : const nh.ImageHost('i4.nhentai.net'),
+      thumbnail: const nh.ThumbnailHost('t2.nhentai.net'),
     ),
   );
 
@@ -37,12 +36,12 @@ Future<void> main() async {
         ..findProxy = (uri) => 'PROXY example.com:1337',
       ),
     // Multiple hosts config with 2 image hosts.
-    hosts: NHentaiHosts.multiple(
+    hosts: nh.Hosts.multiple(
       image: [
         // Create image host via dedicated class constructor.
-        const NHentaiImageHost('i7.nhentai.net'),
+        const nh.ImageHost('i4.nhentai.net'),
         // Create image host config via generic host factory.
-        NHentaiHost(NHentaiHostType.image, 'i5.nhentai.net') as NHentaiImageHost,
+        nh.Host(nh.HostType.image, 'i2.nhentai.net') as nh.ImageHost,
       ],
     ),
   );
@@ -50,16 +49,16 @@ Future<void> main() async {
   final api = pureApi;
 
   // This will throw ApiException if book isn't found.
-  final NHentaiBook book = await api.getBook(421025);
+  final nh.Book book = await api.getBook(421025);
   
   // Print short book summary.
   print(
     'Book: $book\n'
     'Artists: ${book.tags.artists.join(', ')}\n'
     'Languages: ${book.tags.languages.join(', ')}\n'
-    'Cover: ${book.cover.getUrl(api: api)}\n'
-    'First page: ${book.pages.first.getUrl(api: api)}\n'
-    'First page thumbnail: ${book.pages.first.thumbnail.getUrl(api: api)}',
+    'Cover: ${api.hosts.getImageUrl(book.cover)}\n'
+    'First page: ${api.hosts.getImageUrl(book.pages.first)}\n'
+    'First page thumbnail: ${api.hosts.getImageUrl(book.pages.first.thumbnail)}',
   );
 
   print('\n');
@@ -84,7 +83,7 @@ Future<void> main() async {
   print(search1.books.first);
 
   // Pure single search request.
-  final NHentaiSearch search2 = await api.searchSinglePage('test');
+  final nh.Search search2 = await api.searchSinglePage('test');
   print(search2.books.first);
 
   return;

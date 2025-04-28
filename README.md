@@ -47,9 +47,9 @@ print(
   'Book: $book\n'
   'Artists: ${book.tags.artists.join(', ')}\n'
   'Languages: ${book.tags.languages.join(', ')}\n'
-  'Cover: ${book.cover.getUrl(api: api)}\n'
-  'First page: ${book.pages.first.getUrl(api: api)}\n'
-  'First page thumbnail: ${book.pages.first.thumbnail.getUrl(api: api)}\n',
+  'Cover: ${api.hosts.getImageUrl(book.cover)}\n'
+  'First page: ${api.hosts.getImageUrl(book.pages.first)}\n'
+  'First page thumbnail: ${api.hosts.getImageUrl(book.pages.first.thumbnail)}',
 );
 ```
 
