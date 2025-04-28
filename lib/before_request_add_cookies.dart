@@ -1,5 +1,6 @@
 /// [BeforeRequestCallback] generator functions. that helps you to add [Cookie]s
 /// to requests.
+// ignore: unnecessary_library_name
 library nhentai_before_add_cookies;
 
 import 'dart:io';

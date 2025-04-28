@@ -1,5 +1,6 @@
 /// Main library exposing [API] client and corresponding settings:
 /// [Hosts], [Host] and [HostType] classes.
+// ignore: unnecessary_library_name
 library nhentai;
 
 import 'src/api.dart';
