@@ -22,4 +22,7 @@ class ApiClientException implements Exception {
 
   /// Original exception (if any).
   final Exception? originalException;
+
+  @override
+  String toString() => 'ApiClientException: $message';
 }
