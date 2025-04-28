@@ -39,8 +39,9 @@ class Hosts {
     HostType.image: image,
     HostType.thumbnail: thumbnail,
   } {
-    if (api.isEmpty || image.isEmpty || thumbnail.isEmpty)
+    if (api.isEmpty || image.isEmpty || thumbnail.isEmpty) {
       throw ArgumentError('Missing hosts definition.');
+    }
   }
 
   /// Default API host.
